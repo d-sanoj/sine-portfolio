@@ -115,6 +115,12 @@ with the plain page (`boring/index.html`) under the same address; computers and 
 To try it without deploying: `npx wrangler pages dev dist` after `npm run build:dist`, then ask for `/` with a phone's user agent.
 The local dev server (`npm run dev`) does not run the function, so there a phone still gets the sine page.
 
+## The tab icon
+
+A solid yellow wobbly circle (an amoeba): a circle whose radius is wobbled by a few sine waves. `node scripts/make-favicon.js` draws it
+into `assets/` (`favicon.svg` for the tab, `favicon-32.png` and `favicon.ico` as fallbacks, `apple-touch-icon.png` for a phone's home
+screen); the waves, the yellow and the size are at the top of that script. Both pages link to the icons in their `<head>`.
+
 ## Size, and going back
 
 `npm run build:dist` makes a small website: opening `/` loads about **306 KB** uncompressed on a desktop (261 KB on a phone),

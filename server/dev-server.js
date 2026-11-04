@@ -21,6 +21,9 @@ const TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.ttf': 'font/ttf',
   '.woff2': 'font/woff2',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
 };
 const MAX_BODY = 20 * 1024 * 1024;
 const BY_LENGTH = [...ROUTES].sort((a, b) => b.prefix.length - a.prefix.length);

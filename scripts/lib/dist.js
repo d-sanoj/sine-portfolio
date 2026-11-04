@@ -29,6 +29,7 @@ export async function makeDist({ classic = false, minify = true } = {}) {
   copyDir(PATHS.core, path.join(out, 'core'));
   copyDir(PATHS.widgets, path.join(out, 'widgets'));
   copyDir(PATHS.assets, path.join(out, 'assets'));
+  fs.copyFileSync(path.join(PATHS.assets, 'favicon.ico'), path.join(out, 'favicon.ico')); // browsers ask for /favicon.ico by default
   fs.mkdirSync(path.join(out, 'boring'), { recursive: true });
   fs.copyFileSync(PATHS.plainPage, path.join(out, 'boring', 'index.html'));
   // Cloudflare Pages: the function in functions/_middleware.js only needs to run for the home page (static files stay free and unlimited)
