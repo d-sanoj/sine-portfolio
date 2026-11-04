@@ -107,6 +107,13 @@ The addresses inside the site are relative (the code's imports go through an imp
 fonts and links are relative to their page), so the same build works at the root of a domain or in a folder.
 The earlier version of the site is kept at https://archive.sanoj.dev/.
 
+**Phones get the plain page.** `functions/_middleware.js` (a Cloudflare Pages Function) answers the home page `/` for a phone
+with the plain page (`boring/index.html`) under the same address; computers and tablets get the sine page. It only runs for `/`
+(`_routes.json` in `dist/`, written by `scripts/lib/dist.js`), so it stays within the free plan. On a phone the plain page
+replaces its "See it wavy" link with a note that the sine version looks best on a computer (`.sine-note` in `apps/plain/index.html`).
+To try it without deploying: `npx wrangler pages dev dist` after `npm run build:dist`, then ask for `/` with a phone's user agent.
+The local dev server (`npm run dev`) does not run the function, so there a phone still gets the sine page.
+
 ## Size, and going back
 
 `npm run build:dist` makes a small website: opening `/` loads about **306 KB** uncompressed on a desktop (261 KB on a phone),

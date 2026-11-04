@@ -31,6 +31,8 @@ export async function makeDist({ classic = false, minify = true } = {}) {
   copyDir(PATHS.assets, path.join(out, 'assets'));
   fs.mkdirSync(path.join(out, 'boring'), { recursive: true });
   fs.copyFileSync(PATHS.plainPage, path.join(out, 'boring', 'index.html'));
+  // Cloudflare Pages: the function in functions/_middleware.js only needs to run for the home page (static files stay free and unlimited)
+  fs.writeFileSync(path.join(out, '_routes.json'), JSON.stringify({ version: 1, include: ['/', '/index.html'], exclude: [] }));
   if (classic) {
     for (const l of LAYOUTS) fs.copyFileSync(path.join(PATHS.generated, l.page), path.join(out, 'data', l.page));
   } else {

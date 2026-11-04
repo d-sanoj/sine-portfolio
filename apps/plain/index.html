@@ -6,6 +6,10 @@
 <title>Sanoj · AI Engineer</title>
 <meta name="description" content="Sanoj is an AI engineer building retrieval, local AI, text processing and analytics systems that turn messy inputs into useful outputs.">
 <meta name="color-scheme" content="dark">
+<script>
+  /* phones get this page at the main address (functions/_middleware.js); mark them here so the page can say the sine version needs a computer */
+  if (/iPhone|iPod|Android.+Mobile|Windows Phone|Opera Mini|BlackBerry|IEMobile|Mobile.+Firefox/i.test(navigator.userAgent) || (navigator.userAgentData && navigator.userAgentData.mobile)) document.documentElement.classList.add('phone');
+</script>
 <link rel="preload" href="../assets/fonts/JosefinSans-VF.ttf" as="font" type="font/ttf" crossorigin>
 <style>
   @font-face {
@@ -64,6 +68,10 @@
   .top nav { margin: 0; font-size: 1rem; }
   /* the sine page draws the name and the GitHub link in the yellow of its link underlines; this page keeps its own colours (read by apps/measure) */
   .top .brand, .top .links a { --sine-ink: #f2c14e; }
+  /* on a phone the sine-wave version is not offered: a note takes the place of the link */
+  .sine-note { display: none; color: var(--muted); }
+  .phone .to-sine { display: none; }
+  .phone .sine-note { display: inline; }
   .top nav a { text-decoration: none; color: var(--muted); }
   .top nav a:hover { color: var(--ink); }
 
@@ -130,7 +138,7 @@
       <p class="label" style="margin-top:0">AI Engineer</p>
       <h1>Smart Data Foundations. Purposeful AI System.</h1>
       <p>Curious enough to experiment, break and rebuild, careful enough to ship. Art keeps the other half of me happy.</p>
-      <div class="links lead" data-sine="skip"><span class="item"><a href="#work">View selected work</a></span><span class="item"><a href="../" data-sine-text="See it plain" data-sine-href="boring/">See it wavy</a></span></div>
+      <div class="links lead" data-sine="skip"><span class="item"><a href="#work">View selected work</a></span><span class="item"><a class="to-sine" href="../" data-sine-text="See it plain" data-sine-href="boring/">See it wavy</a><span class="sine-note">The sine-wave version looks best on a computer</span></span></div>
       <div class="links lead" data-sine="only" hidden><span class="item"><a href="boring/">See it plain</a></span></div>
     </div>
   </section>
