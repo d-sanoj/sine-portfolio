@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sanoj · AI Engineer</title>
+<meta name="description" content="Sanoj is an AI engineer building retrieval, local AI, text processing and analytics systems that turn messy inputs into useful outputs.">
+<meta name="color-scheme" content="dark">
+<link rel="preload" href="/assets/fonts/JosefinSans-VF.ttf" as="font" type="font/ttf" crossorigin>
+<style>
+  @font-face {
+    font-family: 'Josefin Sans';
+    src: url('/assets/fonts/JosefinSans-VF.ttf') format('truetype');
+    font-weight: 100 700;
+    font-display: swap;
+  }
+
+  /* one theme: a soft black page with pastel-white text */
+  :root {
+    --bg: #131313;
+    --ink: #ebe8e1;
+    --muted: #97948d;
+    --line: #2b2b29;
+    --accent: #c9dcee;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Josefin Sans', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 1.2rem;           /* Josefin has a small x-height, so it is set a little larger */
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+  a:hover { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { width: min(100% - 3rem, 46rem); margin-inline: auto; }
+
+  /* small spaced capitals, used for labels */
+  .label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  [hidden] { display: none !important; }
+
+  /* ---------- top bar ---------- */
+  .top { padding-block: 1.6rem; }
+  .top .wrap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .brand { font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; font-size: 1rem; }
+  .top nav { margin: 0; font-size: 1rem; }
+  /* the sine page draws the name and the GitHub link in the yellow of its link underlines; this page keeps its own colours (read by apps/measure) */
+  .top .brand, .top .links a { --sine-ink: #f2c14e; }
+  .top nav a { text-decoration: none; color: var(--muted); }
+  .top nav a:hover { color: var(--ink); }
+
+  /* ---------- sections ---------- */
+  section { padding-block: 4.5rem; border-top: 1px solid var(--line); }
+  section.hero { border-top: 0; padding-top: 4rem; }
+  h1, h2, h3 { font-weight: 400; line-height: 1.2; margin: 0; }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.8rem); letter-spacing: 0.005em; margin-top: 1rem; }
+  h2 { font-size: clamp(1.7rem, 4.5vw, 2.3rem); margin-top: 0.8rem; max-width: 28ch; }
+  h3 { font-size: 1.45rem; font-weight: 500; }
+  p { margin: 1.1rem 0 0; max-width: 38em; }
+
+
+  /* ---------- about ---------- */
+  .quote { font-size: clamp(1.5rem, 4vw, 1.9rem); font-weight: 300; line-height: 1.4; margin-top: 1rem; max-width: 30ch; }
+  .keywords { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.3rem 1.7rem; color: var(--muted); font-size: 1rem; }
+
+  /* ---------- what I work on ---------- */
+  .areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 2rem 2.4rem; margin-top: 2.6rem; }
+  .areas p { font-size: 1.05rem; margin-top: 0.5rem; }
+  .num { font-size: 0.9rem; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
+
+  /* ---------- projects ---------- */
+  .projects { list-style: none; padding: 0; margin: 2.6rem 0 0; }
+  .projects li {
+    display: grid;
+    grid-template-columns: 3.2rem 1fr;
+    padding-block: 1.8rem;
+    border-top: 1px solid var(--line);
+  }
+  .projects li:last-child { border-bottom: 1px solid var(--line); }
+  .projects p { margin-top: 0.5rem; font-size: 1.05rem; }
+  /* rows of links: plain text, evenly spaced, a dot between each */
+  .links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0; margin-top: 0.8rem; font-size: 1rem; }
+  .links .item:not(:last-child)::after { content: '\00b7'; margin-inline: 0.9rem; color: var(--muted); font-weight: 700; }
+  .links.lead { margin-top: 2rem; font-size: 1.15rem; }
+
+  /* ---------- footer ---------- */
+  footer { padding-block: 2.6rem 3.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 1rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  footer p { margin: 0; }
+
+  @media (max-width: 34rem) {
+    body { font-size: 1.1rem; }
+    section { padding-block: 3.2rem; }
+    .projects li { grid-template-columns: 2.4rem 1fr; }
+  }
+</style>
+</head>
+<body>
+<header class="top" data-sine="skip">
+  <div class="wrap">
+    <a class="brand" href="#top">Sanoj</a>
+    <nav class="links" aria-label="Main">
+      <span class="item"><a href="https://github.com/d-sanoj">GitHub</a></span>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="label" style="margin-top:0">AI Engineer</p>
+      <h1>Smart Data Foundations. Purposeful AI System.</h1>
+      <p>Curious enough to experiment, break and rebuild, careful enough to ship. Art keeps the other half of me happy.</p>
+      <div class="links lead" data-sine="skip"><span class="item"><a href="#work">View selected work</a></span><span class="item"><a href="/" data-sine-text="See it plain" data-sine-href="/boring/">See it wavy</a></span></div>
+      <div class="links lead" data-sine="only" hidden><span class="item"><a href="/boring/">See it plain</a></span></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <p class="label" style="margin-top:0">About</p>
+      <p class="quote">Encode your legacy in bits and bytes.</p>
+      <ul class="keywords inline" aria-label="Areas of interest">
+        <li>AI</li>
+        <li>Data</li>
+        <li>Retrieval</li>
+        <li>Analytics</li>
+        <li>NLP</li>
+        <li>Generative AI</li>
+        <li>LLMs</li>
+        <li>SLMs</li>
+        <li>Text Mining</li>
+        <li>Data Science</li>
+        <li>Machine Learning</li>
+        <li>Prediction</li>
+        <li>AI Agents</li>
+        <li>Retrieval-Augmented Generation</li>
+        <li>Prompt Engineering</li>
+        <li>Context Engineering</li>
+        <li>Deep Learning</li>
+        <li>Fine-Tuning</li>
+        <li>Vision</li>
+        <li>Diffusion Models</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="focus">
+    <div class="wrap">
+      <p class="label" style="margin-top:0">What I work on</p>
+      <h2>AI and data projects that turn messy inputs into useful outputs.</h2>
+      <div class="areas">
+        <div>
+          <span class="num">01</span>
+          <h3>Retrieval</h3>
+          <p>Search and memory that returns the right context.</p>
+        </div>
+        <div>
+          <span class="num">02</span>
+          <h3>Text and NLP</h3>
+          <p>Classification, redaction and structured extraction.</p>
+        </div>
+        <div>
+          <span class="num">03</span>
+          <h3>Analytics</h3>
+          <p>Dashboards that make patterns visible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="label" style="margin-top:0">Selected work</p>
+      <h2>AI, data, ML, NLP, macOS and dashboard projects from my public GitHub.</h2>
+
+      <ol class="projects plain">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <h3>EpigCorpus</h3>
+            <p>A reproducible pipeline for a searchable Latin epigraphy corpus.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj/EpigCorpus">Repository</a></span>
+              <span class="item"><a href="https://d-sanoj.github.io/EpigCorpus/">Live demo</a></span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <h3>FinAgent</h3>
+            <p>A Telegram assistant that answers spending and balance questions.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj/FinAgent">Repository</a></span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <h3>Mac Apps</h3>
+            <p>Native macOS experiments, including a clipboard manager with OCR.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj/KlipKlik">KlipKlik</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/MacMail">MacMail</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/MacUtils">MacUtils</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/pomo-duck">Pomo Duck</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj?tab=repositories&amp;q=qti">QTI Converter</a></span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div>
+            <h3>Cuisine Predictor</h3>
+            <p>Predicts a cuisine from a list of ingredients.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj/Cuisine-Predictor">Repository</a></span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="num">05</span>
+          <div>
+            <h3>Redactor &amp; Unredactor</h3>
+            <p>NLP projects that hide sensitive text, and test whether context can recover it.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj?tab=repositories&amp;q=redactor">The Redactor</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/The-Unredactor">The Unredactor</a></span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="num">06</span>
+          <div>
+            <h3>Analytics and Dashboards</h3>
+            <p>Dashboards for bank loans, UK road accidents and the Netflix catalog.</p>
+            <div class="links">
+              <span class="item"><a href="https://github.com/d-sanoj/Bank-Loan-Analysis">Bank Loan</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/UK-Road-Accidents-Dashboard">Road Accidents</a></span>
+              <span class="item"><a href="https://github.com/d-sanoj/Netflix-Dashboard">Netflix</a></span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <p class="label" style="margin-top:0">Get in touch</p>
+      <h2>Interested in practical AI or data work?</h2>
+      <p>I'm most interested in projects where AI and data become usable.</p>
+      <div class="links lead"><span class="item"><a href="https://github.com/d-sanoj">Connect on GitHub</a></span><span class="item"><a href="https://github.com/d-sanoj?tab=repositories">Browse repositories</a></span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer data-sine="skip">
+  <div class="wrap">
+    <p>Sanoj</p>
+    <p>Encode your legacy in bits and bytes.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Measure the plain page</title>
+<style>
+  body { font: 15px/1.5 -apple-system, sans-serif; background: #1b1b1b; color: #ddd; padding: 1.5rem; }
+  pre { white-space: pre-wrap; }
+  iframe { position: fixed; left: 0; top: 0; border: 0; opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<h3>Measuring apps/plain/index.html</h3>
+<p>This asks the browser where the plain page puts every character, line and underline, at a computer width and a phone width, and saves the numbers to <code>data/generated/layout-wide.json</code> and <code>data/generated/layout-narrow.json</code>. Then run <code>npm run build:dist</code>.</p>
+<pre id="log"></pre>
+<script type="module" src="app/main.js"></script>
+</body>
+</html>

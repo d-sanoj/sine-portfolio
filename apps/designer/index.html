@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sine Glyph Designer</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>SINE GLYPH DESIGNER</h1>
+  <span class="hint">Click to add a point · drag to move · click a line to insert · right-click or Delete to remove · shift-click to force a new point</span>
+  <span class="spacer"></span>
+  <span class="stat" id="saved"></span>
+  <span class="stat" id="total"></span>
+  <button id="export" hidden>Export sines</button>
+  <button id="backup">Backup editor</button>
+  <button id="restore">Restore…</button>
+  <input type="file" id="restoreFile" accept=".json" hidden>
+</header>
+
+<div class="picker">
+  <div class="row" id="upper"></div>
+  <div class="row" id="lower"></div>
+  <div class="row" id="digits"></div>
+  <div class="row" id="punct"></div>
+  <div class="row" id="symbols"></div>
+  <div class="row" style="align-items:center; gap:8px; margin-top:6px">
+    <span class="hint">Starter from a font:</span>
+    <input id="font" list="fonts" value="Josefin Sans, sans-serif" style="width:260px">
+    <datalist id="fonts">
+      <option value="Snell Roundhand, cursive">
+      <option value="Josefin Sans, sans-serif">
+      <option value="Georgia, serif">
+      <option value="Menlo, monospace">
+      <option value="Snell Roundhand, cursive">
+      <option value="Bradley Hand, cursive">
+      <option value="Noteworthy, cursive">
+      <option value="Savoye LET, cursive">
+      <option value="Brush Script MT, cursive">
+      <option value="SignPainter, cursive">
+      <option value="Apple Chancery, cursive">
+    </datalist>
+    <select id="weight">
+      <option value="100">Hairline</option>
+      <option value="200">Thin</option>
+      <option value="300">Light</option>
+      <option value="400" selected>Regular</option>
+      <option value="700">Bold</option>
+    </select>
+    <label style="font-size:13px; display:inline-flex; gap:5px; align-items:center"><input type="checkbox" id="upright" checked> Make upright</label>
+    <button id="traceOne">Trace this glyph</button>
+    <button id="traceAll">Trace all empty glyphs</button>
+    <button id="traceLower">Retrace lowercase</button>
+    <button id="traceReplace">Retrace everything</button>
+    <span class="stat" id="traceMsg"></span>
+  </div>
+</div>
+
+<main>
+  <div class="col" id="leftCol">
+    <div class="bar">
+      <span class="tabs" id="tabs"></span>
+      <button id="addStroke">+ Piece</button>
+      <button id="delStroke">Delete piece</button>
+      <label><input type="checkbox" id="closed"> Closed loop</label>
+      <label><input type="checkbox" id="snap"> Snap</label>
+      <button id="undo">Undo</button>
+      <button id="resetAnchors">Reset join points</button>
+      <button id="clear">Clear glyph</button>
+    </div>
+    <canvas class="panel" id="editor"></canvas>
+  </div>
+  <div class="col" id="rightCol">
+    <div class="bar" style="flex-direction:column; align-items:stretch; flex-wrap:nowrap; justify-content:flex-end; gap:4px">
+      <canvas class="spec" id="spectrum"></canvas>
+      <div class="slider">
+        <span>Sine terms</span>
+        <input type="range" id="terms" min="4" max="128" value="28">
+        <span id="termsVal" class="stat"></span>
+      </div>
+    </div>
+    <canvas class="panel" id="result"></canvas>
+  </div>
+</main>
+
+<section class="preview">
+  <h2>PORTFOLIO TEXT: type normally here. It becomes sine data; the finished page has no text in it.</h2>
+  <div class="hint" style="margin-bottom:6px">Write plain markup (# Heading, **bold**, [words to click](https://address), one line per line) or paste an HTML page. Headings become larger letters and bold becomes a heavier line.</div>
+  <textarea id="text" spellcheck="false"></textarea>
+  <div class="stat" id="parseNotes" style="margin-top:4px"></div>
+  <div class="bar" style="height:auto; margin-top:6px">
+    <label><input type="checkbox" id="join"> Join letters</label>
+    <label>Irregular <input type="range" id="irr" min="0" max="1" step="0.05" value="0" style="width:110px"></label>
+    <label>Seed <input type="number" id="seed" value="1" min="1" style="width:70px"></label>
+    <button id="reroll">Reroll</button>
+    <label>Line width (em) <input type="number" id="lineW" value="14" min="4" max="40" style="width:60px"></label>
+    <label>Size <input type="range" id="size" min="24" max="120" value="64" style="width:110px"> <span class="stat" id="sizeVal"></span></label>
+    <span class="spacer"></span>
+    <button id="play">Play animation</button>
+    <button id="exportPage" hidden>Export page</button>
+  </div>
+  <canvas class="out" id="out"></canvas>
+</section>
+
+<script type="module" src="app/main.js"></script>
+</body>
+</html>
