@@ -94,15 +94,11 @@ The loader is skipped for people who prefer reduced motion, and when the address
 
 ## Publishing (GitHub Pages)
 
-```
-npm run deploy       builds dist/ and pushes it to the gh-pages branch (plain git, nothing else to set up)
-```
-
-In the repository, Settings -> Pages -> Source: **Deploy from a branch**, branch `gh-pages`, folder `/ (root)` (once). The site is then at
+`.github/workflows/pages.yml` publishes the site every time `main` is pushed: it runs `npm ci` and `npm run build:dist` and
+publishes `dist/`. In the repository: Settings -> Pages -> Source: **GitHub Actions** (once). The site is then at
 `https://<user>.github.io/<repository>/`; the sine page is at that address and the plain page is in `boring/` below it.
-`main` holds the source and is pushed as usual; `gh-pages` holds only the finished website (`scripts/deploy.js`). The addresses
-inside the site are relative (the code's imports go through an import map in `apps/site/index.html`, and the data, fonts and links
-are relative to their page), so the same build works at the root of a domain or in a folder.
+The addresses inside the site are relative (the code's imports go through an import map in `apps/site/index.html`, and
+the data, fonts and links are relative to their page), so the same build works at the root of a domain or in a folder.
 
 ## Size, and going back
 

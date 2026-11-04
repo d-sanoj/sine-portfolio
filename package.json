@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "node server/dev-server.js",
     "build": "node scripts/build.js",
-    "build:dist": "node scripts/build.js --dist",
-    "deploy": "node scripts/deploy.js"
+    "build:dist": "node scripts/build.js --dist"
   },
   "engines": {
     "node": ">=18"
