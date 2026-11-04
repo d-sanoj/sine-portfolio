@@ -32,6 +32,13 @@ npm run build:dist   rebuild and make dist/, the folder you publish
 marks something only the sine page has (its About hook line, with the "click here" link to the plain page). The measuring tool removes
 the first kind and shows the second, so the sine layout is the plain page as the sine page should have it.
 
+## Updates reach visitors at once
+
+Browsers keep scripts for hours, so an update could be seen with old code and new data. The build prevents that
+(`stampScripts` in `scripts/lib/dist.js`): every script gets a fingerprint of its contents, `dist/index.html`'s import map sends
+each import to `file.js?v=<fingerprint>`, and the page's own `<script>` tag gets one too. A script that changed has a new address and
+is fetched again; one that did not keeps its address and stays cached. (The dev server does not do this; it does not cache.)
+
 ## Real text on the sine page
 
 Everything on the sine page is drawn, except what the plain page marks `data-sine-real` (now: "for accessible content click here"
