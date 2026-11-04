@@ -7,3 +7,4 @@ data/source/photos/
 .claude/
 # made again by `npm run build` (about 1 MB each); the website carries the small layout files instead
 data/generated/sine-page*.json
+.wrangler/
