@@ -122,11 +122,14 @@
   .projects li {
     display: grid;
     grid-template-columns: 3.2rem 1fr;
-    padding-block: 1.8rem;
+    padding-block: 1.3rem;
     border-top: 1px solid var(--line);
   }
   .projects li:last-child { border-bottom: 1px solid var(--line); }
-  .projects p { margin-top: 0.5rem; font-size: 1.05rem; }
+  /* a project is one line: its title, then its links, a dot between each */
+  .projects li > div { display: flex; flex-wrap: wrap; align-items: baseline; }
+  .projects h3::after { content: '\00b7'; margin-inline: 0.9rem; color: var(--muted); font-weight: 700; font-size: 1rem; }
+  .projects .links { margin-top: 0; }
   /* rows of links: plain text, evenly spaced, a dot between each */
   .links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0; margin-top: 0.8rem; font-size: 1rem; }
   .links .item:not(:last-child)::after { content: '\00b7'; margin-inline: 0.9rem; color: var(--muted); font-weight: 700; }
@@ -141,6 +144,10 @@
     body { font-size: 1.1rem; }
     section { padding-block: 3.2rem; }
     .projects li { grid-template-columns: 2.4rem 1fr; }
+    /* on a phone the links go under the title (no dot left hanging at the end of the title's line) */
+    .projects li > div { flex-direction: column; align-items: flex-start; }
+    .projects h3::after { display: none; }
+    .projects .links { margin-top: 0.35rem; }
   }
 </style>
 </head>
@@ -188,7 +195,6 @@
           <span class="num">01</span>
           <div>
             <h3>EpigCorpus</h3>
-            <p>A reproducible pipeline for a searchable Latin epigraphy corpus.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj/EpigCorpus">Repository</a></span>
               <span class="item"><a href="https://d-sanoj.github.io/EpigCorpus/">Live demo</a></span>
@@ -199,7 +205,6 @@
           <span class="num">02</span>
           <div>
             <h3>FinAgent</h3>
-            <p>A Telegram assistant that answers spending and balance questions.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj/FinAgent">Repository</a></span>
             </div>
@@ -209,7 +214,6 @@
           <span class="num">03</span>
           <div>
             <h3>Mac Apps</h3>
-            <p>Native macOS experiments, including a clipboard manager with OCR.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj/KlipKlik">KlipKlik</a></span>
               <span class="item"><a href="https://github.com/d-sanoj/MacMail">MacMail</a></span>
@@ -223,7 +227,6 @@
           <span class="num">04</span>
           <div>
             <h3>Cuisine Predictor</h3>
-            <p>Predicts a cuisine from a list of ingredients.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj/Cuisine-Predictor">Repository</a></span>
             </div>
@@ -233,7 +236,6 @@
           <span class="num">05</span>
           <div>
             <h3>Redactor &amp; Unredactor</h3>
-            <p>NLP projects that hide sensitive text, and test whether context can recover it.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj?tab=repositories&amp;q=redactor">The Redactor</a></span>
               <span class="item"><a href="https://github.com/d-sanoj/The-Unredactor">The Unredactor</a></span>
@@ -244,7 +246,6 @@
           <span class="num">06</span>
           <div>
             <h3>Analytics and Dashboards</h3>
-            <p>Dashboards for bank loans, UK road accidents and the Netflix catalog.</p>
             <div class="links">
               <span class="item"><a href="https://github.com/d-sanoj/Bank-Loan-Analysis">Bank Loan</a></span>
               <span class="item"><a href="https://github.com/d-sanoj/UK-Road-Accidents-Dashboard">Road Accidents</a></span>

@@ -44,6 +44,7 @@ function materialisePseudoText(d, w) {
   for (const el of [...d.body.querySelectorAll('*')]) {
     for (const pseudo of ['::before', '::after']) {
       const cs = w.getComputedStyle(el, pseudo);
+      if (cs.display === 'none') continue; // hidden at this width (e.g. the dot after a project title on a phone)
       const c = cs.content;
       if (!c || c === 'none' || c === 'normal' || c === '""' || c === "''") continue;
       const span = d.createElement('span');
