@@ -94,7 +94,7 @@ export async function measurePage(L) {
     if (el.closest('[data-sine-real]')) continue; // real text on the sine page (see below), not drawn as sine waves
     const cs = w.getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; // not drawn (or inside something not drawn)
-    const a = el.closest('a');
+    const a = el.closest('a, [data-peek]'); // a link, or a word that shows a picture when hovered
     const upper = cs.textTransform === 'uppercase';
     const asc = ascentOf(cs);
     const fs = parseFloat(cs.fontSize);
@@ -115,6 +115,7 @@ export async function measurePage(L) {
         g = byLink.get(a);
         if (!g) {
           g = { h: a.getAttribute('href'), chars: [], u: [] };
+          if (a.hasAttribute('data-peek')) g.peek = a.getAttribute('data-sine-peek') || a.getAttribute('data-peek');
           byLink.set(a, g);
           groups.push(g);
         }

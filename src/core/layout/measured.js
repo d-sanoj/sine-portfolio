@@ -8,6 +8,7 @@
 //
 //   page.px      pixels per em          page.vw / page.height   size of the measured page
 //   page.bg      page colour            page.palette / accent   colours (words refer to palette by number)
+//   word.peek    a picture (address) shown when the word is hovered
 //   word.c       colour number          word.u        underline rows [x0, x1, v] in ems, word.uw their weight
 //   page.rules   [{ a, b, v, w, c, full }]  horizontal lines; full ones run the width of the screen
 //   page.anchors { id: v }              where #links scroll to
@@ -50,6 +51,7 @@ export function fromLayout(L, data, options) {
     const w = weightOf(wt, fs);
     if (w !== 1) word.w = w;
     if (g.h) word.h = g.h;
+    if (g.peek) word.peek = g.peek; // not a link: hovering it shows this picture
     if (g.u && g.u.length) {
       word.u = g.u.map(([x0, x1, y]) => [+(x0 / px).toFixed(4), +(x1 / px).toFixed(4), +(-y / px).toFixed(4)]);
       word.uw = +(g.u[0][3] / (LINE * px)).toFixed(2);

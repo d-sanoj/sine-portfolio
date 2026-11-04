@@ -103,6 +103,15 @@
 
   /* ---------- about ---------- */
 
+  /* "here" in the About text: not a link; hovering (or focusing, or tapping) it shows a pencil portrait */
+  .peek { text-decoration: underline; text-decoration-color: #f2c14e; text-decoration-thickness: 1px; text-underline-offset: 0.22em; cursor: zoom-in; }
+  .peek:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  .peek-card { display: none; position: fixed; z-index: 40; width: 15rem; aspect-ratio: 4 / 5; border-radius: 0.7rem; overflow: hidden; pointer-events: none;
+    background: #1a1a19; box-shadow: 0 1.2rem 2.6rem rgba(0, 0, 0, 0.6); }
+  .peek-card.on { display: block; animation: peek-in 0.22s ease; }
+  .peek-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  @keyframes peek-in { from { opacity: 0; transform: translateY(0.4rem) scale(0.98); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .peek-card.on { animation: none; } }
   .access { font-weight: 600; } /* the one line of real text on the sine page (data-sine-real): bold, so it stands out */
 
   /* ---------- what I work on ---------- */
@@ -167,7 +176,7 @@
       <p>I&rsquo;m an AI engineer. I like to clean, play with and transform large, confusing data into beautiful search systems with visuals.</p>
       <p>Give me a messy pile of data and I&rsquo;ll make it behave. <a href="https://github.com/d-sanoj/EpigCorpus">EpigCorpus</a> started as a heap of Latin inscriptions. Now you can <a href="https://d-sanoj.github.io/EpigCorpus/">search it and see it in visuals</a>, so you can look things up in stone-carved Latin. <a href="https://github.com/d-sanoj/FinAgent">FinAgent</a> is a Telegram bot that lives on a Raspberry Pi 5, runs Llama 3.2 3B, and answers &ldquo;how much did I spend?&rdquo; from your transactions, no spreadsheet digging needed. In a past life, I turned big tables into Power BI and Tableau dashboards.</p>
       <p>Mac apps and UI/UX are my playground. With AI-assisted coding and zero Swift experience, I built <a href="https://github.com/d-sanoj/KlipKlik">KlipKlik</a>, a clipboard manager that reads text from images, and <a href="https://github.com/d-sanoj/MacMail">MacMail</a>, a native Gmail client, plus a few small tools for everyday work.</p>
-      <p>Away from the keyboard, I draw pencil portraits.</p>
+      <p>Away from the keyboard, I draw pencil portraits. Yes, they&rsquo;re beautiful. You can check one out <span class="peek" tabindex="0" role="button" aria-label="Show one of my pencil portraits" data-peek="../assets/portrait.jpg" data-sine-peek="assets/portrait.jpg">here</span>.</p>
     </div>
   </section>
 
@@ -320,6 +329,43 @@
     ok.addEventListener('click', close);
     modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+  })();
+</script>
+
+<script>
+  /* "here" in the About text: hover, focus or tap shows a pencil portrait (the picture is loaded the first time it is wanted) */
+  (function () {
+    var peek = document.querySelector('.peek');
+    if (!peek) return;
+    var card = document.createElement('div'), img = document.createElement('img');
+    card.className = 'peek-card';
+    img.alt = 'A black-and-white pencil portrait I drew: a woman with flowers in her hair, her hand resting against her cheek';
+    card.appendChild(img);
+    document.body.appendChild(card);
+    function place() {
+      var r = peek.getBoundingClientRect(), w = card.offsetWidth, h = card.offsetHeight;
+      var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+      var y = r.top - h - 12;
+      if (y < 8) y = Math.min(r.bottom + 12, window.innerHeight - h - 8);
+      card.style.left = x + 'px';
+      card.style.top = Math.max(8, y) + 'px';
+    }
+    var wanted = false;
+    function open() { if (wanted) { card.classList.add('on'); place(); } }
+    function show() {
+      wanted = true;
+      if (!img.getAttribute('src')) img.src = peek.getAttribute('data-peek'); // fetched the first time it is wanted
+      if (img.complete && img.naturalWidth) open(); else img.onload = open; // not a blank card while it loads
+    }
+    function hide() { wanted = false; card.classList.remove('on'); }
+    peek.addEventListener('mouseenter', show);
+    peek.addEventListener('mouseleave', hide);
+    peek.addEventListener('focus', show);
+    peek.addEventListener('blur', hide);
+    peek.addEventListener('click', function (e) { e.stopPropagation(); wanted ? hide() : show(); }); // a tap on a phone
+    document.addEventListener('click', hide);
+    window.addEventListener('scroll', function () { if (wanted) place(); }, { passive: true });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
   })();
 </script>
 

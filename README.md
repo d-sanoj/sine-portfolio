@@ -39,6 +39,14 @@ Browsers keep scripts for hours, so an update could be seen with old code and ne
 each import to `file.js?v=<fingerprint>`, and the page's own `<script>` tag gets one too. A script that changed has a new address and
 is fetched again; one that did not keeps its address and stays cached. (The dev server does not do this; it does not cache.)
 
+## A word that shows a picture
+
+The "here" in the last About line is not a link: hovering it (or focusing it, or tapping it on a phone) shows a pencil portrait
+(`assets/portrait.jpg`, fetched only the first time). On the plain page that is the `.peek` span and the small script at the end of
+`apps/plain/index.html` (`data-peek`). On the sine page the measuring tool records the word as a word with a `peek` picture
+(`data-sine-peek` gives the address from the home page), it is underlined in yellow like a link, and `apps/site/app/view/PeekView.js`
+shows the picture above it while it is hovered. To use another picture, replace `assets/portrait.jpg` (about 512 x 640 keeps it light).
+
 ## Real text on the sine page
 
 Everything on the sine page is drawn, except what the plain page marks `data-sine-real` (now: "for accessible content click here"

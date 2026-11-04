@@ -48,7 +48,8 @@ export class HintController {
     const dt = Math.min(0.05, (now - this.last) / 1000);
     this.last = now;
     const hoverNo = this.view.hover;
-    const hovered = hoverNo >= 0 ? this.model.links.find((l) => l.word === hoverNo) : null;
+    const found = hoverNo >= 0 ? this.model.links.find((l) => l.word === hoverNo) : null;
+    const hovered = found && found.href ? found : null; // a word that only shows a picture has no "click"
     if (hovered && hovered !== this.link) { this.link = hovered; this.p = 0; this.onLink = 0; } // a different link: start over
     this.onLink = hovered ? this.onLink + dt : 0;
     const forming = hovered && this.onLink > HINT.hoverDelay;

@@ -11,6 +11,7 @@ import { GatherController } from './controller/GatherController.js';
 import { ScrollController } from './controller/ScrollController.js';
 import { HintController } from './controller/HintController.js';
 import { RealTextView } from './view/RealTextView.js';
+import { PeekView } from './view/PeekView.js';
 import { startLoader } from '/widgets/loader/index.js';
 
 // The big portrait loader covers the screen while the page file arrives. When it is done,
@@ -28,6 +29,8 @@ if (!page) {
   const links = new LinkController(canvas, view, model, play);
   const real = new RealTextView(view, model); // the bits that stay real text
   real.onPointerMove((e) => links.onMove(e));
+  const peek = new PeekView(view); // a word that shows a picture when hovered
+  links.onHover = (l) => peek.show(l);
   const scroll = new ScrollController(view, model, play); // content animates in as it scrolls into view
   new HintController(view, model); // over a link, "click" forms below it
   play.onStart = () => scroll.stop();

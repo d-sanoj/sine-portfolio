@@ -16,7 +16,7 @@ export class PageModel {
     this.anchors = page.anchors || {};
     this.letters = [];
     this.real = page.real || []; // text that stays real text (see views/RealTextView.js)
-    this.links = []; // { href, box: [x0, v0, x1, v1], word }
+    this.links = []; // { href, box: [x0, v0, x1, v1], word }; a hoverable word with a picture has peek (its address) and no href
     let wordNo = 0;
     for (const line of page.lines) {
       for (const word of line) {
@@ -35,6 +35,7 @@ export class PageModel {
         word.l.forEach((letter) => add(letter, word.w || 1)); // line weight: bold words are drawn heavier
         (word.u || []).forEach(([a, b, v]) => add(lineLetter(a, b, v), word.uw || 1, true, true)); // underline rows
         if (word.h) this.links.push({ href: word.h, word: wordNo, box: boxOf(mine) });
+        else if (word.peek) this.links.push({ href: null, peek: word.peek, word: wordNo, box: boxOf(mine) }); // hovering it shows a picture
         wordNo++;
       }
     }

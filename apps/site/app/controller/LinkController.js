@@ -32,9 +32,11 @@ export class LinkController {
   linkAt(e) { return this.linkAtPoint(e.clientX, e.clientY); }
 
   set(word) {
-    this.canvas.style.cursor = word >= 0 ? 'pointer' : 'default'; // the system's own cursor: a hand over a link
+    const l = word >= 0 ? this.model.links.find((x) => x.word === word) : null;
+    this.canvas.style.cursor = l ? (l.peek ? 'zoom-in' : 'pointer') : 'default'; // the system's own cursor: a hand over a link
     if (word === this.view.hover) return;
     this.view.hover = word;
+    if (this.onHover) this.onHover(l || null); // e.g. the picture that shows when a word is hovered
     if (this.play.done) this.play.redraw();
   }
 
@@ -58,7 +60,7 @@ export class LinkController {
 
   onClick(e) {
     const l = this.linkAt(e);
-    if (!l) return;
+    if (!l || !l.href) return;
     follow(l.href, this.model.anchors, this.view.geo.em);
   }
 }
