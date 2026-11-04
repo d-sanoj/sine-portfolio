@@ -25,6 +25,13 @@ npm run build:dist   rebuild and make dist/, the folder you publish
    puts every character, line and underline, and saves the numbers.
 3. `npm run build:dist`, then publish `dist/`.
 
+## One page, two versions
+
+`apps/plain/index.html` is the one place the words live, and the sine page is measured from it (`/measure/`). A few bits differ:
+`data-plain-only` marks something only the plain page has (its "See it wavy" link, its first About line); `data-sine="only" hidden`
+marks something only the sine page has (its About hook line, with the "click here" link to the plain page). The measuring tool removes
+the first kind and shows the second, so the sine layout is the plain page as the sine page should have it.
+
 ## The portrait
 
 The sine home page opens with one big portrait loader, centred on the screen (the plain page has none; it just appears). While the page loads, a circle
@@ -53,7 +60,7 @@ link, toward its right end, growing out of the underline: five circles, one for 
 letters, start stacked as one small circle on the underline, travel down below it, move apart and take their letter shapes
 (the same circle-to-letter morph as the page's letters), in the underline's yellow. It starts 30 ms after the pointer reaches
 the link, takes 0.65 s to form in 20 steps, and folds back in 0.3 s when the pointer leaves; the word is the same size
-(12.3 px per em) wherever it appears. The link to the plain page ("See it plain") says "boring text version" instead, starting where "click" starts and running on to the right (`HINT.words`; `data/generated/boring-word.json`, made by the same build step). The word comes from `data/generated/click-word.json`, made by the build (it moves everything after the "c" right by 0.1 em, because the designed "c" and "l" join up and read as a "d" at a small size; `SPLIT` in `scripts/build.js`),
+(12.3 px per em) wherever it appears. The link to the plain page (the "click here" in the About section) says "boring text version" instead, starting where "click" starts and running on to the right (`HINT.words`; `data/generated/boring-word.json`, made by the same build step). The word comes from `data/generated/click-word.json`, made by the build (it moves everything after the "c" right by 0.1 em, because the designed "c" and "l" join up and read as a "d" at a small size; `SPLIT` in `scripts/build.js`),
 (`npm run build`) from `data/source/sine-glyphs.json`, so it changes when you redesign the letters. Whether the pointer is on a
 link is checked on every pointer move and also when the page scrolls or resizes under a still pointer, when the pointer
 leaves the window, and when the tab or window comes back to the front. Code: `apps/site/app/controller/HintController.js` and

@@ -26,8 +26,10 @@ async function openFrame(L) {
   return frame;
 }
 
-// the sine version of the page swaps a few links (e.g. "See in sine waves" -> "See in the boring way")
+// the sine version of the page differs a little from the plain page: some bits are only on one of them (data-plain-only, data-sine="only"), and a few links swap (data-sine-text)
 function swapSineLinks(d) {
+  d.querySelectorAll('[data-plain-only]').forEach((el) => el.remove()); // bits only the plain page has (e.g. its link to the sine page)
+  d.querySelectorAll('[data-sine="only"]').forEach((el) => { el.hidden = false; }); // bits only the sine page has
   d.querySelectorAll('[data-sine-text]').forEach((el) => {
     el.textContent = el.dataset.sineText;
     if (el.dataset.sineHref) el.setAttribute('href', el.dataset.sineHref);
