@@ -7,7 +7,7 @@
 <meta name="description" content="Sanoj is an AI engineer building retrieval, local AI, text processing and analytics systems that turn messy inputs into useful outputs.">
 <meta name="color-scheme" content="dark">
 <script>
-  /* phones get this page at the main address (functions/_middleware.js); mark them here so the page can say the sine version needs a computer */
+  /* phones get this page at the main address (functions/_middleware.js); mark them here so "See it wavy" can open a pop-up instead of the sine page */
   if (/iPhone|iPod|Android.+Mobile|Windows Phone|Opera Mini|BlackBerry|IEMobile|Mobile.+Firefox/i.test(navigator.userAgent) || (navigator.userAgentData && navigator.userAgentData.mobile)) document.documentElement.classList.add('phone');
 </script>
 <link rel="preload" href="../assets/fonts/JosefinSans-VF.ttf" as="font" type="font/ttf" crossorigin>
@@ -68,10 +68,23 @@
   .top nav { margin: 0; font-size: 1rem; }
   /* the sine page draws the name and the GitHub link in the yellow of its link underlines; this page keeps its own colours (read by apps/measure) */
   .top .brand, .top .links a { --sine-ink: #f2c14e; }
-  /* on a phone the sine-wave version is not offered: a note takes the place of the link */
-  .sine-note { display: none; color: var(--muted); }
-  .phone .to-sine { display: none; }
-  .phone .sine-note { display: inline; }
+  /* on a phone "See it wavy" opens a pop-up (the sine page is too heavy for a phone's animation) */
+  .sine-modal { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 1.4rem;
+    background: rgba(10, 10, 10, 0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); opacity: 0; transition: opacity 0.25s ease; }
+  .sine-modal.open { display: flex; }
+  .sine-modal.show { opacity: 1; }
+  .sine-card { width: 100%; max-width: 22rem; padding: 1.7rem 1.5rem 1.5rem; text-align: center; background: #1a1a19;
+    border: 1px solid var(--line); border-radius: 1.1rem; box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.55);
+    transform: translateY(0.8rem) scale(0.97); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .sine-modal.show .sine-card { transform: none; }
+  .sine-wave { display: block; width: 100%; height: 2.6rem; margin: 0 auto 0.9rem; }
+  .sine-card h2 { margin: 0 0 0.6rem; font-size: 1.45rem; font-weight: 500; line-height: 1.25; letter-spacing: 0.01em; }
+  .sine-card p { margin: 0 0 1.4rem; font-size: 1.05rem; line-height: 1.6; color: var(--muted); }
+  .sine-card button { font: inherit; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.04em; color: #131313; background: #f2c14e; border: 0;
+    border-radius: 999px; padding: 0.65rem 2.2rem; cursor: pointer; }
+  .sine-card button:active { transform: scale(0.97); }
+  .sine-card button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .sine-modal, .sine-card { transition: none; } }
   .top nav a { text-decoration: none; color: var(--muted); }
   .top nav a:hover { color: var(--ink); }
 
@@ -138,7 +151,7 @@
       <p class="label" style="margin-top:0">AI Engineer</p>
       <h1>Smart Data Foundations. Purposeful AI System.</h1>
       <p>Curious enough to experiment, break and rebuild, careful enough to ship. Art keeps the other half of me happy.</p>
-      <div class="links lead" data-sine="skip"><span class="item"><a href="#work">View selected work</a></span><span class="item"><a class="to-sine" href="../" data-sine-text="See it plain" data-sine-href="boring/">See it wavy</a><span class="sine-note">The sine-wave version looks best on a computer</span></span></div>
+      <div class="links lead" data-sine="skip"><span class="item"><a href="#work">View selected work</a></span><span class="item"><a class="to-sine" href="../" data-sine-text="See it plain" data-sine-href="boring/">See it wavy</a></span></div>
       <div class="links lead" data-sine="only" hidden><span class="item"><a href="boring/">See it plain</a></span></div>
     </div>
   </section>
@@ -291,6 +304,38 @@
     <p>Encode your legacy in bits and bytes.</p>
   </div>
 </footer>
+
+<div class="sine-modal" id="sine-modal" role="dialog" aria-modal="true" aria-labelledby="sine-modal-title" hidden data-sine="skip">
+  <div class="sine-card">
+    <svg class="sine-wave" viewBox="0 -6 300 52" aria-hidden="true" preserveAspectRatio="none"><path d="M0 20 C 25 -8, 50 -8, 75 20 S 125 48, 150 20 S 200 -8, 225 20 S 275 48, 300 20" fill="none" stroke="#f2c14e" stroke-width="2" stroke-linecap="round"/></svg>
+    <h2 id="sine-modal-title">Best on a bigger screen</h2>
+    <p>The sine-wave version draws every letter live, and that needs a computer to run smoothly. Open this page on a desktop or laptop to see it.</p>
+    <button type="button" id="sine-modal-ok">Got it</button>
+  </div>
+</div>
+<script>
+  /* on a phone, "See it wavy" opens the pop-up instead of the sine page */
+  (function () {
+    var link = document.querySelector('.to-sine'), modal = document.getElementById('sine-modal'), ok = document.getElementById('sine-modal-ok');
+    if (!link || !modal || !document.documentElement.classList.contains('phone')) return;
+    function open() {
+      modal.hidden = false; modal.classList.add('open');
+      requestAnimationFrame(function () { modal.classList.add('show'); });
+      document.body.style.overflow = 'hidden';
+      ok.focus();
+    }
+    function close() {
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+      setTimeout(function () { modal.classList.remove('open'); modal.hidden = true; }, 250);
+      link.focus();
+    }
+    link.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    ok.addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+  })();
+</script>
 
 </body>
 </html>

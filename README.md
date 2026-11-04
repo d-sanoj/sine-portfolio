@@ -109,8 +109,9 @@ The earlier version of the site is kept at https://archive.sanoj.dev/.
 
 **Phones get the plain page.** `functions/_middleware.js` (a Cloudflare Pages Function) answers the home page `/` for a phone
 with the plain page (`boring/index.html`) under the same address; computers and tablets get the sine page. It only runs for `/`
-(`_routes.json` in `dist/`, written by `scripts/lib/dist.js`), so it stays within the free plan. On a phone the plain page
-replaces its "See it wavy" link with a note that the sine version looks best on a computer (`.sine-note` in `apps/plain/index.html`).
+(`_routes.json` in `dist/`, written by `scripts/lib/dist.js`), so it stays within the free plan. On a phone the plain page keeps its
+"See it wavy" link, but tapping it opens a pop-up ("Best on a bigger screen") instead of going to the sine page, which skips frames on phones
+(`.sine-modal` in `apps/plain/index.html`; the measuring tool ignores it because it is not drawn).
 To try it without deploying: `npx wrangler pages dev dist` after `npm run build:dist`, then ask for `/` with a phone's user agent.
 The local dev server (`npm run dev`) does not run the function, so there a phone still gets the sine page.
 

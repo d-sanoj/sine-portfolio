@@ -90,7 +90,7 @@ export async function measurePage(L) {
     const el = node.parentElement;
     if (!el || el.closest('script, style, noscript')) continue;
     const cs = w.getComputedStyle(el);
-    if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+    if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; // not drawn (or inside something not drawn)
     const a = el.closest('a');
     const upper = cs.textTransform === 'uppercase';
     const asc = ascentOf(cs);
@@ -146,7 +146,7 @@ export async function measurePage(L) {
   const vw = d.documentElement.clientWidth;
   for (const el of d.body.querySelectorAll('*')) {
     const cs = w.getComputedStyle(el);
-    if (cs.display === 'none') continue;
+    if (cs.display === 'none' || !el.getClientRects().length) continue; // not drawn (or inside something that is not drawn, like the phone pop-up)
     const r = el.getBoundingClientRect();
     for (const side of ['Top', 'Bottom']) {
       const bw = parseFloat(cs['border' + side + 'Width']);
@@ -158,7 +158,7 @@ export async function measurePage(L) {
 
   // ----- places the page can scroll to (#work, #contact ...) -----
   const anchors = {};
-  d.querySelectorAll('[id]').forEach((el) => { anchors[el.id] = +(el.getBoundingClientRect().top + sy).toFixed(2); });
+  d.querySelectorAll('[id]').forEach((el) => { if (!el.getClientRects().length) return; anchors[el.id] = +(el.getBoundingClientRect().top + sy).toFixed(2); });
 
   // ----- how thick the font's strokes are at each weight, as a share of the font size -----
   const stems = {};
