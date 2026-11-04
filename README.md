@@ -92,13 +92,20 @@ To change them: put photos in `data/source/photos/` as `portrait-01.jpg`, `portr
 open `/portraits/`, click **Trace all**, then **Save portraits**, then `npm run build:dist`.
 The loader is skipped for people who prefer reduced motion, and when the address has `?noloader`.
 
-## Publishing (GitHub Pages)
+## Publishing (Cloudflare Pages)
 
-`.github/workflows/pages.yml` publishes the site every time `main` is pushed: it runs `npm ci` and `npm run build:dist` and
-publishes `dist/`. In the repository: Settings -> Pages -> Source: **GitHub Actions** (once). The site is then at
-`https://<user>.github.io/<repository>/`; the sine page is at that address and the plain page is in `boring/` below it.
-The addresses inside the site are relative (the code's imports go through an import map in `apps/site/index.html`, and
-the data, fonts and links are relative to their page), so the same build works at the root of a domain or in a folder.
+The site is published by Cloudflare Pages from this repository's `main` branch: every push builds it and publishes it at
+https://sanoj.dev/ (the plain page is at `/boring/`). The Pages project (Workers & Pages -> `sine-portfolio`) uses:
+
+| Setting | Value |
+|---|---|
+| Build command | `npm ci && npm run build:dist` |
+| Build output directory | `dist` |
+| Environment variable | `NODE_VERSION` = `22` |
+
+The addresses inside the site are relative (the code's imports go through an import map in `apps/site/index.html`, and the data,
+fonts and links are relative to their page), so the same build works at the root of a domain or in a folder.
+The earlier version of the site is kept at https://archive.sanoj.dev/.
 
 ## Size, and going back
 
