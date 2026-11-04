@@ -92,6 +92,18 @@ To change them: put photos in `data/source/photos/` as `portrait-01.jpg`, `portr
 open `/portraits/`, click **Trace all**, then **Save portraits**, then `npm run build:dist`.
 The loader is skipped for people who prefer reduced motion, and when the address has `?noloader`.
 
+## Publishing (GitHub Pages)
+
+```
+npm run deploy       builds dist/ and pushes it to the gh-pages branch (plain git, nothing else to set up)
+```
+
+In the repository, Settings -> Pages -> Source: **Deploy from a branch**, branch `gh-pages`, folder `/ (root)` (once). The site is then at
+`https://<user>.github.io/<repository>/`; the sine page is at that address and the plain page is in `boring/` below it.
+`main` holds the source and is pushed as usual; `gh-pages` holds only the finished website (`scripts/deploy.js`). The addresses
+inside the site are relative (the code's imports go through an import map in `apps/site/index.html`, and the data, fonts and links
+are relative to their page), so the same build works at the root of a domain or in a folder.
+
 ## Size, and going back
 
 `npm run build:dist` makes a small website: opening `/` loads about **306 KB** uncompressed on a desktop (261 KB on a phone),

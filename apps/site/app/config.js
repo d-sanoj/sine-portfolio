@@ -27,8 +27,8 @@ export const LINK_YELLOW = '#f2c14e'; // the underlines of hyperlinks (the yello
 
 // over a link, the word "click" forms below it, toward its right end, growing out of the underline (sizes in pixels)
 export const HINT = {
-  wordUrl: '/data/click-word.json', // the word, in the designed letters (made by the build)
-  words: { '/boring/': '/data/boring-word.json' }, // a link to this address shows these words instead of "click"; they start where "click" starts and run on to the right
+  wordUrl: 'data/click-word.json', // the word, in the designed letters (made by the build)
+  words: { 'boring/': 'data/boring-word.json' }, // a link to this address shows these words instead of "click"; they start where "click" starts and run on to the right
   textEm: 12.32, // how many pixels one em of the word is
   radius: 3, // the small circle it starts as, on the underline
   lineWidth: 1.5,

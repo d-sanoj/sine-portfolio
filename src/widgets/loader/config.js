@@ -1,5 +1,5 @@
 // How the loader looks and moves.
-export const PORTRAITS_URL = '/data/portraits.json';
+export const PORTRAITS_URL = 'data/portraits.json'; // relative to the page, so it works wherever the site is published
 
 // the loader: a circle becomes a portrait, holds, and dissolves back
 export const FORM_TIME = 1.0; // seconds for a circle to become a portrait
