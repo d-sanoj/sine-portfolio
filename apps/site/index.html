@@ -17,7 +17,11 @@
   /* the portrait loader covers the page until it is ready (src/widgets/loader) */
   #sine-loader { position: fixed; inset: 0; z-index: 2147483647; background: #131313; }
   html, body { margin: 0; height: 100%; }
-  body { background: #131313; overflow-x: hidden; }
+  /* The window is the one thing that scrolls (the page's code reads the window's scroll position). overflow-x is hidden on the
+     root, not on body: put on body, some browsers (Safari) can make body the thing that scrolls, and then the letters below the
+     first screen are never drawn and the real text stays put while the page moves. */
+  html { overflow-x: hidden; }
+  body { background: #131313; position: relative; }
   canvas { display: block; width: 100%; height: 100vh; }
 </style>
 <noscript><style>#sine-loader { display: none; }</style></noscript>
