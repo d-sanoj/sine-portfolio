@@ -119,7 +119,7 @@ The local dev server (`npm run dev`) does not run the function, so there a phone
 
 A solid yellow wobbly circle (an amoeba): a circle whose radius is wobbled by a few sine waves. `node scripts/make-favicon.js` draws it
 into `assets/` (`favicon.svg` for the tab, `favicon-32.png` and `favicon.ico` as fallbacks, `apple-touch-icon.png` for a phone's home
-screen); the waves, the yellow and the size are at the top of that script. Both pages link to the icons in their `<head>`.
+screen); the waves, the yellow and the size are at the top of that script. Both pages link to the icons in their `<head>`. Browsers keep a page's tab icon for a long time, so after changing the icon, raise the `?v=` number on those links so they download it again.
 
 ## Size, and going back
 
