@@ -64,7 +64,7 @@ export async function makeDist({ classic = false, minify = true } = {}) {
     for (const l of LAYOUTS) fs.copyFileSync(path.join(PATHS.generated, l.measured), path.join(out, 'data', l.measured));
     fs.copyFileSync(path.join(PATHS.generated, 'glyphs-used.json'), path.join(out, 'data', 'glyphs-used.json'));
   }
-  for (const f of ['click-word.json', 'boring-word.json']) fs.copyFileSync(path.join(PATHS.generated, f), path.join(out, 'data', f)); // the words shown below a hovered link
+  for (const f of ['click-word.json', 'boring-word.json', 'hero-word.json']) fs.copyFileSync(path.join(PATHS.generated, f), path.join(out, 'data', f)); // the words shown below a hovered link
   // the portraits the loader draws (traced with apps/portraits); the photos themselves are never published
   if (fs.existsSync(PATHS.portraits)) {
     const dest = path.join(out, 'data', 'portraits.json');

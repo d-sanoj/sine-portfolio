@@ -47,6 +47,19 @@ Browsers keep scripts for hours, so an update could be seen with old code and ne
 each import to `file.js?v=<fingerprint>`, and the page's own `<script>` tag gets one too. A script that changed has a new address and
 is fetched again; one that did not keeps its address and stays cached. (The dev server does not do this; it does not cache.)
 
+## The word at the top (sine page)
+
+Where a heading would be, the sine page shows the word "Sanoj" drawn in sine waves that you can play with: drag across it and the letters
+morph between circles and finished letters (the same morph every letter does as it forms); let go and it settles back. It plays itself
+once when the page is ready, with one small nudge to say it can be dragged. `apps/site/app/view/HeroWord.js` draws it on a canvas of its
+own over a slot the layout keeps free (`data-sine-slot="hero"` in `apps/plain/index.html`, recorded by the measuring tool as `slots`),
+using `data/generated/hero-word.json` (made by the build from the designed letters; the word is set in `scripts/build.js`).
+The plain page's heading and line under it are marked `data-sine-sr`: the plain page draws them as text, and the sine page keeps them
+as hidden real text (`.sr-only`) so screen readers and search engines still get them.
+
+The page does not scroll until the first animation is over (the loader, the letters arriving and this word forming): `lock` in
+`apps/site/app/main.js` holds the window still, with a 9 second timer so it can never stay locked.
+
 ## A word that shows a picture
 
 The "here" in the last About line is not a link: hovering it (or focusing it, or tapping it on a phone) shows a pencil portrait
