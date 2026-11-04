@@ -28,9 +28,17 @@ npm run build:dist   rebuild and make dist/, the folder you publish
 ## One page, two versions
 
 `apps/plain/index.html` is the one place the words live, and the sine page is measured from it (`/measure/`). A few bits differ:
-`data-plain-only` marks something only the plain page has (its "See it wavy" link, its first About line); `data-sine="only" hidden`
+`data-plain-only` marks something only the plain page has (its first About line, which links to the sine page); `data-sine="only" hidden`
 marks something only the sine page has (its About hook line, with the "click here" link to the plain page). The measuring tool removes
 the first kind and shows the second, so the sine layout is the plain page as the sine page should have it.
+
+## Where each letter sits
+
+A letter's position is its first term (k = 0), stored as a radius and an angle. On a tall page the radius is large (about 190 ems at the
+bottom), so an angle rounded to 3 decimals, which is what `affineTerms` does, could put a letter up to about 2 px out: unnoticeable
+near the top, but as big as the gaps between letters near the bottom, and different for every letter (it looked like "sometimes bad
+spacing"). `fromLayout` (`src/core/layout/measured.js`) therefore sets each position exactly. Checked against the browser's own letter
+positions: the error went from an average of 0.4 px (worst about 2 px) to 0.
 
 ## Updates reach visitors at once
 
@@ -141,7 +149,7 @@ The earlier version of the site is kept at https://archive.sanoj.dev/.
 **Phones get the plain page.** `functions/_middleware.js` (a Cloudflare Pages Function) answers the home page `/` for a phone
 with the plain page (`boring/index.html`) under the same address; computers and tablets get the sine page. It only runs for `/`
 (`_routes.json` in `dist/`, written by `scripts/lib/dist.js`), so it stays within the free plan. On a phone the plain page keeps its
-"See it wavy" link, but tapping it opens a pop-up ("Best on a bigger screen") instead of going to the sine page, which skips frames on phones
+link to the sine page (the bold "sine waves" in the first About line), but tapping it opens a pop-up ("Best on a bigger screen") instead of going to the sine page, which skips frames on phones
 (`.sine-modal` in `apps/plain/index.html`; the measuring tool ignores it because it is not drawn).
 To try it without deploying: `npx wrangler pages dev dist` after `npm run build:dist`, then ask for `/` with a phone's user agent.
 The local dev server (`npm run dev`) does not run the function, so there a phone still gets the sine page.

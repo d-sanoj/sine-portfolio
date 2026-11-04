@@ -39,7 +39,14 @@ export function fromLayout(L, data, options) {
         if (!gl) continue;
         const s = (fs / px) * (1 + R() * 0.03 * o.irr);
         const tau = [pen / px, -y / px + R() * 0.004 * o.irr];
-        const letter = { s: Sine.jitter(Sine.affineTerms(gl.s, [s, 0], [0, 0], tau), R, o.irr) };
+        // The letter's position is its k = 0 term, stored as a radius and an angle. On a tall page the radius is large (about 190 ems
+        // at the bottom), so an angle rounded to 3 decimals (as affineTerms does) can put the letter up to 0.1 em out: invisible near the
+        // top, but as big as the gaps between letters at the bottom, and different for every letter. So the position is kept exactly.
+        const placed = Sine.affineTerms(gl.s, [s, 0], [0, 0], tau).filter((t) => t[0] !== 0);
+        const dc = gl.s.find((t) => t[0] === 0) || [0, 0, 0];
+        const cx = s * dc[1] * Math.cos(dc[2]) + tau[0], cy = s * dc[1] * Math.sin(dc[2]) + tau[1];
+        placed.unshift([0, +Math.hypot(cx, cy).toFixed(6), +Math.atan2(cy, cx).toFixed(7)]);
+        const letter = { s: Sine.jitter(placed, R, o.irr) };
         if (gl.g && gl.g.length) letter.g = gl.g;
         letters.push(letter);
         pen += gl.adv * fs;
