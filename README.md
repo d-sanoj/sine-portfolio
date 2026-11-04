@@ -32,6 +32,15 @@ npm run build:dist   rebuild and make dist/, the folder you publish
 marks something only the sine page has (its About hook line, with the "click here" link to the plain page). The measuring tool removes
 the first kind and shows the second, so the sine layout is the plain page as the sine page should have it.
 
+## Real text on the sine page
+
+Everything on the sine page is drawn, except what the plain page marks `data-sine-real` (now: "for accessible content click here"
+in the About hook). The measuring tool does not turn those words into sine letters; it records where each piece sits (one piece per
+row of text and per link) in `layout-*.json` (`real`), and `apps/site/app/view/RealTextView.js` puts real HTML text there, in the
+page's own font (`assets/fonts/JosefinSans-VF.ttf`, loaded by `apps/site/index.html`), so the words around it stay sine waves and
+this part is real text: a screen reader reads it as one paragraph, the link can be reached with the keyboard (Tab) and followed, and the
+text can be selected. A link in it also lights up the hover hint like any other link. It fades in after the letters have formed.
+
 ## The portrait
 
 The sine home page opens with one big portrait loader, centred on the screen (the plain page has none; it just appears). While the page loads, a circle

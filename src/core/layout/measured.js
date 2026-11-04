@@ -11,6 +11,7 @@
 //   word.c       colour number          word.u        underline rows [x0, x1, v] in ems, word.uw their weight
 //   page.rules   [{ a, b, v, w, c, full }]  horizontal lines; full ones run the width of the screen
 //   page.anchors { id: v }              where #links scroll to
+//   page.real    [{ fs, wt, ls, c, frags: [{ t, x, v, w, h, href? }] }]  text that stays real text (page ems; v = top of the piece)
 import { Sine } from '../sine/index.js';
 import { Content } from '../content/index.js';
 import { mulberry32 } from './random.js';
@@ -65,11 +66,16 @@ export function fromLayout(L, data, options) {
   }));
   const anchors = {};
   for (const [id, y] of Object.entries(L.anchors)) anchors[id] = +(-y / px).toFixed(4);
+  const real = (L.real || []).map((r) => ({
+    fs: +(r.fs / px).toFixed(4), wt: r.wt, ls: +(r.ls / px).toFixed(4), c: r.ci,
+    frags: r.frags.map((f) => ({ t: f.t, x: +(f.x / px).toFixed(4), v: +(-f.y / px).toFixed(4), w: +(f.w / px).toFixed(4), h: +(f.h / px).toFixed(4), ...(f.href ? { href: f.href } : {}) })),
+  }));
   return {
     format: 'sine-page', version: 5,
-    note: 'lines > words > letters. A letter is one closed curve: s = [frequency, amplitude, phase] terms, x = sum a*cos(2*pi*f*t+p), y = sum a*sin(2*pi*f*t+p), t in 0..1; g = ranges of t that are not drawn. Units are ems of the body text (px pixels), y up, 0 = top of the page. Words carry c (colour number in palette), w (line weight), h (link), u (underline rows). rules are horizontal lines. anchors say where #links scroll to.',
+    note: 'lines > words > letters. A letter is one closed curve: s = [frequency, amplitude, phase] terms, x = sum a*cos(2*pi*f*t+p), y = sum a*sin(2*pi*f*t+p), t in 0..1; g = ranges of t that are not drawn. Units are ems of the body text (px pixels), y up, 0 = top of the page. Words carry c (colour number in palette), w (line weight), h (link), u (underline rows). rules are horizontal lines. anchors say where #links scroll to. real is text that stays real text.',
     px, vw: L.vw, fitW: Math.round(contentW + 48), height: L.height, bg: L.bg, accent: L.accent, palette: L.palette, anchors, rules,
     bounds: [0, -L.height / px, L.vw / px, 0],
     lines: [words],
+    ...(real.length ? { real } : {}),
   };
 }

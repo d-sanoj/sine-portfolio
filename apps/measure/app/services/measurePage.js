@@ -91,6 +91,7 @@ export async function measurePage(L) {
   while ((node = walker.nextNode())) {
     const el = node.parentElement;
     if (!el || el.closest('script, style, noscript')) continue;
+    if (el.closest('[data-sine-real]')) continue; // real text on the sine page (see below), not drawn as sine waves
     const cs = w.getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || !el.getClientRects().length) continue; // not drawn (or inside something not drawn)
     const a = el.closest('a');
@@ -124,6 +125,39 @@ export async function measurePage(L) {
       weights.add(wt);
       g.chars.push([upper ? ch.toUpperCase() : ch, +(rect.left + sx).toFixed(2), +(rect.top + sy + asc).toFixed(2), fs, wt, ci, +rect.width.toFixed(2)]);
     }
+  }
+
+  // ----- real text: what is marked data-sine-real stays real text on the sine page (so screen readers and keyboards reach it) -----
+  // It is recorded as pieces, one per row of text and per link, with where each sits; the sine page puts real text there.
+  const real = [];
+  for (const el of d.querySelectorAll('[data-sine-real]')) {
+    if (!el.getClientRects().length) continue;
+    const cs = w.getComputedStyle(el);
+    const frags = [];
+    let cur = null;
+    const tw = d.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let tn;
+    while ((tn = tw.nextNode())) {
+      const link = tn.parentElement.closest('a');
+      const href = link ? link.getAttribute('href') : null;
+      for (let i = 0; i < tn.nodeValue.length; i++) {
+        const range = d.createRange();
+        range.setStart(tn, i);
+        range.setEnd(tn, i + 1);
+        const rect = range.getClientRects()[0];
+        if (!rect || rect.width === 0) continue; // collapsed white space
+        if (!cur || cur.href !== href || Math.abs(rect.top + sy - cur.y) > rect.height / 2) {
+          cur = { t: '', x: rect.left + sx, y: rect.top + sy, x1: 0, h: rect.height, href };
+          frags.push(cur);
+        }
+        cur.t += tn.nodeValue[i];
+        cur.x1 = rect.right + sx;
+      }
+    }
+    real.push({
+      fs: parseFloat(cs.fontSize), wt: parseInt(cs.fontWeight, 10), ls: parseFloat(cs.letterSpacing) || 0, ci: colorIndex(cs.color),
+      frags: frags.map((f) => ({ t: f.t, x: +f.x.toFixed(2), y: +f.y.toFixed(2), w: +(f.x1 - f.x).toFixed(2), h: +f.h.toFixed(2), ...(f.href ? { href: f.href } : {}) })),
+    });
   }
 
   // ----- underlines: one line under each row of text of an underlined link -----
@@ -178,7 +212,7 @@ export async function measurePage(L) {
     px: parseFloat(bodyCs.fontSize),
     bg: toHex(bodyCs.backgroundColor),
     accent: rootCs.getPropertyValue('--accent').trim() || null,
-    palette, groups, rules, anchors, stems,
+    palette, groups, rules, anchors, stems, real,
   };
   frame.remove();
   return out;

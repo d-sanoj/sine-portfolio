@@ -15,6 +15,7 @@ export class PageModel {
     this.rules = page.rules || [];
     this.anchors = page.anchors || {};
     this.letters = [];
+    this.real = page.real || []; // text that stays real text (see views/RealTextView.js)
     this.links = []; // { href, box: [x0, v0, x1, v1], word }
     let wordNo = 0;
     for (const line of page.lines) {
@@ -35,6 +36,13 @@ export class PageModel {
         (word.u || []).forEach(([a, b, v]) => add(lineLetter(a, b, v), word.uw || 1, true, true)); // underline rows
         if (word.h) this.links.push({ href: word.h, word: wordNo, box: boxOf(mine) });
         wordNo++;
+      }
+    }
+    // a link in real text has no letters, but it is a link here too, so hovering it lights up the hint like the others
+    let realNo = 1e6;
+    for (const r of this.real) {
+      for (const f of r.frags) {
+        if (f.href) this.links.push({ href: f.href, word: realNo++, box: [f.x - 0.12, f.v - f.h - 0.12, f.x + f.w + 0.12, f.v + 0.12], real: true });
       }
     }
     this.end = this.letters.reduce((m, s) => Math.max(m, s.start + FORM_TIME), 0);
