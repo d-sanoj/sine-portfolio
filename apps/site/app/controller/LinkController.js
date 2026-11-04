@@ -70,7 +70,9 @@ function follow(href, anchors, em) {
   if (href[0] === '#') { // somewhere further down this page
     const v = anchors[href.slice(1)];
     if (v !== undefined) window.scrollTo({ top: -v * em, behavior: 'smooth' });
-  } else if (/^(https?:|mailto:|tel:)/i.test(href)) {
+  } else if (/^(mailto:|tel:)/i.test(href)) {
+    window.location.href = href; // the mail or phone app opens; the page stays
+  } else if (/^https?:/i.test(href)) {
     window.open(href, '_blank', 'noopener'); // other sites open in a new tab
   } else if (!/^[a-z][a-z0-9+.-]*:/i.test(href)) {
     window.location.assign(new URL(href, window.location.href)); // a page of this site
