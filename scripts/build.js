@@ -97,7 +97,6 @@ function hintWord(text, file, shift) {
   console.log('Built data/generated/' + file + ' (the words shown below a hovered link: ' + text + ')');
 }
 hintWord('click', 'click-word.json', (i) => (i === 0 ? 0 : 0.1)); // everything after the "c" moves right
-hintWord('Sanoj', 'hero-word.json', (i) => 0.025 * i); // the word at the top of the sine page that you can drag (apps/site/app/view/HeroWord.js)
 hintWord('boring text version', 'boring-word.json', (i) => 0.03 * i); // shown below the link to the plain page (HINT.words in apps/site/app/config.js)
 
 if (process.argv.includes('--dist')) {

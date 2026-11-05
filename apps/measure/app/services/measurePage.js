@@ -27,17 +27,13 @@ async function openFrame(L) {
 }
 
 // the sine version of the page differs a little from the plain page: some bits are only on one of them (data-plain-only, data-sine="only"), and a few links swap (data-sine-text)
-// Returns the bits that stay on the sine page only as hidden real text (data-sine-sr): [{ tag, t }].
 function swapSineLinks(d) {
-  const sr = [];
-  d.querySelectorAll('[data-sine-sr]').forEach((el) => { sr.push({ tag: el.tagName.toLowerCase(), t: el.textContent.trim() }); el.remove(); }); // read for screen readers, not drawn
   d.querySelectorAll('[data-plain-only]').forEach((el) => el.remove()); // bits only the plain page has (e.g. its link to the sine page)
   d.querySelectorAll('[data-sine="only"]').forEach((el) => { el.hidden = false; }); // bits only the sine page has
   d.querySelectorAll('[data-sine-text]').forEach((el) => {
     el.textContent = el.dataset.sineText;
     if (el.dataset.sineHref) el.setAttribute('href', el.dataset.sineHref);
   });
-  return sr;
 }
 
 // text drawn by CSS (the dots between links) becomes real text so it can be measured
@@ -68,7 +64,7 @@ function materialisePseudoText(d, w) {
 export async function measurePage(L) {
   const frame = await openFrame(L);
   const w = frame.contentWindow, d = frame.contentDocument;
-  const sr = swapSineLinks(d);
+  swapSineLinks(d);
   materialisePseudoText(d, w);
   await new Promise((r) => setTimeout(r, 100));
 
@@ -166,14 +162,6 @@ export async function measurePage(L) {
     });
   }
 
-  // ----- slots: places the sine page puts something other than text (a box with data-sine-slot; see apps/site/app/view/HeroWord.js) -----
-  const slots = [];
-  for (const el of d.querySelectorAll('[data-sine-slot]')) {
-    if (!el.getClientRects().length) continue;
-    const r = el.getBoundingClientRect();
-    slots.push({ id: el.getAttribute('data-sine-slot'), x: +(r.left + sx).toFixed(2), y: +(r.top + sy).toFixed(2), w: +r.width.toFixed(2), h: +r.height.toFixed(2) });
-  }
-
   // ----- underlines: one line under each row of text of an underlined link -----
   for (const [a, g] of byLink) {
     const cs = w.getComputedStyle(a);
@@ -226,7 +214,7 @@ export async function measurePage(L) {
     px: parseFloat(bodyCs.fontSize),
     bg: toHex(bodyCs.backgroundColor),
     accent: rootCs.getPropertyValue('--accent').trim() || null,
-    palette, groups, rules, anchors, stems, real, slots, sr,
+    palette, groups, rules, anchors, stems, real,
   };
   frame.remove();
   return out;

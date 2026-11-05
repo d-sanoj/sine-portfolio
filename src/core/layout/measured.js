@@ -12,8 +12,6 @@
 //   word.c       colour number          word.u        underline rows [x0, x1, v] in ems, word.uw their weight
 //   page.rules   [{ a, b, v, w, c, full }]  horizontal lines; full ones run the width of the screen
 //   page.anchors { id: v }              where #links scroll to
-//   page.slots   [{ id, x, v, w, h }]  boxes the sine page fills with something else, in ems (v = the top)
-//   page.sr      [{ tag, t }]          text that is on the sine page only as hidden real text
 //   page.real    [{ fs, wt, ls, c, frags: [{ t, x, v, w, h, href? }] }]  text that stays real text (page ems; v = top of the piece)
 import { Sine } from '../sine/index.js';
 import { Content } from '../content/index.js';
@@ -88,7 +86,5 @@ export function fromLayout(L, data, options) {
     bounds: [0, -L.height / px, L.vw / px, 0],
     lines: [words],
     ...(real.length ? { real } : {}),
-    ...((L.slots || []).length ? { slots: L.slots.map((b) => ({ id: b.id, x: +(b.x / px).toFixed(4), v: +(-b.y / px).toFixed(4), w: +(b.w / px).toFixed(4), h: +(b.h / px).toFixed(4) })) } : {}),
-    ...((L.sr || []).length ? { sr: L.sr } : {}),
   };
 }

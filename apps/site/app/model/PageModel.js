@@ -16,8 +16,6 @@ export class PageModel {
     this.anchors = page.anchors || {};
     this.letters = [];
     this.real = page.real || []; // text that stays real text (see views/RealTextView.js)
-    this.slots = page.slots || []; // boxes filled with something other than text (the word you can drag at the top)
-    this.sr = page.sr || []; // text that is on the page only as hidden real text, for screen readers and search engines
     this.links = []; // { href, box: [x0, v0, x1, v1], word }; a hoverable word with a picture has peek (its address) and no href
     let wordNo = 0;
     for (const line of page.lines) {
