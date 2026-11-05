@@ -16,6 +16,7 @@ export const PATHS = {
   measureApp: at('apps', 'measure'),
   portraitsApp: at('apps', 'portraits'),
   plainPage: at('apps', 'plain', 'index.html'), // the one place the words live
+  blog: at('content', 'blog'), // one Markdown file per post: content/blog/<slug>.md and images in content/blog/<slug>/
   // data: what people author, and what the build generates
   source: at('data', 'source'),
   generated: at('data', 'generated'),

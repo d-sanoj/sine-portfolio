@@ -14,23 +14,29 @@ import path from 'node:path';
 import { Content, Layout, Sine } from '../src/core/index.js';
 import { ROOT, PATHS, LAYOUTS } from './lib/paths.js';
 import { makeDist } from './lib/dist.js';
+import { injectHome } from './lib/blog.js';
+import { editorOptions, writeUsedGlyphs } from './lib/used-glyphs.js';
+import { ensureMeasured } from './lib/measure-run.js';
 
 const arg = (name) => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : null; };
 const readJson = (file) => { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { return null; } };
 
 const glyphs = readJson(PATHS.glyphs).glyphs;
 const contentFile = arg('--content');
+// The latest notes are filled in, then the page is measured, before the sine pages are built from it.
+// --no-measure skips that (the layouts already on disk are used). A custom --content file is not the home page.
+if (!contentFile && !process.argv.includes('--no-measure')) {
+  try { await ensureMeasured({ required: true }); }
+  catch (e) { console.error(e.message); process.exit(1); }
+}
 // The plain page is the one place the words live; the sine pages are built from it.
 const contentPath = contentFile ? path.resolve(contentFile) : PATHS.plainPage;
-const text = fs.readFileSync(contentPath, 'utf8');
+const raw = fs.readFileSync(contentPath, 'utf8');
+const text = contentFile ? raw : injectHome(raw);
 console.log('Content from ' + path.relative(ROOT, contentPath));
 
 // same page settings the designer last used (seed, irregularity)
-const ui = (readJson(PATHS.editorState) || {}).ui || {};
-const options = {};
-if (ui.join !== undefined) options.join = !!ui.join;
-if (ui.irr !== undefined) options.irr = +ui.irr;
-if (ui.seed !== undefined) options.seed = Math.max(1, Math.floor(+ui.seed || 1));
+const options = editorOptions();
 
 const parsed = Content.parse(text);
 const counts = {};
@@ -60,16 +66,9 @@ for (const layout of LAYOUTS) {
 // copy of the sine waves for every letter). They are the measured layouts (layout-*.json) and the letters the page uses.
 // The result is exactly the same page: scripts/check-compact.js proves it.
 {
-  const used = new Set();
-  for (const layout of LAYOUTS) {
-    const L = readJson(path.join(PATHS.generated, layout.measured));
-    if (!L) continue;
-    for (const g of L.groups) for (const [c0] of g.chars) for (const ch of (glyphs[c0] ? c0 : Content.resolve(c0, glyphs))) if (glyphs[ch]) used.add(ch);
-  }
-  const subset = {};
-  for (const ch of [...used].sort()) subset[ch] = glyphs[ch];
-  fs.writeFileSync(path.join(PATHS.generated, 'glyphs-used.json'), JSON.stringify({ format: 'sine-glyphs-used', options, glyphs: subset }));
-  console.log('Built data/generated/glyphs-used.json (' + used.size + ' letters, ' + Math.round(JSON.stringify(subset).length / 1024) + ' KB)');
+  const n = writeUsedGlyphs();
+  const subset = readJson(path.join(PATHS.generated, 'glyphs-used.json')).glyphs;
+  console.log('Built data/generated/glyphs-used.json (' + n + ' letters, ' + Math.round(JSON.stringify(subset).length / 1024) + ' KB)');
 }
 
 // The words shown below a hovered link, in the designed letters: laid out once and centred on the origin (units: ems, y up),
@@ -101,5 +100,5 @@ hintWord('boring text version', 'boring-word.json', (i) => 0.03 * i); // shown b
 
 if (process.argv.includes('--dist')) {
   await makeDist({ classic: process.argv.includes('--classic'), minify: !process.argv.includes('--no-minify') });
-  console.log('Made dist/: the sine site at the root, the plain site in dist/boring/');
+  console.log('Made dist/: the sine site at the root, the plain site in dist/boring/, the blog in dist/blog/');
 }
