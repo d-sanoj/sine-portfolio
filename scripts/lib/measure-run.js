@@ -81,6 +81,16 @@ function assertMeasured(posts) {
     for (const post of shown) {
       if (!text.includes(flat(post.title))) throw new Error(layout.measured + ' is missing the note "' + post.title + '"');
       if (!hrefs.some((h) => h.includes('/blog/' + post.slug + '/'))) throw new Error(layout.measured + ' is missing the link to /blog/' + post.slug + '/');
+      // sine home lists title and date only; the description stays on the plain page
+      if (post.description && text.includes(flat(post.description))) {
+        throw new Error(layout.measured + ' still draws the description of "' + post.title + '" (it should be plain-only)');
+      }
+    }
+    if (!text.includes('Home') || !text.includes('Blog')) {
+      throw new Error(layout.measured + ' is missing the Home / Blog links in the top bar');
+    }
+    if (!hrefs.some((h) => h === '../blog/' || h.endsWith('/blog/') || h === 'blog/')) {
+      throw new Error(layout.measured + ' is missing the Blog nav link');
     }
   }
 }

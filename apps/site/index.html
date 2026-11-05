@@ -32,6 +32,12 @@
 <noscript><p style="color:#ebe8e1;font:20px sans-serif;padding:2rem"><a style="color:inherit" href="boring/">Open the plain version</a></p></noscript>
 <!-- the code imports its parts as /core/... and /widgets/...; this makes those addresses relative to this page, so the site works
      wherever it is published (the root of a domain, or a folder like github.io/sine.portfolio/) -->
+<script>
+  /* remember that this visitor is on the sine version, so Home / Sanoj from the blog come back here */
+  (function () {
+    try { localStorage.setItem('sanoj-home', 'sine'); } catch (e) {}
+  })();
+</script>
 <script type="importmap">{"imports":{"/core/":"./core/","/widgets/":"./widgets/"}}</script>
 <script type="module" src="app/main.js"></script>
 </body>

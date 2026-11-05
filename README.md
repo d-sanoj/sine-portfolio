@@ -59,7 +59,7 @@ coverAlt: What the cover image shows.
 |---|---|
 | `title` | required. The page's only `h1`. |
 | `date` | required, `YYYY-MM-DD`. Newest first. |
-| `description` | required. Also the meta description. Keep it to one sentence: the home page draws it. |
+| `description` | required. Also the meta description. Keep it to one sentence: the plain home shows it; the sine home only draws the title and date. |
 | `cover`, `coverAlt` | optional image for sharing. `coverAlt` is required when there is a cover. |
 | `draft` | `true` leaves it off the site, the feed and the home page. The dev server still opens it. |
 | `lang` | optional, defaults to `en`. |
@@ -83,9 +83,11 @@ An empty alt is allowed only when you mark the image as decoration: `![](rule.sv
 
 A GIF, and an SVG whose CSS or SMIL animates, gets a Pause button. Someone who prefers reduced motion gets a still first frame (the build keeps frame 1 of a GIF) or the SVG held at the start, and Play. `{poster=still.png}` uses your own still instead of frame 1. Put the animation on its own line so the button belongs to it.
 
-Publishing is adding the `.md` (and its images) and pushing. Cloudflare runs `npm ci && npm run build:dist`. The three newest notes are filled into the home page, in the same rows as the projects: title (a link), then the date and the description. The markers are `<!-- blog:latest -->` in `apps/plain/index.html`; editing those rows by hand does nothing. The link written there is `../blog/<slug>/`, which lands on the note from both `/` and `/boring/`.
+Publishing is adding the `.md` (and its images) and pushing. Cloudflare runs `npm ci && npm run build:dist`. The three newest notes are filled into the home page, in the same rows as the projects: title (a link), then the date, and on the plain home the description too. The sine home draws only the title and the date. The markers are `<!-- blog:latest -->` in `apps/plain/index.html`; editing those rows by hand does nothing. The link written there is `../blog/<slug>/`, which lands on the note from both `/` and `/boring/`.
 
 `/blog/` is a static file. `functions/_middleware.js` only answers `/` (see `_routes.json`), so a phone opens the blog as the blog, not the plain home page.
+
+The top bar on the home pages and the blog has Home and Blog links. Visiting the sine home (`/`) or the plain home (`/boring/`) remembers which one you are on (in `localStorage`), so Home and "Sanoj" on a blog page take you back to that version. With no preference stored, or with JavaScript off, those links go to `/` (phones still get the plain page there).
 
 `npm run check:blog` checks that a missing alt stops the build. `npm run check:a11y` runs axe-core against the built blog after `npm run build:dist`.
 

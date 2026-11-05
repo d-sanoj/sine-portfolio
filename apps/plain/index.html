@@ -91,6 +91,7 @@
   @media (prefers-reduced-motion: reduce) { .sine-modal, .sine-card { transition: none; } }
   .top nav a { text-decoration: none; color: var(--muted); }
   .top nav a:hover { color: var(--ink); }
+  .top nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-color: #f2c14e; }
 
   /* ---------- sections ---------- */
   section { padding-block: 4.5rem; border-top: 1px solid var(--line); }
@@ -153,10 +154,12 @@
 </style>
 </head>
 <body>
-<header class="top" data-sine="skip">
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="#top">Sanoj</a>
+    <a class="brand" href="#top" data-home>Sanoj</a>
     <nav class="links" aria-label="Main">
+      <span class="item"><a href="#top" aria-current="page" data-home>Home</a></span>
+      <span class="item"><a href="../blog/">Blog</a></span>
       <span class="item"><a href="https://github.com/d-sanoj">GitHub</a></span>
     </nav>
   </div>
@@ -362,6 +365,14 @@
     document.addEventListener('click', hide);
     window.addEventListener('scroll', function () { if (wanted) place(); }, { passive: true });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  })();
+</script>
+
+
+<script>
+  /* remember that this visitor is on the plain version, so Home / Sanoj from the blog come back here */
+  (function () {
+    try { localStorage.setItem('sanoj-home', 'plain'); } catch (e) {}
   })();
 </script>
 
