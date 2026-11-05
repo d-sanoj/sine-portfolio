@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img">
+  <title>A highlight moves from the word star, to token 1421, then to its vector</title>
+  <style>
+    .hw-cap { opacity: 0.28; }
+    .hw-c1 { animation: hw-show 9s infinite; }
+    .hw-c2 { animation: hw-show 9s infinite 3s; }
+    .hw-c3 { animation: hw-show 9s infinite 6s; }
+    .hw-hi { animation: hw-move 9s infinite; }
+    @keyframes hw-show {
+      0%, 28% { opacity: 1; }
+      33%, 100% { opacity: 0.28; }
+    }
+    @keyframes hw-move {
+      0%, 30% { transform: translateX(0); }
+      33%, 63% { transform: translateX(241px); }
+      66%, 97% { transform: translateX(482px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+  <g fill="none" stroke="#c9dcee" stroke-width="2">
+    <rect x="24" y="36" width="190" height="120" rx="16"/>
+    <rect x="265" y="36" width="190" height="120" rx="16"/>
+    <rect x="506" y="36" width="190" height="120" rx="16"/>
+  </g>
+  <rect class="hw-hi" x="20" y="32" width="198" height="128" rx="18" fill="none" stroke="#f2c14e" stroke-width="3"/>
+  <g fill="#ebe8e1" font-family="Josefin Sans, system-ui, sans-serif" text-anchor="middle">
+    <text x="119" y="104" font-size="36">star</text>
+    <text x="360" y="74" font-size="16" fill="#97948d" letter-spacing="2">TOKEN</text>
+    <text x="360" y="114" font-size="36">1421</text>
+    <text x="601" y="104" font-size="20">0.2, -0.4, 0.7</text>
+    <text class="hw-cap hw-c1" x="360" y="230" font-size="22">A word becomes one token.</text>
+    <text class="hw-cap hw-c2" x="360" y="230" font-size="22">The token is a number.</text>
+    <text class="hw-cap hw-c3" x="360" y="230" font-size="22">The number picks a vector.</text>
+  </g>
+</svg>

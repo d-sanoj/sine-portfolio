@@ -15,6 +15,7 @@ import crypto from 'node:crypto';
 import { PATHS, LAYOUTS } from './paths.js';
 import { trimPortraits } from './trim.js';
 import { minifyDist } from './minify.js';
+import { injectHome, buildBlog } from './blog.js';
 
 const notHidden = (src) => !path.basename(src).startsWith('.');
 const copyDir = (from, to) => fs.cpSync(from, to, { recursive: true, filter: notHidden });
@@ -54,8 +55,12 @@ export async function makeDist({ classic = false, minify = true } = {}) {
   copyDir(PATHS.assets, path.join(out, 'assets'));
   fs.copyFileSync(path.join(PATHS.assets, 'favicon.ico'), path.join(out, 'favicon.ico')); // browsers ask for /favicon.ico by default
   fs.mkdirSync(path.join(out, 'boring'), { recursive: true });
-  fs.copyFileSync(PATHS.plainPage, path.join(out, 'boring', 'index.html'));
-  // Cloudflare Pages: the function in functions/_middleware.js only needs to run for the home page (static files stay free and unlimited)
+  // the three newest notes are written in here; the source file only keeps the markers
+  fs.writeFileSync(path.join(out, 'boring', 'index.html'), injectHome(fs.readFileSync(PATHS.plainPage, 'utf8')));
+  const posts = buildBlog(path.join(out, 'blog'));
+  console.log('Built dist/blog/ (' + posts + ' post' + (posts === 1 ? '' : 's') + ')');
+  // Cloudflare Pages: the function in functions/_middleware.js only needs to run for the home page (static files stay free and unlimited).
+  // /blog/ is not listed, so a phone opens the blog as itself and is not sent to the plain home page.
   fs.writeFileSync(path.join(out, '_routes.json'), JSON.stringify({ version: 1, include: ['/', '/index.html'], exclude: [] }));
   if (classic) {
     for (const l of LAYOUTS) fs.copyFileSync(path.join(PATHS.generated, l.page), path.join(out, 'data', l.page));

@@ -1,6 +1,7 @@
 // Local dev server: shows every app at its real address and lets the tools save into data/.
 //   npm run dev        then open  http://localhost:5173/            the sine site
 //                                 http://localhost:5173/boring/     the plain site
+//                                 http://localhost:5173/blog/       the blog
 //                                 http://localhost:5173/designer/   the letter designer
 //                                 http://localhost:5173/measure/    measures the plain page
 import http from 'node:http';
@@ -8,6 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { PATHS } from '../scripts/lib/paths.js';
 import { ROUTES, WRITABLE } from './routes.js';
+import { handleBlog, injectHome } from '../scripts/lib/blog.js';
+import { ensureMeasured } from '../scripts/lib/measure-run.js';
 
 const PORT = +process.env.PORT || 5173;
 for (const dir of [PATHS.source, PATHS.generated, PATHS.preview]) fs.mkdirSync(dir, { recursive: true });
@@ -23,6 +26,11 @@ const TYPES = {
   '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.xml': 'application/atom+xml; charset=utf-8',
   '.ico': 'image/x-icon',
 };
 const MAX_BODY = 20 * 1024 * 1024;
@@ -66,24 +74,40 @@ function serveFile(req, res, pathname) {
   if (!inside || hidden) return send(res, 404, 'not found');
   return fs.readFile(file, (err, buf) => {
     if (err) return send(res, 404, 'not found');
-    return send(res, 200, req.method === 'HEAD' ? '' : buf, TYPES[path.extname(file)] || 'application/octet-stream');
+    let body = buf;
+    if (path.resolve(file) === path.resolve(PATHS.plainPage)) {
+      try { body = injectHome(buf.toString('utf8')); }
+      catch (e) { return send(res, 500, e.message + '\n'); }
+    }
+    return send(res, 200, req.method === 'HEAD' ? '' : body, TYPES[path.extname(file)] || 'application/octet-stream');
   });
 }
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/api/ping') return send(res, 200, 'ok');
   if (req.method === 'POST' && url.pathname.startsWith('/api/save/')) return saveFile(req, res, decodeURIComponent(url.pathname.slice('/api/save/'.length)));
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'method not allowed');
+  // a new note, or an edit to the plain page, is measured before the sine page is served
+  if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname.startsWith('/boring') || url.pathname.startsWith('/data/layout-') || url.pathname.startsWith('/data/glyphs-used')) {
+    await ensureMeasured({ required: false });
+  }
+  if (url.pathname === '/blog' || url.pathname.startsWith('/blog/')) {
+    const result = handleBlog(url.pathname);
+    if (result.location) return send(res, result.status, '', 'text/plain', { Location: result.location });
+    return send(res, result.status, req.method === 'HEAD' ? '' : result.body, result.type);
+  }
   // /boring -> /boring/ so relative links inside the app resolve
   const bare = ROUTES.find((r) => r.prefix.length > 1 && url.pathname === r.prefix.slice(0, -1) && r.prefix !== '/data/');
   if (bare) return send(res, 301, '', 'text/plain', { Location: bare.prefix });
   return serveFile(req, res, url.pathname);
 });
 
+await ensureMeasured({ required: false });
 server.listen(PORT, '127.0.0.1', () => {
   console.log('Sine site:      http://localhost:' + PORT + '/');
   console.log('Plain site:     http://localhost:' + PORT + '/boring/');
+  console.log('Blog:           http://localhost:' + PORT + '/blog/');
   console.log('Designer:       http://localhost:' + PORT + '/designer/');
   console.log('Measure tool:   http://localhost:' + PORT + '/measure/');
 });

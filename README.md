@@ -14,16 +14,82 @@ npm run build:dist   rebuild and make dist/, the folder you publish
 |---|---|
 | `/` | the sine site (the default) |
 | `/boring/` | the plain HTML site |
+| `/blog/` | the notes, newest first, and `/blog/<slug>/` for one note |
 | `/designer/` | the letter designer (development only) |
-| `/measure/` | measures the plain page (development only) |
+| `/measure/` | measures the plain page (development only; the build does this itself) |
 | `/portraits/` | traces the loader portraits from photos (development only) |
 
 ## Updating the content
 
-1. Edit `apps/plain/index.html`.
-2. Open `http://localhost:5173/measure/` once. It asks the browser where the plain page
-   puts every character, line and underline, and saves the numbers.
-3. `npm run build:dist`, then publish `dist/`.
+Edit `apps/plain/index.html`, then `npm run build:dist`. The build measures the plain page
+(headless Chrome) whenever that file or the notes have changed, and writes `dist/`. You do not
+have to open `/measure/` first. The dev server measures too, the next time the sine page is
+asked for after a change. `/measure/` is still there if you want to watch the measuring happen.
+
+## Blog
+
+Notes are Markdown files. The blog is plain HTML, in the same type and colours as `/boring/`.
+Only the home page draws the latest notes as sine waves. `npm run dev` serves the notes at
+`/blog/`, and `npm run build:dist` writes them into `dist/blog/`.
+
+| Address | What it is |
+|---|---|
+| `/blog/` | every published note, newest first |
+| `/blog/<slug>/` | one note |
+| `/blog/feed.xml` | the Atom feed |
+
+### Writing a note
+
+Add `content/blog/<slug>.md`. The file name is the address (`how-a-model-reads-a-word.md` is
+`/blog/how-a-model-reads-a-word/`), lowercase words separated by hyphens. Images for that note
+go in `content/blog/<slug>/` and are named from the note: `![...](diagram.svg)` means
+`content/blog/<slug>/diagram.svg`.
+
+```markdown
+---
+title: How a model reads a word
+date: 2026-11-05
+description: One sentence. The home page draws every letter of this.
+cover: cover.png
+coverAlt: What the cover image shows.
+---
+```
+
+| Field | |
+|---|---|
+| `title` | required. The page's only `h1`. |
+| `date` | required, `YYYY-MM-DD`. Newest first. |
+| `description` | required. Also the meta description. Keep it to one sentence: the home page draws it. |
+| `cover`, `coverAlt` | optional image for sharing. `coverAlt` is required when there is a cover. |
+| `draft` | `true` leaves it off the site, the feed and the home page. The dev server still opens it. |
+| `lang` | optional, defaults to `en`. |
+
+In the body, `#` is a section (`h2`) and `##` is `h3`. The title is already the `h1`.
+Lists, tables (`Table: caption` on the line above), quotes, fenced code and links are the ordinary Markdown ones. To link another note, use its slug: `[How a model reads a word](how-a-model-reads-a-word)`.
+
+An image is its own line. The words in brackets are the alt text, and the build **stops** if they are missing:
+
+```markdown
+![What the picture shows](diagram.svg "A short caption under it")
+
+:::describe
+A longer account of a diagram or an animation: paragraphs and lists.
+:::
+```
+
+`:::describe` is optional. It becomes a disclosure under the figure ("Text description of this diagram", or "of this animation"). Use it when the alt text cannot carry the whole thing, which is the usual case for a step-by-step picture.
+
+An empty alt is allowed only when you mark the image as decoration: `![](rule.svg){decorative}`.
+
+A GIF, and an SVG whose CSS or SMIL animates, gets a Pause button. Someone who prefers reduced motion gets a still first frame (the build keeps frame 1 of a GIF) or the SVG held at the start, and Play. `{poster=still.png}` uses your own still instead of frame 1. Put the animation on its own line so the button belongs to it.
+
+Publishing is adding the `.md` (and its images) and pushing. Cloudflare runs `npm ci && npm run build:dist`. The three newest notes are filled into the home page, in the same rows as the projects: title (a link), then the date and the description. The markers are `<!-- blog:latest -->` in `apps/plain/index.html`; editing those rows by hand does nothing. The link written there is `../blog/<slug>/`, which lands on the note from both `/` and `/boring/`.
+
+`/blog/` is a static file. `functions/_middleware.js` only answers `/` (see `_routes.json`), so a phone opens the blog as the blog, not the plain home page.
+
+`npm run check:blog` checks that a missing alt stops the build. `npm run check:a11y` runs axe-core against the built blog after `npm run build:dist`.
+
+The three notes already in `content/blog/` are samples. Delete them when real ones replace them.
 
 ## One page, two versions
 
@@ -148,7 +214,7 @@ The loader is skipped for people who prefer reduced motion, and when the address
 ## Publishing (Cloudflare Pages)
 
 The site is published by Cloudflare Pages from this repository's `main` branch: every push builds it and publishes it at
-https://sanoj.dev/ (the plain page is at `/boring/`). The Pages project (Workers & Pages -> `sine-portfolio`) uses:
+https://sanoj.dev/ (the plain page is at `/boring/`, the notes at `/blog/`). The Pages project (Workers & Pages -> `sine-portfolio`) uses:
 
 | Setting | Value |
 |---|---|
@@ -176,8 +242,8 @@ screen); the waves, the yellow and the size are at the top of that script. Both 
 
 ## Size, and going back
 
-`npm run build:dist` makes a small website: opening `/` loads about **306 KB** uncompressed on a desktop (261 KB on a phone),
-under the 512 KB Club's limit (which counts uncompressed bytes). It is smaller in three ways, and each can be turned off:
+`npm run build:dist` makes a small website: opening `/` loads about **463 KB** uncompressed on a desktop,
+under the 512 KB Club's limit (which counts uncompressed bytes). The three notes on the home page are about 10 KB of that, because every new letter is another position in the measured layout. A phone is sent the plain page, about 140 KB, mostly the font. The site is smaller in three ways, and each can be turned off:
 
 | What | Instead of | Same look? | To go back |
 |---|---|---|---|
@@ -194,7 +260,7 @@ node scripts/build.js --dist --classic    the complete old way: 1 MB pages, whol
 The source (`apps/`, `src/`, `data/generated/portraits.json`) is never changed by any of this, only the copy in `dist/`.
 The site's own address `?classic` / `?src` switches back to the finished pages in development too (`apps/site/app/services/pageLoader.js`).
 `npm install` is needed once for esbuild; without it the build still works and publishes the code as written.
-The plain page (`/boring/`) is about 130 KB, mostly its font.
+The plain page (`/boring/`) is about 140 KB, mostly its font.
 
 ## Layout
 
@@ -205,6 +271,7 @@ apps/                       each app is its own small MVC program
   designer/                   the letter designer index.html + styles.css + app/{model,view,controller,services}
   measure/                    the measuring tool  index.html + app/{view,services}
   portraits/                  the portrait tracer index.html + app/{model,view,controller,services}
+content/blog/               the notes: one `<slug>.md`, images in `<slug>/`
 src/core/                   the shared model layer: pure logic, no DOM, no Node, no files
   sine/                       the math (series.js, fit.js, transform.js)
   content/                    reading text, markup and HTML into blocks

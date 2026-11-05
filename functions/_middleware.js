@@ -2,7 +2,7 @@
 //
 // The sine page is made for a computer's screen. When a phone asks for the home page ("/"), this sends it the plain page
 // (boring/index.html) instead, under the same address, so a shared link to sanoj.dev works for everyone. Computers, tablets and
-// every other address (data, scripts, fonts, /boring/ itself) are passed on untouched. It only runs for "/" (see _routes.json,
+// every other address (data, scripts, fonts, /boring/, /blog/) are passed on untouched. It only runs for "/" (see _routes.json,
 // which dist/ gets from scripts/lib/dist.js), so it stays far below the free plan's limit.
 const PHONE = /iPhone|iPod|Android.+Mobile|Windows Phone|Opera Mini|BlackBerry|IEMobile|Mobile.+Firefox/i;
 
