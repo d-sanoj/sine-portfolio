@@ -89,8 +89,6 @@ Publishing is adding the `.md` (and its images) and pushing. Cloudflare runs `np
 
 `npm run check:blog` checks that a missing alt stops the build. `npm run check:a11y` runs axe-core against the built blog after `npm run build:dist`.
 
-The three notes already in `content/blog/` are samples. Delete them when real ones replace them.
-
 ## One page, two versions
 
 `apps/plain/index.html` is the one place the words live, and the sine page is measured from it (`/measure/`). A few bits differ:
@@ -243,7 +241,7 @@ screen); the waves, the yellow and the size are at the top of that script. Both 
 ## Size, and going back
 
 `npm run build:dist` makes a small website: opening `/` loads about **463 KB** uncompressed on a desktop,
-under the 512 KB Club's limit (which counts uncompressed bytes). The three notes on the home page are about 10 KB of that, because every new letter is another position in the measured layout. A phone is sent the plain page, about 140 KB, mostly the font. The site is smaller in three ways, and each can be turned off:
+under the 512 KB Club's limit (which counts uncompressed bytes). The note listed on the home page is about 10 KB of that, because every new letter is another position in the measured layout. A phone is sent the plain page, about 140 KB, mostly the font. The site is smaller in three ways, and each can be turned off:
 
 | What | Instead of | Same look? | To go back |
 |---|---|---|---|

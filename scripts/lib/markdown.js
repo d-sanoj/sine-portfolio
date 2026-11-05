@@ -8,7 +8,7 @@ export class BlogError extends Error {
   }
 }
 
-const ALLOWED = new Set(['title', 'date', 'description', 'cover', 'coverAlt', 'draft', 'lang']);
+const ALLOWED = new Set(['title', 'date', 'description', 'cover', 'coverAlt', 'draft', 'lang', 'slug', 'tags']);
 
 function unquote(raw) {
   const v = raw.trim();
@@ -106,6 +106,14 @@ function parseInline(src) {
   while (i < src.length) {
     const c = src[i];
     if (c === '\\' && i + 1 < src.length) { out += esc(src[i + 1]); i += 2; continue; }
+    if (c === '<') {
+      const auto = /^<(https?:\/\/[^>\s]+)>/.exec(src.slice(i));
+      if (auto) {
+        out += '<a href="' + esc(auto[1]) + '">' + esc(auto[1]) + '</a>';
+        i += auto[0].length;
+        continue;
+      }
+    }
     if (c === '`') {
       let ticks = 1;
       while (src[i + ticks] === '`') ticks++;
@@ -216,7 +224,7 @@ function alignOf(cell) {
   return 'left';
 }
 
-export function parseBlocks(lines, file, usedIds) {
+export function parseBlocks(lines, file, usedIds, minLevel = 1) {
   const blocks = [];
   let i = 0;
   const err = (line, message) => { throw new BlogError(file + ':' + line.no + ': ' + message); };
@@ -257,7 +265,7 @@ export function parseBlocks(lines, file, usedIds) {
         itemLines.push({ text: lines[i].text.slice(cut), no: lines[i].no });
         i++;
       }
-      items.push(parseBlocks(itemLines, file, usedIds));
+      items.push(parseBlocks(itemLines, file, usedIds, minLevel));
     }
     return { type: 'list', ordered, items };
   }
@@ -288,7 +296,8 @@ export function parseBlocks(lines, file, usedIds) {
 
     if (/^#{1,6}\s+/.test(text.trim())) {
       const m = /^(#{1,6})\s+(.+?)\s*#*\s*$/.exec(text.trim());
-      const level = Math.min(6, m[1].length + 1); // the post title is the only h1
+      // The note's title is the page's only h1. The shallowest heading in the body is the next one down.
+      const level = Math.min(6, Math.max(2, m[1].length - minLevel + 2));
       const id = slugId(m[2], usedIds);
       blocks.push({ type: 'heading', level, text: m[2], id });
       i++;
@@ -312,7 +321,7 @@ export function parseBlocks(lines, file, usedIds) {
         inner.push({ text: lines[i].text.replace(/^>\s?/, ''), no: lines[i].no });
         i++;
       }
-      blocks.push({ type: 'quote', blocks: parseBlocks(inner, file, usedIds) });
+      blocks.push({ type: 'quote', blocks: parseBlocks(inner, file, usedIds, minLevel) });
       continue;
     }
 
@@ -368,7 +377,7 @@ export function parseBlocks(lines, file, usedIds) {
         }
         if (!closed) err({ no: openNo }, ':::describe is not closed with :::');
         if (!inner.some((l) => l.text.trim())) err({ no: openNo }, ':::describe is empty');
-        node.describe = parseBlocks(inner, file, usedIds);
+        node.describe = parseBlocks(inner, file, usedIds, minLevel);
       }
       blocks.push(node);
       continue;
@@ -408,7 +417,12 @@ export function parseMarkdown(text, file) {
   const { meta, body, bodyStart } = parseFrontMatter(text, file);
   const rawLines = body.split('\n');
   const lines = rawLines.map((t, n) => ({ text: t, no: bodyStart + n }));
-  const blocks = parseBlocks(lines, file, new Set());
+  let minLevel = 6;
+  for (const line of lines) {
+    const m = /^(#{1,6})\s+\S/.exec(line.text.trim());
+    if (m) minLevel = Math.min(minLevel, m[1].length);
+  }
+  const blocks = parseBlocks(lines, file, new Set(), minLevel === 6 ? 1 : minLevel);
   return { meta, blocks };
 }
 

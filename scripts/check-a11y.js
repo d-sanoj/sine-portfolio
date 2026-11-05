@@ -21,9 +21,7 @@ if (!fs.existsSync(path.join(PATHS.dist, 'blog', 'index.html'))) {
 
 const PAGES = [
   '/blog/',
-  '/blog/how-a-model-reads-a-word/',
-  '/blog/what-temperature-does/',
-  '/blog/one-word-at-a-time/',
+  '/blog/how-ai-reads-a-million-tokens/',
   '/boring/',
 ];
 
@@ -167,25 +165,28 @@ async function main() {
 
     await setWidth(1280);
     await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-    await goto(origin + '/blog/how-a-model-reads-a-word/');
+    await goto(origin + '/blog/how-ai-reads-a-million-tokens/');
     const reduced = await evalJson(page, `(() => {
-      const img = document.querySelector('img[data-animated-src]');
-      const btn = img.closest('figure').querySelector('.anim-control');
-      const svg = document.querySelector('svg.blog-anim');
-      return { src: img.getAttribute('src'), pressed: btn.getAttribute('aria-pressed'), label: btn.textContent, paused: svg.classList.contains('is-paused') };
+      return [...document.querySelectorAll('figure.anim')].map((fig) => {
+        const img = fig.querySelector('img[data-animated-src]');
+        const btn = fig.querySelector('.anim-control');
+        return { src: img.getAttribute('src'), anim: img.getAttribute('data-animated-src'), label: btn.textContent, pressed: btn.getAttribute('aria-pressed') };
+      });
     })()`);
-    const reducedOk = reduced.src.endsWith('lookup.still.png') && reduced.label === 'Play animation' && reduced.pressed === 'false' && reduced.paused;
-    console.log((reducedOk ? 'ok   ' : 'FAIL ') + 'reduced motion keeps the GIF still and the SVG paused: ' + JSON.stringify(reduced));
+    const reducedOk = reduced.length === 2 && reduced.every((f) => f.src.endsWith('-poster.png') && f.anim.endsWith('.gif') && f.label === 'Play animation' && f.pressed === 'false');
+    console.log((reducedOk ? 'ok   ' : 'FAIL ') + 'reduced motion keeps each GIF on its poster: ' + JSON.stringify(reduced));
     if (!reducedOk) failed++;
 
     await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
-    await goto(origin + '/blog/how-a-model-reads-a-word/');
+    await goto(origin + '/blog/how-ai-reads-a-million-tokens/');
     const motion = await evalJson(page, `(() => {
-      const img = document.querySelector('img[data-animated-src]');
-      const btn = img.closest('figure').querySelector('.anim-control');
-      return { src: img.getAttribute('src'), label: btn.textContent, pressed: btn.getAttribute('aria-pressed') };
+      return [...document.querySelectorAll('figure.anim')].map((fig) => {
+        const img = fig.querySelector('img[data-animated-src]');
+        const btn = fig.querySelector('.anim-control');
+        return { src: img.getAttribute('src'), label: btn.textContent, pressed: btn.getAttribute('aria-pressed') };
+      });
     })()`);
-    const motionOk = motion.src.endsWith('lookup.gif') && motion.label === 'Pause animation' && motion.pressed === 'true';
+    const motionOk = motion.length === 2 && motion.every((f) => f.src.endsWith('.gif') && f.label === 'Pause animation' && f.pressed === 'true');
     console.log((motionOk ? 'ok   ' : 'FAIL ') + 'animation plays with a pause control: ' + JSON.stringify(motion));
     if (!motionOk) failed++;
 

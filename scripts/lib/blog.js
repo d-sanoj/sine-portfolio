@@ -201,6 +201,9 @@ export function loadPosts(dir = PATHS.blog) {
     const slug = name.slice(0, -3);
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new BlogError('content/blog/' + name + ': use lowercase words separated by hyphens');
     const parsed = parseMarkdown(fs.readFileSync(abs, 'utf8'), 'content/blog/' + name);
+    if (parsed.meta.slug && parsed.meta.slug !== slug) {
+      throw new BlogError('content/blog/' + name + ': slug is ' + parsed.meta.slug + ' but the file name is ' + slug);
+    }
     const post = {
       slug, file: 'content/blog/' + name, dir: path.join(dir, slug),
       title: parsed.meta.title, date: parsed.meta.date, description: parsed.meta.description,

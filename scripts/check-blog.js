@@ -90,25 +90,29 @@ try {
 
 try {
   const real = loadPosts();
-  const third = real.find((p) => p.slug === 'one-word-at-a-time');
-  const html = renderPost(third, real);
-  if (!html.includes('href="../how-a-model-reads-a-word/"')) throw new Error('link to the other note was ' + (html.match(/href="[^"]*how-a-model[^"]*"/) || ['missing'])[0]);
-  if (!html.includes('<time datetime="2026-11-03">')) throw new Error('no time element');
-  ok('post links and dates');
-} catch (e) { bad('post links and dates', e); }
+  const post = real.find((p) => p.slug === 'how-ai-reads-a-million-tokens');
+  if (!post) throw new Error('the note is not loaded');
+  const html = renderPost(post, real);
+  if (!html.includes('href="https://ernie.baidu.com/release/ernie-5-5-flash-base/"')) throw new Error('the ERNIE link was dropped');
+  if (!html.includes('<time datetime="2026-11-05">')) throw new Error('no time element');
+  if (!html.includes('data-still-src="next-token-poster.png"') || !html.includes('data-animated-src="next-token.gif"')) throw new Error('the next-token GIF is not using its poster');
+  if (!html.includes('data-still-src="attention-poster.png"') || !html.includes('data-animated-src="attention.gif"')) throw new Error('the attention GIF is not using its poster');
+  if ((html.match(/<h1/g) || []).length !== 1) throw new Error('the page should have one h1');
+  ok('post links, dates and posters');
+} catch (e) { bad('post links, dates and posters', e); }
 
 try {
   const out = path.join(root, 'out');
   const n = buildBlog(out);
-  if (n < 3) throw new Error('expected at least the sample posts, got ' + n);
-  const still = path.join(out, 'how-a-model-reads-a-word', 'lookup.still.png');
-  if (!fs.existsSync(still)) throw new Error('still frame was not written');
-  const frame = gifFirstFrame(fs.readFileSync(path.join('content/blog/how-a-model-reads-a-word', 'lookup.gif')));
-  if (frame.frames < 2) throw new Error('sample gif is not animated');
+  if (n < 1) throw new Error('expected the note to be built, got ' + n);
+  const frame = gifFirstFrame(fs.readFileSync(path.join('content/blog/how-ai-reads-a-million-tokens', 'next-token.gif')));
+  if (frame.frames < 2) throw new Error('next-token.gif is not animated');
+  const page = fs.readFileSync(path.join(out, 'how-ai-reads-a-million-tokens', 'index.html'), 'utf8');
+  if (!page.includes('next-token-poster.png') || !fs.existsSync(path.join(out, 'how-ai-reads-a-million-tokens', 'attention-poster.png'))) throw new Error('posters were not published');
   const feed = fs.readFileSync(path.join(out, 'feed.xml'), 'utf8');
   if (!feed.includes('<feed xmlns="http://www.w3.org/2005/Atom">')) throw new Error('not an Atom feed');
-  if (!feed.includes('How a model reads a word')) throw new Error('feed is missing the sample');
-  ok('build writes pages, still frame and feed');
-} catch (e) { bad('build writes pages, still frame and feed', e); }
+  if (!feed.includes('How an AI reads a million tokens')) throw new Error('feed is missing the note');
+  ok('build writes pages, posters and feed');
+} catch (e) { bad('build writes pages, posters and feed', e); }
 
 process.exit(failed ? 1 : 0);
