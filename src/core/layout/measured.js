@@ -12,6 +12,7 @@
 //   word.c       colour number          word.u        underline rows [x0, x1, v] in ems, word.uw their weight
 //   page.rules   [{ a, b, v, w, c, full }]  horizontal lines; full ones run the width of the screen
 //   page.anchors { id: v }              where #links scroll to
+//   page.greetings { morning: [words], afternoon: [words] }  the words of the greeting at other times (the page itself has the evening's)
 //   page.real    [{ fs, wt, ls, c, frags: [{ t, x, v, w, h, href? }] }]  text that stays real text (page ems; v = top of the piece)
 import { Sine } from '../sine/index.js';
 import { Content } from '../content/index.js';
@@ -27,8 +28,8 @@ export function fromLayout(L, data, options) {
   // letters have round ends and overlap where strokes join, which reads heavier.
   const THIN = 0.72;
   const weightOf = (wt, fs) => +((THIN * (L.stems[wt] || 0.05) * fs) / (LINE * px)).toFixed(2);
-  const words = [];
-  for (const g of L.groups) {
+  // one measured word -> one word of the page (null when none of its characters has a designed shape)
+  const wordOf = (g) => {
     const letters = [];
     for (const [c0, x, y, fs] of g.chars) {
       // a character without a designed shape is swapped for a close one (which may be several characters)
@@ -52,7 +53,7 @@ export function fromLayout(L, data, options) {
         pen += gl.adv * fs;
       }
     }
-    if (!letters.length) continue;
+    if (!letters.length) return null;
     const [, , , fs, wt, ci] = g.chars[0];
     const word = { l: letters, c: ci };
     const w = weightOf(wt, fs);
@@ -63,8 +64,14 @@ export function fromLayout(L, data, options) {
       word.u = g.u.map(([x0, x1, y]) => [+(x0 / px).toFixed(4), +(x1 / px).toFixed(4), +(-y / px).toFixed(4)]);
       word.uw = +(g.u[0][3] / (LINE * px)).toFixed(2);
     }
-    words.push(word);
-  }
+    if (g.greet) word.greet = true; // a word of the greeting (see the greetings below)
+    return word;
+  };
+  const words = [];
+  for (const g of L.groups) { const word = wordOf(g); if (word) words.push(word); }
+  // the other greetings: { morning: [words], afternoon: [words] }; the evening one is in the page itself (its words have greet: true)
+  const greetings = {};
+  for (const [name, gs] of Object.entries(L.greetings || {})) greetings[name] = gs.map(wordOf).filter(Boolean);
   // the narrowest screen this layout fits: the text column plus the side space the plain page keeps
   const xs = L.groups.flatMap((g) => g.chars.map((ch) => ch[1]));
   const ends = L.groups.flatMap((g) => g.chars.map((ch) => ch[1] + ch[6]));
@@ -86,5 +93,6 @@ export function fromLayout(L, data, options) {
     bounds: [0, -L.height / px, L.vw / px, 0],
     lines: [words],
     ...(real.length ? { real } : {}),
+    ...(Object.keys(greetings).length ? { greetings } : {}),
   };
 }

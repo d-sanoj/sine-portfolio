@@ -16,7 +16,7 @@ async function openFrame(L) {
   const frame = document.createElement('iframe');
   frame.style.width = L.width + 'px';
   frame.style.height = L.height + 'px';
-  frame.src = PAGE_URL;
+  frame.src = PAGE_URL + (L.greeting ? '&greeting=' + L.greeting : ''); // L.greeting: measure the page as it reads in the morning, the afternoon or the evening
   document.body.appendChild(frame);
   await new Promise((r) => { frame.onload = r; });
   const d = frame.contentDocument;
@@ -121,7 +121,7 @@ export async function measurePage(L) {
           groups.push(g);
         }
       } else {
-        if (!plain) { plain = { chars: [], u: [] }; groups.push(plain); }
+        if (!plain) { plain = { chars: [], u: [] }; if (el.closest('[data-greet]')) plain.greet = true; groups.push(plain); } // greet: a word of the greeting, which changes with the time of day
         g = plain;
       }
       weights.add(wt);

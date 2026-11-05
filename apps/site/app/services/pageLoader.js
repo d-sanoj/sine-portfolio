@@ -32,14 +32,29 @@ async function loadFinished() {
   return r.ok ? await r.json() : null;
 }
 
+// The greeting at the top follows the visitor's own clock: morning 5 am to noon, afternoon noon to 5 pm, evening from 5 pm all night.
+// The page holds the evening's words (flagged greet) and the others in page.greetings; the right ones are swapped in before anything is
+// built. (?greeting=morning shows one on purpose.)
+function applyGreeting(page) {
+  if (!page || !page.greetings) return page;
+  const o = /[?&]greeting=(morning|afternoon|evening)/.exec(window.location.search), h = new Date().getHours();
+  const name = o ? o[1] : h >= 5 && h < 12 ? 'morning' : h >= 12 && h < 17 ? 'afternoon' : 'evening';
+  const swap = page.greetings[name];
+  const words = page.lines[0];
+  const first = words.findIndex((w) => w.greet);
+  if (!swap || first < 0) return page;
+  words.splice(first, words.filter((w) => w.greet).length, ...swap.map((w) => ({ ...w, greet: true })));
+  return page;
+}
+
 export async function loadPage() {
   const params = new URLSearchParams(window.location.search);
   try {
     if (!params.has('src') && !params.has('classic')) {
       const page = await loadCompact().catch(() => null);
-      if (page) return page;
+      if (page) return applyGreeting(page);
     }
-    return await loadFinished();
+    return applyGreeting(await loadFinished());
   } catch (e) {
     return null; // no data yet
   }

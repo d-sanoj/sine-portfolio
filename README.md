@@ -47,6 +47,15 @@ Browsers keep scripts for hours, so an update could be seen with old code and ne
 each import to `file.js?v=<fingerprint>`, and the page's own `<script>` tag gets one too. A script that changed has a new address and
 is fetched again; one that did not keeps its address and stays cached. (The dev server does not do this; it does not cache.)
 
+## The greeting
+
+The big heading is "Good morning / afternoon / evening. I\u2019m Sanoj." by the visitor\u2019s own clock: morning 5 am to noon, afternoon noon to 5 pm,
+evening from 5 pm all night. The greeting is a line of its own in `apps/plain/index.html` (`data-greet`), so all three take the same room
+and nothing below moves. The plain page sets it with a few lines of script. On the sine page the letters are drawn from measured positions,
+so the measuring tool measures all three greetings (`greeting` in `apps/measure/app/main.js`), the page holds the evening\u2019s words
+(flagged `greet`) and the others in `greetings`, and `applyGreeting` in `apps/site/app/services/pageLoader.js` swaps in the right ones before
+anything is built. `?greeting=morning` (or `afternoon`, `evening`) shows one on purpose. To change the hours, change them in both places.
+
 ## No scrolling during the first animation
 
 The sine page does not scroll until its first animation is over (the loader, then the letters arriving): `lock` and `unlock` in

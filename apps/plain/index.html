@@ -97,6 +97,7 @@
   section.hero { border-top: 0; padding-top: 4rem; }
   h1, h2, h3 { font-weight: 400; line-height: 1.2; margin: 0; }
   h1 { font-size: clamp(2.4rem, 7vw, 3.8rem); letter-spacing: 0.005em; margin-top: 1rem; }
+  .greet { display: block; } /* the greeting is a line of its own, so morning, afternoon and evening all take the same room */
   h2 { font-size: clamp(1.7rem, 4.5vw, 2.3rem); margin-top: 0.8rem; max-width: 28ch; }
   h3 { font-size: 1.45rem; font-weight: 500; }
   p { margin: 1.1rem 0 0; max-width: 38em; }
@@ -166,7 +167,15 @@
   <section class="hero">
     <div class="wrap">
       <p class="label" style="margin-top:0">AI Engineer</p>
-      <h1>Smart Data Foundations. Purposeful AI System.</h1>
+      <h1><span class="greet" data-greet>Good evening.</span> I&rsquo;m Sanoj.</h1>
+      <script>
+        /* "Good morning / afternoon / evening" by the visitor's own clock (5 am to noon, noon to 5 pm, and evening from 5 pm all night); ?greeting=morning shows one on purpose */
+        (function () {
+          var g = document.querySelector('[data-greet]');
+          var o = /[?&]greeting=(morning|afternoon|evening)/.exec(location.search), h = new Date().getHours();
+          if (g) g.textContent = 'Good ' + (o ? o[1] : h >= 5 && h < 12 ? 'morning' : h >= 12 && h < 17 ? 'afternoon' : 'evening') + '.';
+        })();
+      </script>
       <p>Curious enough to experiment, break and rebuild, careful enough to ship. Art keeps the other half of me happy.</p>
     </div>
   </section>
