@@ -10,7 +10,7 @@ export { BlogError };
 
 export const SITE = process.env.SITE_ORIGIN || 'https://sanoj.dev';
 // Bump when the home-page markup changes, so a publish rebuilds the sine layout.
-export const HOME_VERSION = '1';
+export const HOME_VERSION = '2';
 
 const CSS = fs.readFileSync(new URL('./blog.css', import.meta.url), 'utf8');
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -128,7 +128,7 @@ function checkAlt(img, post) {
 // Fills in how each image is published: a still frame for a GIF, inlined SVG, and so on.
 function preparePost(post) {
   if (post.description.length > 220) {
-    console.warn(post.file + ': description is ' + post.description.length + ' characters. The home page draws every letter of it, so one sentence is plenty.');
+    console.warn(post.file + ': description is ' + post.description.length + ' characters. Keep it to one sentence (the plain home shows it; the sine home only draws the title and date).');
   }
   if (post.cover) {
     const abs = resolveAsset(post.cover, post);
@@ -228,13 +228,14 @@ export function publishedPosts(dir) {
 
 function homeItem(post, i) {
   const n = String(i + 1).padStart(2, '0');
+  // Description is plain-only: the sine home draws just the title and the date.
   return '        <li>\n'
     + '          <span class="num">' + n + '</span>\n'
     + '          <div>\n'
     + '            <h3><a href="../blog/' + esc(post.slug) + '/">' + esc(post.title) + '</a></h3>\n'
     + '            <div class="links">\n'
     + '              <span class="item"><time datetime="' + post.date + '">' + esc(displayDate(post.date)) + '</time></span>\n'
-    + '              <span class="item">' + esc(post.description) + '</span>\n'
+    + '              <span class="item" data-plain-only>' + esc(post.description) + '</span>\n'
     + '            </div>\n'
     + '          </div>\n'
     + '        </li>';
@@ -394,6 +395,23 @@ function renderFigure(b, ctx) {
     + button + cap + desc + '</figure>';
 }
 
+const HOME_PREF_SCRIPT = `<script>
+(function () {
+  var KEY = 'sanoj-home';
+  var root = __ROOT__;
+  var boring = __BORING__;
+  function prefer() {
+    try { return localStorage.getItem(KEY); } catch (e) { return null; }
+  }
+  function apply() {
+    var v = prefer();
+    var href = v === 'plain' ? boring : root;
+    document.querySelectorAll('[data-home]').forEach(function (a) { a.setAttribute('href', href); });
+  }
+  apply();
+})();
+</script>`;
+
 function shell(opts) {
   const depth = opts.depth;
   const up = '../'.repeat(depth);
@@ -432,15 +450,17 @@ function shell(opts) {
     + '<header class="top">\n'
     + '<a class="skip" href="#content">Skip to content</a>\n'
     + '<div class="wrap">\n'
-    + '<a class="brand" href="' + home + '">Sanoj</a>\n'
+    + '<a class="brand" href="' + home + '" data-home>Sanoj</a>\n'
     + '<nav class="links" aria-label="Main">\n'
-    + '<span class="item"><a href="' + home + '">Home</a></span>\n'
+    + '<span class="item"><a href="' + home + '" data-home>Home</a></span>\n'
     + '<span class="item"><a href="' + blog + '"' + current + '>Blog</a></span>\n'
     + '<span class="item"><a href="https://github.com/d-sanoj">GitHub</a></span>\n'
     + '</nav>\n</div>\n</header>\n'
     + '<main id="content" tabindex="-1">\n<div class="wrap">\n' + opts.body + '\n</div>\n</main>\n'
     + '<footer>\n<div class="wrap">\n<p>Sanoj</p>\n<p><a href="' + feed + '">Feed</a></p>\n</div>\n</footer>\n'
-    + anim + '\n</body>\n</html>\n';
+    + anim + '\n'
+    + HOME_PREF_SCRIPT.replace('__ROOT__', JSON.stringify(home || './')).replace('__BORING__', JSON.stringify((up || './') + 'boring/'))
+    + '\n</body>\n</html>\n';
 }
 
 function hasAnim(blocks) {
