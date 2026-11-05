@@ -49,10 +49,10 @@ is fetched again; one that did not keeps its address and stays cached. (The dev 
 
 ## The greeting
 
-The big heading is "Good morning / afternoon / evening. I\u2019m Sanoj." by the visitor\u2019s own clock: morning 5 am to noon, afternoon noon to 5 pm,
+The big heading is "Good morning / afternoon / evening. I’m Sanoj." by the visitor’s own clock: morning 5 am to noon, afternoon noon to 5 pm,
 evening from 5 pm all night. The greeting is a line of its own in `apps/plain/index.html` (`data-greet`), so all three take the same room
 and nothing below moves. The plain page sets it with a few lines of script. On the sine page the letters are drawn from measured positions,
-so the measuring tool measures all three greetings (`greeting` in `apps/measure/app/main.js`), the page holds the evening\u2019s words
+so the measuring tool measures all three greetings (`greeting` in `apps/measure/app/main.js`), the page holds the evening’s words
 (flagged `greet`) and the others in `greetings`, and `applyGreeting` in `apps/site/app/services/pageLoader.js` swaps in the right ones before
 anything is built. `?greeting=morning` (or `afternoon`, `evening`) shows one on purpose. To change the hours, change them in both places.
 
