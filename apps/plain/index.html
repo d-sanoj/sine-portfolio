@@ -131,9 +131,11 @@
   /* a project is one line: its title, then its links, a dot between each */
   .projects li > div { display: flex; flex-wrap: wrap; align-items: baseline; }
   .projects h3::after { content: '\00b7'; margin-inline: 0.9rem; color: var(--muted); font-weight: 700; font-size: 1rem; }
-  /* a blog row has no links after its title, so no dot after it — just the space the dot used to give */
+  /* a blog row has no links after its title, so no dot after it */
   #blog .projects h3::after { content: none; }
-  #blog .projects h3 { margin-right: 1.8rem; }
+  /* a blog row is two lines: the title, then the date (and the description, on the plain page) */
+  #blog .projects li > div { flex-direction: column; align-items: flex-start; }
+  #blog .projects .links { margin-top: 0.35rem; }
   .projects .links { margin-top: 0; }
   /* rows of links: plain text, evenly spaced, a dot between each */
   .links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0; margin-top: 0.8rem; font-size: 1rem; }
