@@ -6,6 +6,8 @@ export const LINE = 0.035; // line width as a share of the body em, before a wor
 export const FORM_TIME = 1.0; // seconds for every letter to form
 export const START_DELAY = 0.4; // seconds between the data arriving and the animation starting
 export const MIN_LINE_PX = { exact: 0.9, flowed: 1.5 }; // thinnest line drawn, in pixels
+export const BAND_MARGIN = 360; // the canvas is the screen plus this many pixels above and below (see CanvasView)
+export const MAX_PIXEL_RATIO = 1.5; // the canvas is never drawn sharper than this many pixels per CSS pixel
 export const PHONE_MAX_WIDTH = 783; // screens up to this width get the narrow layout
 
 // the loader's circle pops: it draws in a little, shatters into one bead per letter, and the beads

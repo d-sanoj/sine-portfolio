@@ -2,7 +2,7 @@
 // about time or events (the controllers say when to draw and what is hovered).
 import { shape, clamp, ease } from '/core/animate/morph.js';
 import { Sine } from '/core/index.js';
-import { PAD, MAX_EM, LINE, FORM_TIME, MIN_LINE_PX, LOADER_INK, LINE_SEED, LINK_YELLOW } from '../config.js';
+import { PAD, MAX_EM, LINE, FORM_TIME, MIN_LINE_PX, LOADER_INK, LINE_SEED, LINK_YELLOW, BAND_MARGIN, MAX_PIXEL_RATIO } from '../config.js';
 
 // A line (an underline, a rule) forms from a small circle that swells and stretches out into the line.
 // Its terms are the centre and two equal waves going opposite ways (see lineLetter).
@@ -35,7 +35,13 @@ export class CanvasView {
     this.ruleLetters = [];
     this.geo = { em: 1, ox: 0, oy: 0 }; // pixels per em, and where the page's (0, 0) is
     this.width = 0;
-    this.height = 0;
+    this.height = 0; // of the whole page
+    // The canvas is not as tall as the page (that is tens of millions of pixels on a big screen, cleared and sent to the
+    // graphics card every frame). It is a band: the screen plus a margin above and below, placed where the page is being
+    // looked at. It scrolls with the page like any element, and is moved (and redrawn) when the screen nears its edge.
+    this.bandTop = 0; // where the band's top is, in page pixels
+    this.bandH = 0;
+    this.ratio = 1; // canvas pixels per CSS pixel
     // the page colour comes from the plain page, so the two look the same
     if (model.exact && model.background) document.documentElement.style.background = document.body.style.background = model.background;
   }
@@ -64,7 +70,7 @@ export class CanvasView {
       this.width = canvas.clientWidth;
       geo = this.geometry();
       this.height = Math.max(window.innerHeight, geo.height);
-      canvas.style.height = this.height + 'px';
+      document.body.style.height = this.height + 'px'; // the page is this tall (the canvas no longer is)
     }
     if (geo.flowed) {
       const [, v0, , v1] = model.bounds;
@@ -73,16 +79,48 @@ export class CanvasView {
     this.geo = geo;
     // lines that run the width of the screen depend on the width
     this.ruleLetters = model.ruleLetters({ left: -geo.ox / geo.em, right: (this.width - geo.ox) / geo.em });
-    canvas.width = Math.round(this.width * dpr);
-    canvas.height = Math.round(this.height * dpr);
-    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.bandH = Math.min(this.height, window.innerHeight + 2 * BAND_MARGIN);
+    this.ratio = Math.min(dpr, MAX_PIXEL_RATIO); // a very sharp screen is drawn a little less sharp: far fewer pixels to move
+    canvas.style.height = this.bandH + 'px';
+    canvas.width = Math.round(this.width * this.ratio);
+    canvas.height = Math.round(this.bandH * this.ratio);
+    this.bandTop = -1;
+    this.follow();
     for (const st of model.letters) st.still = null;
+  }
+
+  // Keep the band where the screen is. Returns true when it had to move: the canvas is then empty and must be drawn again
+  // (in the same frame, so the move never shows).
+  follow() {
+    const top = window.scrollY, maxTop = Math.max(0, this.height - this.bandH);
+    const safe = this.bandTop >= 0 && (top - this.bandTop >= BAND_MARGIN / 3 || this.bandTop === 0)
+      && (this.bandTop + this.bandH - (top + window.innerHeight) >= BAND_MARGIN / 3 || this.bandTop >= maxTop);
+    if (safe) return false;
+    this.bandTop = Math.round(Math.min(maxTop, Math.max(0, top - (this.bandH - window.innerHeight) / 2)));
+    this.canvas.style.top = this.bandTop + 'px';
+    return true;
+  }
+
+  // Start a frame: the band in place, emptied, and set so that drawing is in page pixels.
+  begin() {
+    const { g, ratio } = this;
+    this.follow();
+    g.setTransform(ratio, 0, 0, ratio, 0, -this.bandTop * ratio);
+    g.clearRect(0, this.bandTop, this.width, this.bandH);
+    g.lineCap = 'round';
+    g.lineJoin = 'round';
+  }
+
+  // is a letter (or line) anywhere near the band? (the others need no drawing)
+  inBand(st) {
+    const sy = this.geo.oy - st.cy * this.geo.em, reach = (st.line ? 0.2 : st.rmax) * this.geo.em + 4;
+    return sy + reach >= this.bandTop && sy - reach <= this.bandTop + this.bandH;
   }
 
   // client (screen) coordinates -> page ems
   toPage(clientX, clientY) {
     const r = this.canvas.getBoundingClientRect();
-    return { x: (clientX - r.left - this.geo.ox) / this.geo.em, v: (this.geo.oy - (clientY - r.top)) / this.geo.em };
+    return { x: (clientX - r.left - this.geo.ox) / this.geo.em, v: (this.geo.oy - (clientY - r.top + this.bandTop)) / this.geo.em };
   }
 
   colorOf(st) {
@@ -123,10 +161,8 @@ export class CanvasView {
   //   formed:  [{ st, p }]  letters whose bead has landed; p (0..1) is how far they have formed
   // Lines (underlines, rules) are circles and formed letters too.
   renderGather({ circles, formed }) {
-    const { g, width: w, height: h } = this;
-    g.clearRect(0, 0, w, h);
-    g.lineCap = 'round';
-    g.lineJoin = 'round';
+    const { g } = this;
+    this.begin();
     for (const { st, p } of formed) this.drawLetter(st, Math.min(1, p));
     for (const { st, c: [x, v, r], w: weight, a, k = 1, solid = 0, from = LOADER_INK } of circles) {
       // the same circle the morph starts from: the position wave plus the strongest wave
@@ -152,16 +188,14 @@ export class CanvasView {
   // While scrolling: the letters that are on screen (`st.vis`), each forming from its circle from the moment
   // it came into view (`st.enter`, in ms), flying in from `st.shift`. Returns true while any is still moving.
   renderScroll(letters, now, formTime) {
-    const { g, width: w, height: h } = this;
-    g.clearRect(0, 0, w, h);
-    g.lineCap = 'round';
-    g.lineJoin = 'round';
+    const { g } = this;
+    this.begin();
     let moving = false;
     for (const st of letters) {
       if (!st.vis) continue;
       const p = (now - st.enter) / formTime;
       if (p < 1) moving = true;
-      if (p <= 0) continue;
+      if (p <= 0 || !this.inBand(st)) continue;
       const q = Math.min(1, p), left = q >= 1 ? 0 : 1 - (1 - Math.pow(1 - q, 3));
       this.drawLetter(st, q, st.word >= 0 && st.word === this.hover, st.shift[0] * left, st.shift[1] * left);
     }
@@ -179,13 +213,11 @@ export class CanvasView {
 
   // time is in seconds since the animation started; Infinity draws the finished page.
   render(time) {
-    const { g, model, width: w, height: h } = this;
-    const { em, ox, oy } = this.geo;
+    const { g, model } = this;
+    const { em, oy } = this.geo;
     const exact = model.exact;
-    g.clearRect(0, 0, w, h);
-    g.lineCap = 'round';
-    g.lineJoin = 'round';
-    // while the letters are forming, only the ones on screen are drawn; afterwards, all of them
+    this.begin();
+    // while the letters are forming, only the ones on screen are drawn; afterwards, all that the band holds
     const forming = time < model.end;
     const top = window.scrollY - 40, bottom = window.scrollY + window.innerHeight + 40;
     const minPx = exact ? MIN_LINE_PX.exact : MIN_LINE_PX.flowed;
@@ -195,7 +227,7 @@ export class CanvasView {
       if (forming) {
         const sy = oy - st.cy * em, reach = st.rmax * em;
         if (sy + reach < top || sy - reach > bottom) continue;
-      }
+      } else if (!this.inBand(st)) continue;
       const hot = st.word >= 0 && st.word === this.hover; // lines and anything without a word are never "hovered"
       this.ink(st, hot, minPx);
       const { xy, hide } = shapeOf(st, Math.min(1, p));

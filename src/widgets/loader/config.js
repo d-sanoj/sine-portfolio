@@ -12,6 +12,7 @@ export const BACKGROUND = '#131313';
 export const INK = '#ffffff'; // the lines of the portrait are white
 export const MAX_FRACTION = { w: 0.96, h: 0.96 }; // the portrait fills the screen, leaving this much of it as a margin
 export const CURVE_POINTS = 16384; // how finely the finished portrait is drawn (points along its curve)
+export const MAX_PIXEL_RATIO = 1.5; // the loader's canvas is never drawn sharper than this many pixels per CSS pixel
 export const CURVE_LEVELS = 6; // while it forms, it is drawn with half, a quarter, ... of that, as far as the waves in use need
 
 // the colour inside the portrait: solid areas, each forming from a small circle (sizes are shares of the portrait's height)

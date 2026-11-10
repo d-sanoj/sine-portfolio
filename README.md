@@ -41,6 +41,10 @@ Your writing here. `#` is a section, `##` is a sub-section.
 
 Images for that note go in `content/blog/<slug>/` and are linked by their file name, for example `![What the picture shows](diagram.png)`. Every image needs alt text, or the build stops.
 
+## Smooth animation
+
+The sine page draws on a canvas that is only a little taller than the screen and follows the page as it scrolls (`BAND_MARGIN` in `apps/site/app/config.js`). The canvas is never drawn sharper than 1.5 pixels per CSS pixel (`MAX_PIXEL_RATIO`). The loader adds up only the waves that change from one frame to the next. Together these keep the animation smooth on big screens and slower computers.
+
 ## Publishing
 
 The site is published by Cloudflare Pages from the `main` branch: every push builds it with `npm ci && npm run build:dist` and publishes it at https://sanoj.dev/.

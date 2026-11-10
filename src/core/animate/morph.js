@@ -37,13 +37,53 @@ function shapeLevels(letter, p) {
   const n = Math.max(1, (letter.ramp || letter.terms.length) - 1);
   const K = Math.pow(n, ease(p));
   const whole = Math.floor(K), frac = K - whole;
-  const weights = letter.terms.map((_, q) => (q <= whole ? 1 : q === whole + 1 ? frac : 0));
-  const need = 3 * letter.maxk[Math.min(letter.terms.length - 1, whole + 1)];
+  const count = letter.terms.length;
+  const need = 3 * letter.maxk[Math.min(count - 1, whole + 1)];
   let i = 0;
   while (i + 1 < letter.levels.length && letter.levels[i + 1].M >= need) i++;
   const { M, runs } = letter.levels[i];
   const terms = letter.circle ? startCircle(letter.terms, letter.circle, p, letter.home, letter.off) : letter.terms;
-  return { xy: Sine.trace(terms, M, weights), hide: ease(clamp((p - 0.75) / 0.25)), runs, step: letter.M / M };
+  // Adding up a thousand waves at thousands of points every frame is what made the loader slow. From one frame to the next
+  // almost all the waves are the same, fully on. So their sum is kept (letter.sum: waves 2 .. n-1), and a frame only adds the
+  // waves that have just come on (or takes away the ones that have gone, when the curve is dissolving). The first two waves are
+  // left out of the sum: they are the ones startCircle changes. The sum is kept at the finest level the curve ever uses; a
+  // coarser level's points are every 2nd, 4th ... of those, so changing level costs nothing. The result is the same curve as
+  // adding all the waves.
+  let sum = letter.sum;
+  if (!sum) {
+    let f = 0;
+    while (f + 1 < letter.levels.length && letter.levels[f + 1].M >= 3 * letter.maxk[count - 1]) f++;
+    sum = letter.sum = { M: letter.levels[f].M, n: 2, xy: new Float64Array(2 * (letter.levels[f].M + 1)) };
+  }
+  const want = Math.max(2, Math.min(count, whole + 1)); // waves 0 .. want-1 are fully on
+  if (want !== sum.n) {
+    if (want === 2) sum.xy.fill(0); // back to nothing: start clean, so rounding never builds up
+    else addWaves(sum.xy, letter.terms, Math.min(want, sum.n), Math.max(want, sum.n), sum.M, want > sum.n ? 1 : -1);
+    sum.n = want;
+  }
+  const head = [terms[0], terms[1]], weights = [1, whole >= 1 ? 1 : frac];
+  if (whole + 1 >= 2 && whole + 1 < count) { head.push(terms[whole + 1]); weights.push(frac); } // the wave that is fading in
+  const xy = Sine.trace(head, M, weights);
+  const stride = sum.M / M;
+  for (let j = 0; j <= M; j++) { xy[2 * j] += sum.xy[2 * j * stride]; xy[2 * j + 1] += sum.xy[2 * j * stride + 1]; }
+  return { xy, hide: ease(clamp((p - 0.75) / 0.25)), runs, step: letter.M / M };
+}
+
+// add (sign 1) or take away (sign -1) waves from .. to-1 of `terms` to the points in xy (M + 1 points, as Sine.trace makes them)
+function addWaves(xy, terms, from, to, M, sign) {
+  for (let q = from; q < to; q++) {
+    const [k, a, ph] = terms[q];
+    if (!a) continue;
+    const step = (2 * Math.PI * k) / M, cd = Math.cos(step), sd = Math.sin(step), amp = a * sign;
+    let c = Math.cos(ph), s = Math.sin(ph);
+    for (let j = 0; j <= M; j++) {
+      xy[2 * j] += amp * c;
+      xy[2 * j + 1] += amp * s;
+      const nc = c * cd - s * sd;
+      s = s * cd + c * sd;
+      c = nc;
+    }
+  }
 }
 
 // A curve that has a fixed `circle` (a radius) starts as exactly that circle, centred on
