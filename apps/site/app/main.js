@@ -65,6 +65,8 @@ if (!page) {
     real.show();
   }
 
+  // scrolling can carry the screen to the edge of the canvas's band: the band moves there and is drawn again at once
+  window.addEventListener('scroll', () => { if (!busy && view.follow()) play.redraw(); }, { passive: true });
   window.addEventListener('resize', () => { view.resize(); real.place(); scroll.reset(); if (!busy) play.redraw(); });
   window.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); play.play(); } });
   watchLayoutChange(() => window.location.reload()); // crossing between phone and computer width needs the other layout

@@ -1,6 +1,6 @@
 // Drawing one portrait on a canvas at a given progress and pose.
 import { Morph } from '/core/index.js';
-import { INK, MAX_FRACTION, FILL } from '../config.js';
+import { INK, MAX_FRACTION, FILL, MAX_PIXEL_RATIO } from '../config.js';
 
 export class PortraitView {
   // root: the element the canvas fills
@@ -14,12 +14,15 @@ export class PortraitView {
   }
 
   resize() {
-    const dpr = window.devicePixelRatio || 1;
+    // everything here moves, so a very sharp screen is drawn a little less sharp: far fewer pixels to fill every frame
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+    this.dpr = dpr;
     this.w = this.root.clientWidth || window.innerWidth;
     this.h = this.root.clientHeight || window.innerHeight;
     this.canvas.width = Math.round(this.w * dpr);
     this.canvas.height = Math.round(this.h * dpr);
     this.g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.done = null; // the finished portrait as a picture (see draw)
   }
 
   // An area's colour as a gradient along its axis: its mean colour where the shading is not in yet, the waves where it is.
@@ -68,8 +71,30 @@ export class PortraitView {
   }
 
   // item: { curve, box }; progress: 0 = circle, 1 = finished portrait
-  draw(item, progress, pose = this.fullPose(item)) {
-    const { g, w, h } = this;
+  draw(item, progress, pose = null) {
+    // The finished portrait does not change while it is held, so it is painted once on a canvas of its own and that picture is
+    // shown each frame, instead of filling a few hundred shapes again.
+    if (progress >= 1 && !pose) {
+      if (!this.done || this.done.item !== item) {
+        const canvas = document.createElement('canvas');
+        canvas.width = this.canvas.width;
+        canvas.height = this.canvas.height;
+        const cg = canvas.getContext('2d');
+        cg.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+        this.paint(cg, item, 1, this.fullPose(item));
+        this.done = { item, canvas };
+      }
+      this.g.setTransform(1, 0, 0, 1, 0, 0);
+      this.g.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.g.drawImage(this.done.canvas, 0, 0);
+      this.g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      return;
+    }
+    this.paint(this.g, item, progress, pose || this.fullPose(item));
+  }
+
+  paint(g, item, progress, pose) {
+    const { w, h } = this;
     g.clearRect(0, 0, w, h);
     const [x0, v0, x1, v1] = item.box;
     const { s } = pose;
