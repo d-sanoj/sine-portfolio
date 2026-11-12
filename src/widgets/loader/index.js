@@ -1,7 +1,7 @@
 // The portrait loader. A page needs an empty <div id="sine-loader"></div> as the first
 // thing in its body (with the small style that makes it cover the screen) and then
 //
-//   import { startLoader } from '/widgets/loader/index.js';
+//   import { startLoader } from 'widgets/loader/index.js';
 //   const loader = startLoader({ ready: somePromise, mode: 'fade' });
 //
 // It shows a circle that becomes a portrait drawn from sine waves, holds, dissolves,
@@ -33,8 +33,17 @@ export function startLoader({ ready, mode = 'fade' }) {
   const savedOverflow = document.documentElement.style.overflow;
   document.documentElement.style.overflow = 'hidden'; // no scrolling behind the loader
 
+  // Show the loader's circle at once, before the portraits have arrived: otherwise the loader is
+  // a black panel until the portrait file has been fetched and drawn. The controller takes the
+  // circle over (and removes this ring) as soon as it starts.
+  const ring = document.createElement('div');
+  ring.setAttribute('aria-hidden', 'true');
+  ring.style.cssText = 'position:absolute;left:50%;top:50%;width:min(96vw,96vh);height:min(96vw,96vh);transform:translate(-50%,-50%);border:1px solid #ffffff;border-radius:50%;';
+  root.appendChild(ring);
+
   let controller = null;
   const started = PortraitSet.load().then((set) => {
+    ring.remove();
     if (!set) { skipped(root); return null; }
     controller = new LoaderController({ root, set, view: new PortraitView(root), ready, savedOverflow, mode });
     return controller;
