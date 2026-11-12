@@ -65,30 +65,28 @@ export class LoaderController {
     return { x: pose.cx + window.scrollX, y: pose.cy + window.scrollY, r: pose.s * 0.5, dots };
   }
 
-  // fade out the loader: portrait fades, then the page appears; 'gone' at the end
-  fade() {
-    this.state = 'waiting'; // stop drawing portraits; keep the loader visible while it fades
-    this.progress = 0;
-    this.view.draw(this.item, 0);
-    this.finish();
-    this.root.style.transition = `opacity ${FADE_TIME}s`;
-    this.root.style.opacity = '0';
-    setTimeout(() => this.release(), FADE_TIME * 1000);
-  }
+  unlock() { document.documentElement.style.overflow = this.savedOverflow || ''; }
 
-  // open the porthole: the page shows behind the still-opaque loader, then the loader lifts
-  showPage() {
-    this.root.style.display = 'none';
-    this.root.style.opacity = '1';
-    document.documentElement.style.overflow = this.savedOverflow;
-  }
+  // the page draws underneath now: the loader's own background goes, its circle stays a little longer
+  showPage() { this.root.style.background = 'transparent'; this.root.style.pointerEvents = 'none'; }
 
-  // the loader is gone for good: remove it, restoring scrolling, and resolve 'finished'
-  release() {
+  // the loader goes
+  release({ instant = false } = {}) {
     this.state = 'gone';
+    this.unlock();
+    if (instant) { this.root.remove(); return; }
+    this.root.style.transition = `opacity ${FADE_TIME * 0.55}s ease`;
+    this.root.style.opacity = '0';
+    setTimeout(() => this.root.remove(), FADE_TIME * 550 + 50);
+  }
+
+  fade() {
+    this.unlock();
+    this.root.style.pointerEvents = 'none';
     this.finish();
-    this.view.release();
-    this.root.remove();
-    document.documentElement.style.overflow = this.savedOverflow;
+    this.state = 'gone';
+    this.root.style.transition = `opacity ${FADE_TIME}s ease`;
+    this.root.style.opacity = '0';
+    setTimeout(() => this.root.remove(), FADE_TIME * 1000 + 50);
   }
 }
