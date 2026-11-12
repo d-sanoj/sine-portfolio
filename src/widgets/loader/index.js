@@ -1,7 +1,7 @@
 // The portrait loader. A page needs an empty <div id="sine-loader"></div> as the first
 // thing in its body (with the small style that makes it cover the screen) and then
 //
-//   import { startLoader } from 'widgets/loader/index.js';
+//   import { startLoader } from '/widgets/loader/index.js';
 //   const loader = startLoader({ ready: somePromise, mode: 'fade' });
 //
 // It shows a circle that becomes a portrait drawn from sine waves, holds, dissolves,
