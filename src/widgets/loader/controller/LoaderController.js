@@ -1,8 +1,9 @@
 // Runs the loader: cycles through random portraits until the page is ready (and the
-// loader has been up long enough), then leaves on a finished portrait. It leaves in one of two ways:
+// loader has been up long enough), then leaves. It leaves in one of two ways:
 //   mode 'fade'    the loader fades away (the plain page)
-//   mode 'circle'  the portrait dissolves into a circle and hands that circle to the page,
-//                  which divides it into its letters' circles (the sine page)
+//   mode 'circle'  as soon as the page is ready, the loader hands over its circle and the page
+//                  divides it into its letters' circles (the sine page); the portrait only
+//                  plays while the page is still loading
 import { MIN_SHOW, FADE_TIME } from '../config.js';
 import { at, cycleTime, LOADER_TIMES } from '../model/Timeline.js';
 
@@ -10,7 +11,7 @@ export class LoaderController {
   // ready: a promise that settles when the page is ready to be shown
   constructor({ root, set, view, ready, savedOverflow, mode = 'fade' }) {
     Object.assign(this, { root, set, view, savedOverflow, mode });
-    this.state = 'loading'; // loading -> closing -> waiting -> gone
+    this.state = 'loading'; // loading -> waiting -> gone
     this.ready = false;
     this.item = set.next();
     this.t0 = performance.now();
@@ -36,19 +37,19 @@ export class LoaderController {
     const { phase, progress } = at(lt, LOADER_TIMES);
     this.progress = progress;
     this.view.draw(this.item, progress);
-    // it leaves once the page is ready and the portrait has formed; the circle mode can carry on
-    // through the dissolve, so a page that is a little late never waits for a whole extra cycle
-    const formed = this.mode === 'fade' ? phase === 'hold' : phase !== 'form';
-    if (this.state === 'loading' && this.ready && (now - this.t0) / 1000 >= MIN_SHOW && formed) {
-      if (this.mode === 'fade') { this.fade(); return; }
-      this.state = 'closing'; // let the finished portrait dissolve into its circle
-    }
-    if (this.state === 'closing' && lt >= cycleTime(LOADER_TIMES)) {
-      this.state = 'waiting';
-      this.progress = 0;
-      this.view.draw(this.item, 0);
-      this.giveCircle(this.circleNow());
-      return;
+    // It leaves once the page is ready and the loader has been up long enough. In circle mode it leaves
+    // at once: the loader is a cover for loading, not an intro, so a ready page never waits for the
+    // portrait cycle to play out. In fade mode it still leaves on a finished portrait, as before.
+    if (this.state === 'loading' && this.ready && (now - this.t0) / 1000 >= MIN_SHOW) {
+      if (this.mode === 'fade') {
+        if (phase === 'hold') { this.fade(); return; }
+      } else {
+        this.state = 'waiting';
+        this.progress = 0;
+        this.view.draw(this.item, 0);
+        this.giveCircle(this.circleNow());
+        return;
+      }
     }
     requestAnimationFrame(this.frame);
   }
@@ -64,28 +65,30 @@ export class LoaderController {
     return { x: pose.cx + window.scrollX, y: pose.cy + window.scrollY, r: pose.s * 0.5, dots };
   }
 
-  unlock() { document.documentElement.style.overflow = this.savedOverflow || ''; }
-
-  // the page draws underneath now: the loader's own background goes, its circle stays a little longer
-  showPage() { this.root.style.background = 'transparent'; this.root.style.pointerEvents = 'none'; }
-
-  // the loader goes
-  release({ instant = false } = {}) {
-    this.state = 'gone';
-    this.unlock();
-    if (instant) { this.root.remove(); return; }
-    this.root.style.transition = `opacity ${FADE_TIME * 0.55}s ease`;
+  // fade out the loader: portrait fades, then the page appears; 'gone' at the end
+  fade() {
+    this.state = 'waiting'; // stop drawing portraits; keep the loader visible while it fades
+    this.progress = 0;
+    this.view.draw(this.item, 0);
+    this.finish();
+    this.root.style.transition = `opacity ${FADE_TIME}s`;
     this.root.style.opacity = '0';
-    setTimeout(() => this.root.remove(), FADE_TIME * 550 + 50);
+    setTimeout(() => this.release(), FADE_TIME * 1000);
   }
 
-  fade() {
-    this.unlock();
-    this.root.style.pointerEvents = 'none';
-    this.finish();
+  // open the porthole: the page shows behind the still-opaque loader, then the loader lifts
+  showPage() {
+    this.root.style.display = 'none';
+    this.root.style.opacity = '1';
+    document.documentElement.style.overflow = this.savedOverflow;
+  }
+
+  // the loader is gone for good: remove it, restoring scrolling, and resolve 'finished'
+  release() {
     this.state = 'gone';
-    this.root.style.transition = `opacity ${FADE_TIME}s ease`;
-    this.root.style.opacity = '0';
-    setTimeout(() => this.root.remove(), FADE_TIME * 1000 + 50);
+    this.finish();
+    this.view.release();
+    this.root.remove();
+    document.documentElement.style.overflow = this.savedOverflow;
   }
 }
