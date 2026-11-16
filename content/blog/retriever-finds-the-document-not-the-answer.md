@@ -25,7 +25,7 @@ The chunks are fixed-size word windows: 100, 200, 400 and 800 words, plus whole 
 - **Post-level:** did any chunk from the right post make the top five? This is what most people measure, because it is easy.
 - **Chunk-level:** did the chunk that actually contains the answer make the top five? A chunk counts as the answer only if it comes from the gold post and contains at least two of the answer's key terms — the weight-editing question needs two of "weight-space", "edited", "Astra". Strict, and I will show you where that strictness is itself a judgment call.
 
-Top five, because that is roughly what a RAG system hands the model. The script, the questions, and the full results are downloadable with this post, so you can run the same test on your own docs. The script excludes this post from its own corpus — it quotes the questions, so including it would change the measurement.
+Top five, because that is roughly what a RAG system hands the model. The script, the questions, and the full results are in the [retriever-doc-answer](https://github.com/d-sanoj/retriever-doc-answer) repo, so you can run the same test on your own docs. The script excludes this post from its own corpus — it quotes the questions, so including it would change the measurement.
 
 ![A RAG pipeline in four boxes: a question goes to a retriever, which returns the top 5 chunks, and those 5 go to the model. Below, a ranked list shows ranks 1 to 5, then rank 8 in red: the chunk with the answer, outside the top 5 the model ever sees.](rag-pipeline.png)
 
@@ -120,7 +120,7 @@ What I do claim is narrower: grading retrieval at the document level overstates 
 
 # Try it on your own docs
 
-The download is the whole experiment: [measure-retrieval.py](measure-retrieval.py), [questions.json](questions.json), and [results.json](results.json). Point the script at a folder of Markdown files, write twenty questions a real user would ask, label each with the passage that answers it — not the document, the passage — and run it. It needs Python 3 with numpy, no model, no API key. The script excludes this post from its own corpus, so the numbers in `results.json` reproduce exactly. If your document-level recall is 95% and your passage-level recall is 70%, you have the same system I have.
+The whole experiment is now a standalone service: [retriever-doc-answer](https://github.com/d-sanoj/retriever-doc-answer) — the same BM25 experiment rebuilt as a FastAPI service, with the script, questions, and results included. Point the script at a folder of Markdown files, write twenty questions a real user would ask, label each with the passage that answers it — not the document, the passage — and run it. It needs Python 3 with numpy, no model, no API key. The script excludes this post from its own corpus, so the numbers in `results.json` reproduce exactly. If your document-level recall is 95% and your passage-level recall is 70%, you have the same system I have.
 
 # Sources
 
