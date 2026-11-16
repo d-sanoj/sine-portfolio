@@ -239,7 +239,23 @@ async function runChrome(measureUrl) {
     pageWs.close();
   } finally {
     proc.kill('SIGKILL');
-    fs.rmSync(dataDir, { recursive: true, force: true });
+    // Wait for Chrome to actually exit before deleting its profile dir.
+    // It can still be writing files into Default/ while shutting down, and
+    // deleting a non-empty dir throws ENOTEMPTY and fails the whole build.
+    await new Promise((resolve) => {
+      if (proc.exitCode !== null) return resolve();
+      const timer = setTimeout(resolve, 5000);
+      proc.once('exit', () => { clearTimeout(timer); resolve(); });
+    });
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        fs.rmSync(dataDir, { recursive: true, force: true });
+        break;
+      } catch (e) {
+        if (attempt === 2) throw e;
+        await new Promise((r) => setTimeout(r, 200));
+      }
+    }
   }
 }
 
