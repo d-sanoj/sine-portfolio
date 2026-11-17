@@ -4,11 +4,11 @@ slug: qwen4-max-preview
 date: 2026-11-12
 description: "Alibaba's next flagship arrived on November 11 with a printed expiry date: November 25, then retired. Here is what it is, what it isn't, and what to test before it vanishes."
 tags: [ai, qwen, alibaba, models, api, benchmarks]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Qwen4-Max is out — for two weeks only' above a calendar strip from November 11 to November 25, with the final day marked 'retired'."
 ---
 
-![Title card reading "Qwen4-Max is out — for two weeks only" above a calendar strip from November 11 to November 25, with the final day marked "retired".](cover.png)
+![Title card reading "Qwen4-Max is out — for two weeks only" above a calendar strip from November 11 to November 25, with the final day marked "retired".](img/cover.png)
 
 Yesterday morning, Alibaba opened the first model of its next generation. Qwen4-Max-Preview went live at 10:00 Beijing time on November 11, and the documentation carries a sentence you do not usually see on a flagship launch: the preview runs until 24:00 on November 25, "no changes will be made during this period, and the model will be retired after the preview ends."
 
@@ -47,7 +47,7 @@ The missing half of the launch is longer than the shipped half:
 
 So every quality claim about Qwen4-Max is, for now, Alibaba's word. There is no independent measurement of any kind, and the model you would measure is frozen for two weeks and then retired. That is not a criticism of the model — it might be excellent. It is a statement about the evidence: there is none yet, and the window for collecting it is roughly two weeks long.
 
-![Two columns. Left, "What shipped": a million-token context, 393,216 tokens of output, thinking on by default, text, image, and video input, tool calling, and OpenAI and Anthropic API compatibility. Right, "What didn't": no benchmarks, no parameter count, no model card, no per-token price, no weights, and no pay-as-you-go access.](shipped-vs-missing.png)
+![Two columns. Left, "What shipped": a million-token context, 393,216 tokens of output, thinking on by default, text, image, and video input, tool calling, and OpenAI and Anthropic API compatibility. Right, "What didn't": no benchmarks, no parameter count, no model card, no per-token price, no weights, and no pay-as-you-go access.](img/shipped-vs-missing.png)
 
 :::describe
 The diagram has two columns. The left column, headed "What shipped", lists a million-token context; 393,216 tokens of output; thinking on by default; text, image, and video input; tool calling; and OpenAI and Anthropic API compatibility. The right column, headed "What didn't", lists no benchmarks; no parameter count; no model card; no per-token price; no weights; and no pay-as-you-go access. The point is that the missing half of the launch is longer than the shipped half.
@@ -61,13 +61,13 @@ For the API, the route is narrow and specific. Qwen4-Max-Preview is available th
 
 One documentation detail can break existing code, and it is worth reading before you call the API. Starting with this model, `max_tokens` is equivalent to `max_completion_tokens`: both limit the combined tokens for thinking and the final answer. Thinking consumes part of the same budget, so a limit previously sized for the answer alone may truncate output. If you set a 32,768-token limit — the default output limit Qwen Code applies to this model, according to independent coverage — and the model spends 30,000 tokens thinking, you get about 2,700 tokens of answer. Allow room for both when choosing the limit.
 
-![A horizontal bar labelled "393,216-token output budget, shared by thinking and the final answer". The left portion, in yellow, is "thinking" and takes most of the bar; the right portion, in blue, is "the answer". The 70/30 split is illustrative — the docs give the 393,216-token total, not the ratio. A note below reads: "Starting with qwen4-max-preview, max_tokens counts thinking and the answer together. A limit sized for the answer alone can cut the output short."](output-budget.png)
+![A horizontal bar labelled "393,216-token output budget, shared by thinking and the final answer". The left portion, in yellow, is "thinking" and takes most of the bar; the right portion, in blue, is "the answer". The 70/30 split is illustrative — the docs give the 393,216-token total, not the ratio. A note below reads: "Starting with qwen4-max-preview, max_tokens counts thinking and the answer together. A limit sized for the answer alone can cut the output short."](img/output-budget.png)
 
 :::describe
 The diagram is a single horizontal bar representing the 393,216-token output budget. The left portion, in yellow and labelled "thinking", takes most of the bar; the right portion, in blue and labelled "the answer", takes the rest. The 70/30 split is illustrative — the docs give the 393,216-token total, not the ratio. A note below reads: "Starting with qwen4-max-preview, max_tokens counts thinking and the answer together. A limit sized for the answer alone can cut the output short." The point is that the output budget is shared, so a limit set for the answer alone will truncate the response.
 :::
 
-![Animation of the three steps to try Qwen4-Max-Preview. First, subscribe to Token Plan and get a dedicated API key. Second, point your client at the Token Plan base URL and set the model ID to qwen4-max-preview. Third, send a first call — the easiest route is Qwen Studio, where the model is in the picker.](try-it.gif){poster=try-it-poster.png}
+![Animation of the three steps to try Qwen4-Max-Preview. First, subscribe to Token Plan and get a dedicated API key. Second, point your client at the Token Plan base URL and set the model ID to qwen4-max-preview. Third, send a first call — the easiest route is Qwen Studio, where the model is in the picker.](img/try-it.gif){poster=img/try-it-poster.png}
 
 *Three steps to a first call. The animation shows subscribing to Token Plan for a dedicated key, pointing a client at the Token Plan base URL with the model ID set, and sending a first call — or skipping the API entirely and picking the model in Qwen Studio.*
 
@@ -89,7 +89,7 @@ The preview makes more sense against the run-up to it. At the Apsara Conference 
 
 Read that sequence as a whole and the preview looks like a deliberate middle step, not a launch that ran out of time. Alibaba gets two weeks of real usage on a frozen model — the docs promise no changes during the window — before the real family lands, and the expiry date caps what anyone can expect from it: no support burden, no migration story, no one building a product on a model that disappears. The teaser, the open-source pledge, and the preview are all doing the same job: keeping the Qwen audience warm while the actual release — the weights, the 27B local model, the benchmarks — is still being finished.
 
-![Animation of the two-week window. A timeline runs from November 11 to November 25, 2026. A marker moves along it in stages, and on November 25 the timeline ends and a stamp reads "RETIRED — Test it. Don't build on it".](two-weeks.gif){poster=two-weeks-poster.png}
+![Animation of the two-week window. A timeline runs from November 11 to November 25, 2026. A marker moves along it in stages, and on November 25 the timeline ends and a stamp reads "RETIRED — Test it. Don't build on it".](img/two-weeks.gif){poster=img/two-weeks-poster.png}
 
 *Fourteen days, then gone. The animation moves a marker along the timeline from November 11 to November 25, 2026, and ends with a stamp reading "RETIRED". Alibaba's docs say no changes will be made during the window and the model will be retired when it ends.*
 

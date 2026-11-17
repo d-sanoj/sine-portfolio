@@ -4,11 +4,11 @@ slug: retriever-finds-the-document-not-the-answer
 date: 2026-11-16
 description: "I built a 20-question eval on my own blog and measured BM25 retrieval. The right document came back 95% of the time. The passage with the answer made the top five only 70% of the time."
 tags: [rag, retrieval, measurement, bm25]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Your retriever finds the right document. It doesn't always find the answer.' Below it, two bars: 'right document in the top 5' at 95% in green, and 'passage with the answer in the top 5' at 70% in yellow."
 ---
 
-![Title card reading "Your retriever finds the right document. It doesn't always find the answer." Below it, two bars: "right document in the top 5" at 95% in green, and "passage with the answer in the top 5" at 70% in yellow.](cover.png)
+![Title card reading "Your retriever finds the right document. It doesn't always find the answer." Below it, two bars: "right document in the top 5" at 95% in green, and "passage with the answer in the top 5" at 70% in yellow.](img/cover.png)
 
 The RAG demo always works. You load twenty documents, ask five questions, and the answers come back crisp and cited. Then you load the real corpus, ship it, and the same assistant confidently answers questions using a chunk from the wrong page, the wrong month, or the wrong customer. Nothing errored. The retrieval "worked." It just returned the wrong thing, dressed up as the right thing.
 
@@ -27,7 +27,7 @@ The chunks are fixed-size word windows: 100, 200, 400 and 800 words, plus whole 
 
 Top five, because that is roughly what a RAG system hands the model. The script, the questions, and the full results are in the [retriever-doc-answer](https://github.com/d-sanoj/retriever-doc-answer) repo, so you can run the same test on your own docs. The script excludes this post from its own corpus — it quotes the questions, so including it would change the measurement.
 
-![A RAG pipeline in four boxes: a question goes to a retriever, which returns the top 5 chunks, and those 5 go to the model. Below, a ranked list shows ranks 1 to 5, then rank 8 in red: the chunk with the answer, outside the top 5 the model ever sees.](rag-pipeline.png)
+![A RAG pipeline in four boxes: a question goes to a retriever, which returns the top 5 chunks, and those 5 go to the model. Below, a ranked list shows ranks 1 to 5, then rank 8 in red: the chunk with the answer, outside the top 5 the model ever sees.](img/rag-pipeline.png)
 
 # The comforting number: 95%
 
@@ -50,7 +50,7 @@ Same retriever, same chunks, same questions. The chunk that actually contains th
 
 The weight-editing question is the clearest case. Seven of the top ten chunks come from the right post. The model gets the introduction, the background on what weights are, the caveats. What it does not get is the experiment itself: the chunk describing the edit — "The edit: 131,072 weights change, 0.016% of the model… MATH-500 from 7.9% to 48.1%" — sits at rank 8, and the chunk introducing the experiment sits right behind it at rank 9. Both just outside the five chunks the model reads. The question's words ("edit", "directly", "retraining") match the post's throat-clearing better than they match its substance, because the substance uses different words ("Astra", "layers", "tensors").
 
-![Animation of the ranked list for the weight-editing question. First, the top five chunks — four from the right post, one from another — which are what the model receives. Then the list shows ranks 6 to 10, where rank 8 is the chunk describing the edit itself and rank 9 introduces the experiment. Then a summary: the model gets 5 chunks, and the answer is at rank 8.](ranked-list.gif){poster=ranked-list-poster.png}
+![Animation of the ranked list for the weight-editing question. First, the top five chunks — four from the right post, one from another — which are what the model receives. Then the list shows ranks 6 to 10, where rank 8 is the chunk describing the edit itself and rank 9 introduces the experiment. Then a summary: the model gets 5 chunks, and the answer is at rank 8.](img/ranked-list.gif){poster=img/ranked-list-poster.png}
 
 *Still frame: the model receives the top five chunks; the chunk with the answer sits at rank 8, just below the cutoff.*
 
@@ -76,7 +76,7 @@ Small chunks are orphans: a 100-word chunk cut from mid-section often lacks the 
 
 It is not free: a 400-word chunk is twice the words of the 200-word chunks used through most of this post, for the same five slots, and more words per chunk means more noise — the model has to find the sentence inside a bigger haystack. The right size depends on your documents: dense writing survives small chunks; discursive writing with long build-ups does not. But if you change one thing, change the chunk size first — it is the only knob that moved my numbers by double digits. The cheap second knob, prepending the post title to every chunk, is a mirage, and it is the next section.
 
-![Grouped bars of recall at the top 5, BM25, by chunk size. Post level: 95% at 100 words, 95% at 200, 100% at 400. Chunk level, strict: 60% at 100 words, 70% at 200, 90% at 400. The gap between the two bars shrinks as chunks get bigger, but never closes.](recall-gap.png)
+![Grouped bars of recall at the top 5, BM25, by chunk size. Post level: 95% at 100 words, 95% at 200, 100% at 400. Chunk level, strict: 60% at 100 words, 70% at 200, 90% at 400. The gap between the two bars shrinks as chunks get bigger, but never closes.](img/recall-gap.png)
 
 # The title trick is a mirage
 
@@ -86,7 +86,7 @@ Prepending the post title to every chunk is the first fix everyone tries, and on
 
 The same question, asked three ways, on the same retriever, same chunks:
 
-![Animation of one question asked three ways. First, as a reader asks it: 'What happens inside a model when it reads a million tokens of context?' — the answer chunk lands at rank 18. Second, in keywords: 'million token context window attention cost' — rank 2. Third, in plain words: 'What breaks when you paste a whole book into a chatbot?' — rank 13. Same question, same corpus, three different ranks.](rewording.gif){poster=rewording-poster.png}
+![Animation of one question asked three ways. First, as a reader asks it: 'What happens inside a model when it reads a million tokens of context?' — the answer chunk lands at rank 18. Second, in keywords: 'million token context window attention cost' — rank 2. Third, in plain words: 'What breaks when you paste a whole book into a chatbot?' — rank 13. Same question, same corpus, three different ranks.](img/rewording.gif){poster=img/rewording-poster.png}
 
 *Still frame: the same question in three phrasings — the answer chunk lands at rank 18, rank 2, and rank 13.*
 

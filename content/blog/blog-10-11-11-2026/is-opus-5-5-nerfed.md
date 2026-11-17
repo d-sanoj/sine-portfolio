@@ -4,11 +4,11 @@ slug: is-opus-5-5-nerfed
 date: 2026-11-11
 description: "Half my timeline says Opus 5.5 got dumber. The public trackers disagree, one user's 6,638-answer log shows a real step change, and the only way to know for yourself is a frozen test — so I built one."
 tags: [ai, claude, claude-code, opus, benchmarks, tools]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Is Opus 5.5 nerfed?' over two diverging lines: a flat line labelled 'the trackers' and a falling line labelled 'one user's log'."
 ---
 
-![Title card reading "Is Opus 5.5 nerfed?" over two diverging lines: a flat line labelled "the trackers" and a falling line labelled "one user's log".](cover.png)
+![Title card reading "Is Opus 5.5 nerfed?" over two diverging lines: a flat line labelled "the trackers" and a falling line labelled "one user's log".](img/cover.png)
 
 Half my timeline says Claude Opus 5.5 got nerfed. "Nerfed" is the word of the week — the one developers reach for when a model that was sharp on Monday feels blunt on Friday. Data and AI engineer Irushi wrote that she "actually counted NINE times that it repeated the same rejected approach despite strict instructions." Another developer reported an overnight agent run that produced "complete garbage" and wrote: "This NEVER happened before." One count put it at roughly 2,700 posts on the topic in 24 hours. Some users now say they prefer Sonnet 5.5 for consistency.
 
@@ -69,7 +69,7 @@ Three known confounders sit in the harness layer, and each one explains part of 
 
 **The client updates.** Claude Code ships most days, and the harness moves under you. In issue #99572, one commenter logged median thinking per turn falling from 196 to 63 tokens after a Claude Code auto-update and said rolling back "restores quality" — a single user's measurement, but the mechanism is real: a client update can change what the model is asked to do without the model changing at all.
 
-![Two panels. Left: the trackers — a flat line labelled "LiveNerf, 78-question panel" stays level from launch week through November 10, and a second line labelled "NerfBench" stays inside a band marked 90 to 110 percent of launch. Right: one user's log — a bar chart of corrected answers per week, flat at about 5 percent for four weeks, then jumping to 25.4 percent in the week of October 19 and 17.0 percent for November 2–4.](two-sides.png)
+![Two panels. Left: the trackers — a flat line labelled "LiveNerf, 78-question panel" stays level from launch week through November 10, and a second line labelled "NerfBench" stays inside a band marked 90 to 110 percent of launch. Right: one user's log — a bar chart of corrected answers per week, flat at about 5 percent for four weeks, then jumping to 25.4 percent in the week of October 19 and 17.0 percent for November 2–4.](img/two-sides.png)
 
 :::describe
 The diagram has two panels. The left panel, "The trackers", shows a flat line for LiveNerf's frozen 78-question panel from launch week through November 10, and a band from 90 to 110 percent of launch score holding NerfBench's runs. The right panel, "One user's log", is a bar chart of corrected answers per week from GitHub issue #105112: about 5 percent for the four weeks from September 21 to October 18, then 25.4 percent in the week of October 19, and 17.0 percent for November 2–4. The point is that fixed single-shot questions and long stateful sessions measure different things, so the two panels can both be right.
@@ -89,7 +89,7 @@ That last sentence is the whole post, really. Here is the suite.
 
 [nerf-watch](https://github.com/d-sanoj/claude-skills/tree/skill/nerf-watch/nerf-watch) is a new skill in my [claude-skills repo](https://github.com/d-sanoj/claude-skills). It runs eight small frozen tasks through Claude Code in headless mode — a median function, an off-by-one, a read-then-answer check, a filtered sum, a crashing startup, an explanation, an empty-input edge case, a deduplication refactor — with a pinned model and effort, and scores them with deterministic checks. Same tasks, same model, same effort, every week. If the score drops, something changed. If it doesn't, the model is fine and the problem is somewhere else.
 
-![A five-step pipeline titled "How nerf-watch works". Step 1: freeze eight tasks — prompts, fixtures, and checks that never change. Step 2: run them weekly through claude --bare -p with a pinned model and effort. Step 3: score each task with deterministic checks. Step 4: log the result as one JSON file per run. Step 5: compare two runs — two or more tasks flipping is worth investigating, one is noise.](how-nerf-watch-works.png)
+![A five-step pipeline titled "How nerf-watch works". Step 1: freeze eight tasks — prompts, fixtures, and checks that never change. Step 2: run them weekly through claude --bare -p with a pinned model and effort. Step 3: score each task with deterministic checks. Step 4: log the result as one JSON file per run. Step 5: compare two runs — two or more tasks flipping is worth investigating, one is noise.](img/how-nerf-watch-works.png)
 
 :::describe
 The diagram is a top-to-bottom pipeline with five boxes joined by arrows. First, freeze eight tasks: prompts, fixtures, and checks that never change once they have a logged run. Second, run them weekly through Claude Code in headless mode with a pinned model and effort. Third, score each task with deterministic checks — shell commands that must exit zero, exact output, or strings the answer must contain. Fourth, log the result as one JSON file per run, recording the date, model, effort, CLI version, and cost. Fifth, compare two runs: two or more tasks flipping is worth investigating, one is noise on an eight-task panel.
@@ -114,11 +114,11 @@ Three rules keep the comparison honest: pin the model and the effort, freeze the
 
 One of the eight tasks is there because of #105112. It hands the agent a notes file with two figures — 41,200 signups for the week of November 2, 47,800 for the week of November 9, marked the newest — and asks for the newest figure. The check requires the answer to name 47,800 and forbids it from naming 41,200. That is the exact failure shape from the issue: the research done, then dropped. A suite that cannot catch that failure is not measuring what the complaints are about.
 
-![Animation of the failure shape from GitHub issue #105112. First, a notes file holds two figures, 41,200 for the week of November 2 and 47,800 for the week of November 9, marked newest. Second, the agent reads the file. Third, the agent answers with the old figure, 41,200 — the research was done, then dropped before the answer.](read-then-drop.gif){poster=read-then-drop-poster.png}
+![Animation of the failure shape from GitHub issue #105112. First, a notes file holds two figures, 41,200 for the week of November 2 and 47,800 for the week of November 9, marked newest. Second, the agent reads the file. Third, the agent answers with the old figure, 41,200 — the research was done, then dropped before the answer.](img/read-then-drop.gif){poster=img/read-then-drop-poster.png}
 
 *The research gets done, then dropped. The animation shows a notes file with two figures, the agent reading it, and the answer naming the old figure instead of the newest.*
 
-![Animation of one nerf-watch task running. First, the task prompt arrives with its fixture files in a fresh temp directory. Second, Claude Code runs headless with a pinned model and effort. Third, deterministic checks run against what the agent left behind. Fourth, the pass or fail is written to the run's JSON log.](suite-run.gif){poster=suite-run-poster.png}
+![Animation of one nerf-watch task running. First, the task prompt arrives with its fixture files in a fresh temp directory. Second, Claude Code runs headless with a pinned model and effort. Third, deterministic checks run against what the agent left behind. Fourth, the pass or fail is written to the run's JSON log.](img/suite-run.gif){poster=img/suite-run-poster.png}
 
 *One task, end to end. The animation shows the prompt and fixtures arriving in a fresh directory, the headless run, the checks, and the result landing in the log.*
 
@@ -132,7 +132,7 @@ A suite is only half the answer. The other half is the settings that keep the ha
 
 **Keep a tested fallback model.** If Sonnet passes where Opus fails, the problem is specific to one model, not your setup. If the fallback fails too, the problem is your harness. And the fallback got better this week: Anthropic launched Claude Fable 5.2, at $8 and $40 per million input and output tokens, generating output up to 30% faster than Fable 5.1. At high effort it scores about level with Opus 5.5 at max effort on FrontierCode 2.0, for roughly half the cost per task — and Anthropic's own recommendation is still to start with Opus 5.5 as the daily driver and switch up to Fable for the hardest work. The escape hatch exists, and it is cheaper than the argument.
 
-![Four stacked layers. At the bottom, "Weights" — the model itself, frozen behind its name. Above it, "Serving" — routing, safeguards, and fallbacks you cannot see. Above that, "Harness" — Claude Code, system prompts, and effort defaults, which ship most days. At the top, "Your workload" — session length, context size, and task mix. A note reads: only the bottom layer is supposed to stay frozen; a change in any of the other three feels exactly like a nerf.](four-layers.png)
+![Four stacked layers. At the bottom, "Weights" — the model itself, frozen behind its name. Above it, "Serving" — routing, safeguards, and fallbacks you cannot see. Above that, "Harness" — Claude Code, system prompts, and effort defaults, which ship most days. At the top, "Your workload" — session length, context size, and task mix. A note reads: only the bottom layer is supposed to stay frozen; a change in any of the other three feels exactly like a nerf.](img/four-layers.png)
 
 :::describe
 The diagram shows four stacked layers. At the bottom is Weights: the model itself, frozen behind its name. Above it is Serving: routing, safeguards, and fallbacks you cannot see. Above that is Harness: Claude Code, system prompts, and effort defaults, which ship most days. At the top is Your workload: session length, context size, and task mix. A note under the stack reads: only the bottom layer is supposed to stay frozen; a change in any of the other three feels exactly like a nerf.

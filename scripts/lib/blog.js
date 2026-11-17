@@ -1,5 +1,6 @@
-// Turns content/blog/*.md into the plain pages at /blog/, and fills the latest three
-// notes into the home page. Images must have alt text or this refuses to build.
+// Turns content/blog/blog-<number>-<MM>-<DD>-<YYYY>/<slug>.md into the plain pages
+// at /blog/, and fills the latest three notes into the home page. Images must have
+// alt text or this refuses to build.
 import fs from 'node:fs';
 import path from 'node:path';
 import { PATHS } from './paths.js';
@@ -97,13 +98,13 @@ function assertSafeSvg(text, file, src) {
 
 function resolveAsset(src, post) {
   if (/^[a-z][a-z0-9+.-]*:/i.test(src) || src.startsWith('//') || src.startsWith('/') || src.split(/[\\/]/).includes('..')) {
-    throw new BlogError(post.file + ': image "' + src + '" must be a file in content/blog/' + post.slug + '/ (not a web address)');
+    throw new BlogError(post.file + ': image "' + src + '" must be a file in the post folder (content/blog/' + path.basename(post.dir) + '/img/) — not a web address');
   }
   const root = path.resolve(post.dir) + path.sep;
   const abs = path.resolve(post.dir, src);
   if (!abs.startsWith(root)) throw new BlogError(post.file + ': image "' + src + '" escapes the post folder');
   if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) {
-    throw new BlogError(post.file + ': image "' + src + '" was not found at content/blog/' + post.slug + '/' + src);
+    throw new BlogError(post.file + ': image "' + src + '" was not found at content/blog/' + path.basename(post.dir) + '/' + src);
   }
   return abs;
 }
@@ -153,7 +154,7 @@ function preparePost(post) {
       b.height = frame.height;
       if (frame.animated && !b.attrs.static) {
         b.kind = 'gif';
-        b.posterName = path.basename(b.src, ext) + '.still.png';
+        b.posterName = path.join(path.dirname(b.src), path.basename(b.src, ext) + '.still.png');
         const posted = path.join(post.dir, b.posterName);
         if (fs.existsSync(posted)) b.posterPNG = null;
         else b.posterPNG = encodePNG(frame.width, frame.height, frame.rgba);
@@ -189,34 +190,53 @@ function preparePost(post) {
   });
 }
 
+// One folder per post: content/blog/blog-<number>-<MM>-<DD>-<YYYY>/<slug>.md,
+// images in img/. The number counts posts in date order from 1, and the folder
+// date must match the frontmatter date.
+const FOLDER_RE = /^blog-(\d+)-(\d{2})-(\d{2})-(\d{4})$/;
+
 export function loadPosts(dir = PATHS.blog) {
   if (!fs.existsSync(dir)) return [];
   const names = fs.readdirSync(dir).filter((n) => !n.startsWith('.'));
   const posts = [];
-  const slugs = new Set();
+  const folders = [];
   for (const name of names) {
     const abs = path.join(dir, name);
-    if (fs.statSync(abs).isDirectory()) continue;
-    if (!name.endsWith('.md')) throw new BlogError('content/blog/' + name + ' is not a post. Add notes as slug.md next to an optional slug/ folder of images.');
-    const slug = name.slice(0, -3);
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new BlogError('content/blog/' + name + ': use lowercase words separated by hyphens');
-    const parsed = parseMarkdown(fs.readFileSync(abs, 'utf8'), 'content/blog/' + name);
+    if (!fs.statSync(abs).isDirectory()) {
+      throw new BlogError('content/blog/' + name + ' is not a post folder. Each post lives in its own folder: content/blog/blog-<number>-<MM>-<DD>-<YYYY>/<slug>.md with images in img/.');
+    }
+    const m = FOLDER_RE.exec(name);
+    if (!m) throw new BlogError('content/blog/' + name + ' is not a post folder. Name it blog-<number>-<MM>-<DD>-<YYYY>.');
+    const [, num, mm, dd, yyyy] = m;
+    const folderDate = yyyy + '-' + mm + '-' + dd;
+    const mdFiles = fs.readdirSync(abs).filter((n) => !n.startsWith('.') && n.endsWith('.md'));
+    if (mdFiles.length !== 1) throw new BlogError('content/blog/' + name + '/ must contain exactly one .md file, found ' + mdFiles.length);
+    const mdName = mdFiles[0];
+    const slug = mdName.slice(0, -3);
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new BlogError('content/blog/' + name + '/' + mdName + ': use lowercase words separated by hyphens');
+    const file = 'content/blog/' + name + '/' + mdName;
+    const parsed = parseMarkdown(fs.readFileSync(path.join(abs, mdName), 'utf8'), file);
     if (parsed.meta.slug && parsed.meta.slug !== slug) {
-      throw new BlogError('content/blog/' + name + ': slug is ' + parsed.meta.slug + ' but the file name is ' + slug);
+      throw new BlogError(file + ': slug is ' + parsed.meta.slug + ' but the file name is ' + slug);
+    }
+    if (parsed.meta.date !== folderDate) {
+      throw new BlogError(file + ': date is ' + parsed.meta.date + ' but the folder says ' + folderDate);
     }
     const post = {
-      slug, file: 'content/blog/' + name, dir: path.join(dir, slug),
+      slug, file, dir: abs,
       title: parsed.meta.title, date: parsed.meta.date, description: parsed.meta.description,
       cover: parsed.meta.cover, coverAlt: parsed.meta.coverAlt, draft: parsed.meta.draft, lang: parsed.meta.lang,
       blocks: parsed.blocks,
     };
     if (!post.draft) preparePost(post);
     posts.push(post);
-    slugs.add(slug);
+    folders.push({ num: Number(num), date: folderDate, name });
   }
-  for (const name of names) {
-    const abs = path.join(dir, name);
-    if (fs.statSync(abs).isDirectory() && !slugs.has(name)) throw new BlogError('content/blog/' + name + '/ has no ' + name + '.md next to it');
+  folders.sort((a, b) => a.date.localeCompare(b.date) || a.num - b.num);
+  for (let i = 0; i < folders.length; i++) {
+    if (folders[i].num !== i + 1) {
+      throw new BlogError('content/blog post folders must be numbered 1..' + folders.length + ' in date order; ' + folders[i].name + ' (dated ' + folders[i].date + ') sits at position ' + (i + 1));
+    }
   }
   posts.sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
   return posts;
@@ -566,14 +586,31 @@ function copyDirFiles(from, to) {
   for (const name of fs.readdirSync(from)) {
     if (name.startsWith('.')) continue;
     const src = path.join(from, name);
-    if (fs.statSync(src).isDirectory()) throw new BlogError('content/blog image folders are flat; ' + name + ' contains another folder');
+    if (fs.statSync(src).isDirectory()) {
+      if (name !== 'img') throw new BlogError('content/blog/' + path.basename(from) + '/ holds files and an img/ folder only; it contains another folder: ' + name);
+      const imgDest = path.join(to, 'img');
+      fs.mkdirSync(imgDest, { recursive: true });
+      for (const img of fs.readdirSync(src)) {
+        if (img.startsWith('.')) continue;
+        const imgSrc = path.join(src, img);
+        if (fs.statSync(imgSrc).isDirectory()) throw new BlogError('content/blog img/ folders are flat; ' + name + '/' + img + ' contains another folder');
+        fs.copyFileSync(imgSrc, path.join(imgDest, img));
+      }
+      continue;
+    }
+    // The post's own .md is the source, not a download: never publish it.
+    if (name.endsWith('.md')) continue;
     fs.copyFileSync(src, path.join(to, name));
   }
 }
 
 function writeStills(post, dir) {
   eachBlock(post.blocks, (b) => {
-    if (b.type === 'image' && b.posterPNG) fs.writeFileSync(path.join(dir, b.posterName), b.posterPNG);
+    if (b.type === 'image' && b.posterPNG) {
+      const target = path.join(dir, b.posterName);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.writeFileSync(target, b.posterPNG);
+    }
   });
 }
 
@@ -632,7 +669,7 @@ export function handleBlog(pathname, dir = PATHS.blog) {
     try { return { status: 200, type: MIME['.html'], body: renderPost(post, posts) }; }
     catch (e) { return { status: 500, type: 'text/plain; charset=utf-8', body: e.message + '\n' }; }
   }
-  const filePath = /^([a-z0-9]+(?:-[a-z0-9]+)*)\/([^/]+)$/.exec(rel);
+  const filePath = /^([a-z0-9]+(?:-[a-z0-9]+)*)\/((?:img\/)?[^/]+)$/.exec(rel);
   if (filePath && !filePath[2].split('/').includes('..')) {
     const post = posts.find((p) => p.slug === filePath[1]);
     if (!post) return { status: 404, type: 'text/plain; charset=utf-8', body: 'not found\n' };

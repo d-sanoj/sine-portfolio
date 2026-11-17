@@ -4,11 +4,11 @@ slug: your-agents-code-looks-nothing-like-yours
 date: 2026-11-15
 description: "I measured my own repo conventions and found the enforceable ones are the boring mechanical ones, while error handling is mixed everywhere, so I built a skill that turns conventions into checks."
 tags: [ai, claude-code, coding-agents, conventions, tools]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Your agent's code looks nothing like yours' with the subtitle 'Same task, different conventions — and the fix is a check, not a paragraph', over two code files side by side: one labelled 'how the repo writes it' and one labelled 'how the agent wrote it', joined by an unlabeled arrow."
 ---
 
-![Title card reading "Your agent's code looks nothing like yours" with the subtitle "Same task, different conventions — and the fix is a check, not a paragraph", over two code files side by side: one labelled "how the repo writes it" and one labelled "how the agent wrote it", joined by an unlabeled arrow.](cover.png)
+![Title card reading "Your agent's code looks nothing like yours" with the subtitle "Same task, different conventions — and the fix is a check, not a paragraph", over two code files side by side: one labelled "how the repo writes it" and one labelled "how the agent wrote it", joined by an unlabeled arrow.](img/cover.png)
 
 The first week with a coding agent is impressive. By the third week, the review comments start repeating: "we don't use that logger here", "this should follow the orders service", "don't call the payments API directly." The agent writes good code. It just keeps writing it the way most projects do, not the way yours does.
 
@@ -24,7 +24,7 @@ The usual fix is to write the rules down where the agent reads them: a `CLAUDE.m
 
 That ranking is the whole argument of this post. I did not need a better instructions file. I needed to know what my repo already does, written as checks the agent runs on its own diff.
 
-![A five-rung ladder of enforcement, strongest at the top, titled 'Push every rule as far up as it will go': 1, a formatter that rewrites the file; 2, a linter with a non-zero exit code; 3, a type system or a test that asserts structure; 4, a committed example file; 5, a rule written in prose in your instructions file, highlighted in red and labelled 'frequently ignored'.](tier-ladder.png)
+![A five-rung ladder of enforcement, strongest at the top, titled 'Push every rule as far up as it will go': 1, a formatter that rewrites the file; 2, a linter with a non-zero exit code; 3, a type system or a test that asserts structure; 4, a committed example file; 5, a rule written in prose in your instructions file, highlighted in red and labelled 'frequently ignored'.](img/tier-ladder.png)
 
 # The experiment: measure the repo, don't assert about it
 
@@ -32,7 +32,7 @@ I wrote a small extractor — plain Python, no packages — that walks a repo an
 
 Here is what my repo actually does, measured on 2026-11-15:
 
-![Bar chart of measured conventions. const is 83% of declarations; single quotes are 91% of strings; semicolons end 92% of statement lines; 95% of non-merge commits carry an Area: prefix; 212 import statements against 0 require() calls. A separate note reads 'error handling: mixed in every directory — no rule'.](measured-conventions.png)
+![Bar chart of measured conventions. const is 83% of declarations; single quotes are 91% of strings; semicolons end 92% of statement lines; 95% of non-merge commits carry an Area: prefix; 212 import statements against 0 require() calls. A separate note reads 'error handling: mixed in every directory — no rule'.](img/measured-conventions.png)
 
 - **Declarations: `const`.** 1,821 of 2,187 declarations are `const` (83%). `let` is 355. `var` is 11 — and all eleven sit in a single file, `scripts/lib/blog.js`, a hand-written build script that generates the HTML pages, written in an older style.
 - **Quotes: single.** 2,425 of 2,654 strings (91%). The rest cluster in HTML template strings and regex fragments, which matters later.
@@ -50,7 +50,7 @@ And then the finding that made the post: **error handling is mixed everywhere.**
 
 The extractor's second script checks changed files against the rules it found, and exits 1 with a violation list or 0 with "clean". Every violation carries the repo evidence behind its rule, so the agent sees *why* it is a rule. I ran it against all 94 files of the repo that produced the rules:
 
-![The checker's report on the repo's own code: 19 hard violations in 9 files. Eleven var uses, all in scripts/lib/blog.js. Six camelCase service and model files. Two PascalCase files that define no class. Below, a separate line reads '95 advisory quote notes — reported, not failures'.](drift-report.png)
+![The checker's report on the repo's own code: 19 hard violations in 9 files. Eleven var uses, all in scripts/lib/blog.js. Six camelCase service and model files. Two PascalCase files that define no class. Below, a separate line reads '95 advisory quote notes — reported, not failures'.](img/drift-report.png)
 
 **19 hard violations in 9 files.** Eleven are the `var` uses in `scripts/lib/blog.js`. Six are camelCase service and model files — `exportData.js`, `glyphFit.js`, `measurePage.js`, `fitPortrait.js`, `lineArt.js`, `pageLoader.js` — each sitting in a model or services folder next to kebab-case siblings, so there is no sub-rule hiding there, just drift nobody noticed. Two are PascalCase files that define no class at all: `Letter.js` and `Timeline.js` both export helper functions, and their names are leftovers from a time when they presumably held classes.
 
@@ -58,11 +58,11 @@ None of this was visible before measuring. The repo's author — me — thought 
 
 The run also produced **95 advisory notes**, all about quote style, and they taught me something about what a regex checker can and cannot do. The first version of the checker flagged 121 double-quoted strings. Most of them were not drift. They were HTML attribute names inside the template strings of `scripts/lib/blog.js` (92 lines containing double quotes in that one file), regex fragments like `"[^"`, and data strings like `"done"`. A regex cannot tell a template string from a style violation, so quote style became an advisory rule: reported, never failing. After I also taught the checker to skip comment-only lines — my own fixture file's header comment described its violations using the words `var` and `console.log`, and the first checker version flagged the comments — the count settled at 95. Quote style is a formatter's job. The checker says so in the rule, instead of pretending otherwise.
 
-![Animation of the workflow in three steps. First, the extractor measures the repo: 94 files become counts. Second, the counts become nine rules in a conventions file. Third, the checker runs on a changed file: it lists violations in red, the file is fixed, and the checker reports clean in green.](extract-check-fix.gif){poster=extract-check-fix-poster.png}
+![Animation of the workflow in three steps. First, the extractor measures the repo: 94 files become counts. Second, the counts become nine rules in a conventions file. Third, the checker runs on a changed file: it lists violations in red, the file is fixed, and the checker reports clean in green.](img/extract-check-fix.gif){poster=img/extract-check-fix-poster.png}
 
 *Still frame: the checker runs on a changed file, lists its violations, and reports clean after the fix.*
 
-![Animation of the quote-style lesson in three steps. First, the checker flags 121 double-quoted strings. Second, a close-up shows most of them are HTML attribute names inside template strings and regex fragments. Third, the verdict: quote style is advisory only — a formatter owns it, not the checker.](quotes-are-advisory.gif){poster=quotes-are-advisory-poster.png}
+![Animation of the quote-style lesson in three steps. First, the checker flags 121 double-quoted strings. Second, a close-up shows most of them are HTML attribute names inside template strings and regex fragments. Third, the verdict: quote style is advisory only — a formatter owns it, not the checker.](img/quotes-are-advisory.gif){poster=img/quotes-are-advisory-poster.png}
 
 *Still frame: most flagged double quotes are HTML attribute names in template strings — so quote style stays advisory.*
 

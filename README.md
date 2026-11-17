@@ -25,21 +25,21 @@ All the words on the site live in one file: `apps/plain/index.html`. Edit it, th
 
 ## Blog
 
-Notes are Markdown files in `content/blog/`. To add one, create `content/blog/<slug>.md`:
+Notes are Markdown files in `content/blog/`, one folder per note. To add one, create `content/blog/blog-<number>-<MM>-<DD>-<YYYY>/`, where `<number>` counts the notes from 1 in date order, and put `content/blog/blog-<number>-<MM>-<DD>-<YYYY>/<slug>.md` inside it:
 
 ```markdown
 ---
 title: How a model reads a word
 date: 2026-11-05
 description: One sentence about the note.
-cover: cover.png
+cover: img/cover.png
 coverAlt: What the cover image shows.
 ---
 
 Your writing here. `#` is a section, `##` is a sub-section.
 ```
 
-Images for that note go in `content/blog/<slug>/` and are linked by their file name, for example `![What the picture shows](diagram.png)`. Every image needs alt text, or the build stops.
+Images for that note go in `content/blog/blog-<number>-<MM>-<DD>-<YYYY>/img/` and are linked as `img/<file>`, for example `![What the picture shows](img/diagram.png)`. Every image needs alt text, or the build stops. Downloadable files (a script, a results file) sit next to the `.md` at the folder root and are linked by their file name.
 
 ## Smooth animation
 

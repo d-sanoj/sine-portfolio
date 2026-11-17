@@ -4,11 +4,11 @@ slug: claude-motion-for-pro
 date: 2026-11-07
 description: "Anthropic's Motion turns a report into an animated explainer, but only on Team and Enterprise — so I simplified a community skill into motion-reel, one installable skill that renders the same films on Pro."
 tags: [ai, claude, claude-code, explainer, news, skills]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Claude Motion is Team-only. Here's the same trick on Pro', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "Claude Motion is Team-only. Here's the same trick on Pro", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "Claude Motion is Team-only. Here's the same trick on Pro", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 On October 8, Anthropic launched [Claude Motion](https://claude.com/resources/articles/dashboards-and-motion), and the idea is genuinely good. You describe an animation — a quarterly report as a 30-second explainer for an all-hands, motion on a chart in a board deck, a product walkthrough for onboarding — and Claude builds it. It plays like a short video, and you can download it as an MP4.
 
@@ -30,7 +30,7 @@ Anthropic's own [artifacts help page](https://support.claude.com/en/articles/171
 
 Two more details from the same sources. On Team, Motion is on by default. On Enterprise it is off by default until an owner turns it on under Organization settings, then Artifacts — so even some Team-and-Enterprise customers have to ask an admin first. And Motion counts toward your plan's usage limits: a longer or more complex animation uses more of your limit than a typical message. There is no separate Motion fee; it comes with the seat.
 
-![A plan table titled "Who gets Claude Motion (beta)". Six rows: Free $0 — no; Pro $20 a month — no; Max $100 a month — no; Ultra $200 a month — no; Team, $20 to $25 a seat a month, two-seat minimum — yes; Enterprise, $20 a seat a month plus usage — yes. A caption notes the gate is per Anthropic's artifacts help page, checked November 7, 2026.](plans.png)
+![A plan table titled "Who gets Claude Motion (beta)". Six rows: Free $0 — no; Pro $20 a month — no; Max $100 a month — no; Ultra $200 a month — no; Team, $20 to $25 a seat a month, two-seat minimum — yes; Enterprise, $20 a seat a month plus usage — yes. A caption notes the gate is per Anthropic's artifacts help page, checked November 7, 2026.](img/plans.png)
 
 *The gate is the product decision, not a technical one: Dashboards from the same launch is on every paid plan. Team pricing is per Anthropic's pricing page as reported by [eesel.ai](https://www.eesel.ai/blog/claude-motion); the two-seat minimum is per [Zemith](https://www.zemith.com/en/contents/claude-motion-graphics). Enterprise pricing is from [Claude's pricing FAQ](https://claude.com/pricing).*
 
@@ -61,7 +61,7 @@ What stayed the same matters as much as what changed. The render script, the Mot
 
 The mechanism is the interesting part, and it is simpler than it sounds. A film is two files. `film.json` holds the words, the colours, the score and the narration. `film.html` holds one section per scene, and a small module that describes each scene as Motion animation segments — which element moves, from where to where, and when. The player builds one paused Motion timeline out of all the scenes, so any moment in the film can be shown exactly, on demand.
 
-![A four-box pipeline titled "How a motion-reel film is made". Box 1: film.json plus film.html — words, colours, scenes as code. Box 2: one paused Motion timeline — every frame addressable. Box 3: headless Chrome photographs each frame, 15 or 30 times a second. Box 4: ffmpeg stitches the frames with the score and voice into an MP4. A caption reads: the film is a paused timeline; Chrome photographs it, ffmpeg assembles it.](pipeline.png)
+![A four-box pipeline titled "How a motion-reel film is made". Box 1: film.json plus film.html — words, colours, scenes as code. Box 2: one paused Motion timeline — every frame addressable. Box 3: headless Chrome photographs each frame, 15 or 30 times a second. Box 4: ffmpeg stitches the frames with the score and voice into an MP4. A caption reads: the film is a paused timeline; Chrome photographs it, ffmpeg assembles it.](img/pipeline.png)
 
 *The film is a paused timeline. Chrome photographs it, ffmpeg assembles it. There is no video model anywhere in the pipeline — the animation is code, and the MP4 is a recording of that code playing.*
 
@@ -73,9 +73,9 @@ Two properties of this design do most of the work. The first is determinism: bec
 
 The skill ships with a working example — a ten-second film called "Motion, as code" that renders out of the box — and these are real frames from it, rendered on this machine with the skill's own test:
 
-![Animated frames from the example film "Motion, as code". First the title "Motion, as code" fades in with the subtitle "a film written like a program" over a yellow sine wave. Then three numbered steps appear one by one: "Words live in film.json", "Motion plays the timeline", "Chrome and ffmpeg make the MP4". It closes on "Free. On your machine." and "motion-reel" over the wave.](reel-frames.gif){poster=reel-frames-poster.png}
+![Animated frames from the example film "Motion, as code". First the title "Motion, as code" fades in with the subtitle "a film written like a program" over a yellow sine wave. Then three numbered steps appear one by one: "Words live in film.json", "Motion plays the timeline", "Chrome and ffmpeg make the MP4". It closes on "Free. On your machine." and "motion-reel" over the wave.](img/reel-frames.gif){poster=img/reel-frames-poster.png}
 
-*Real frames from the example film, rendered with `node scripts/render.mjs example draft`. The three scenes run 2.5, 5 and 2.5 seconds. A still from the middle of the film is available: [poster frame](reel-frames-poster.png).*
+*Real frames from the example film, rendered with `node scripts/render.mjs example draft`. The three scenes run 2.5, 5 and 2.5 seconds. A still from the middle of the film is available: [poster frame](img/reel-frames-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -94,9 +94,9 @@ node ~/.claude/skills/motion-reel/scripts/render.mjs \
 
 The check script lists what your machine is missing and how to install it — Node 22 or later, Chrome, ffmpeg, Python 3.10 or later, and `espeak-ng` on Linux for the voice. Then copy `example/` to a new folder, edit the words in `film.json`, and you have your own film. Ask Claude Code for one in plain words — *"a 15-second animated explainer of our pricing page: three plans, the middle one highlighted"* — and the skill asks for a style and colours, renders a draft, shows you frames, and renders the final only after you say it is right.
 
-![A horizontal timeline titled "One timeline, every frame exact". Three blocks run left to right: Wake, 2.5 seconds; Idea, 5 seconds; Close, 2.5 seconds. A playhead line sweeps across the blocks and a clock reads the time. A caption reads: the timeline is built once, paused, and photographed frame by frame — so a re-render gives the same film.](timeline.gif){poster=timeline-poster.png}
+![A horizontal timeline titled "One timeline, every frame exact". Three blocks run left to right: Wake, 2.5 seconds; Idea, 5 seconds; Close, 2.5 seconds. A playhead line sweeps across the blocks and a clock reads the time. A caption reads: the timeline is built once, paused, and photographed frame by frame — so a re-render gives the same film.](img/timeline.gif){poster=img/timeline-poster.png}
 
-*One timeline, every frame exact. The blocks are the example film's three scenes, 2.5, 5 and 2.5 seconds. The timeline is built once, paused, and photographed frame by frame — so a re-render gives the same film. A still version is available: [poster frame](timeline-poster.png).*
+*One timeline, every frame exact. The blocks are the example film's three scenes, 2.5, 5 and 2.5 seconds. The timeline is built once, paused, and photographed frame by frame — so a re-render gives the same film. A still version is available: [poster frame](img/timeline-poster.png).*
 
 ## The catch
 
