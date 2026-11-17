@@ -4,7 +4,7 @@ slug: how-i-built-a-portfolio-out-of-sine-waves
 date: 2026-11-06
 description: "One sine curve per letter, no text, no images on the home page — how a video about a game with no assets turned into a portfolio drawn entirely from waves."
 tags: [sine waves, portfolio, fourier]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "A single sine wave on the left, and the letter a drawn from 40 waves on the right."
 ---
 
@@ -22,7 +22,7 @@ Not a picture of a letter. Not a font rendered onto a canvas. One closed loop, d
 
 That is also how the letters get made. I drew each letter once, by hand, in a small designer tool that lives in the same repo. The designer takes the drawn stroke and fits a Fourier series to it: it samples 512 points around the loop and runs a discrete Fourier transform, looking at frequencies up to 128 in either direction, and keeps the strongest waves. What gets saved for the curve itself is nothing but the waves — each term is three numbers: frequency, amplitude, phase — plus a little routing metadata alongside: how wide the letter is, where joins enter and leave, and which stretches of the loop stay undrawn. The letter `a` is 40 waves. The digits are the fussiest letters I have, up to 96 waves each. All 161 letters together fit in a 175 KB file.
 
-![The letter a drawn with 1, 5, 15, and 40 sine waves: one wave is a circle, and each added wave bends it closer to the letter.](forming-a.png)
+![The letter a drawn with 1, 5, 15, and 40 sine waves: one wave is a circle, and each added wave bends it closer to the letter.](img/forming-a.png)
 
 :::describe
 Four panels show the same letter `a` built from its real wave data. With one wave it is a plain circle. With five waves a stem starts to appear on the right. With fifteen the bowl and stem are nearly there. With all forty waves it is the finished letter. The waves are added strongest first, exactly as they fade in on the page.
@@ -30,9 +30,9 @@ Four panels show the same letter `a` built from its real wave data. With one wav
 
 The moment a letter loads on the page, it draws itself the same way it was built: it starts as a single wave — a circle — and the waves fade in, strongest first, each one bending the path closer to the letter. You can watch it happen. The portrait that loads first forms the same way, one wave at a time.
 
-![The letter a forming, step by step, from a circle to the finished letter.](forming-a.gif){poster=forming-a-poster.png}
+![The letter a forming, step by step, from a circle to the finished letter.](img/forming-a.gif){poster=img/forming-a-poster.png}
 
-*A still version is available: [poster frame](forming-a-poster.png).*
+*A still version is available: [poster frame](img/forming-a-poster.png).*
 
 # The dot of the i
 
@@ -54,7 +54,7 @@ Getting the sine page to look right takes one more step. A browser opens the pla
 
 Then comes the part that surprised me most. The finished sine page, if you shipped it naively, would be about a megabyte of wave data — a copy of the sine waves for every letter on the page. Instead the site ships two small things: the measured layouts and the letters the page actually uses. The home page uses 71 of the 161 letters, 3,600 waves in total. When the page loads, deterministic code rebuilds the page from those two things, and the result is exactly the same page. It is the same idea as the game, one level up: don't ship the thing, ship the recipe for the thing.
 
-![Four boxes with arrows: plain page, measure, layouts plus glyphs, canvas. The plain page holds the words, a browser measures where each letter sits, the layouts and glyphs are shipped instead of the page, and the canvas redraws the curves at load.](pipeline.png)
+![Four boxes with arrows: plain page, measure, layouts plus glyphs, canvas. The plain page holds the words, a browser measures where each letter sits, the layouts and glyphs are shipped instead of the page, and the canvas redraws the curves at load.](img/pipeline.png)
 
 :::describe
 The build pipeline in four steps. First, the plain page at apps/plain/index.html, the only place words live. Second, a browser measures where each letter sits on that page. Third, the measured layouts and the glyphs — 71 letters, 3,600 waves for the home page — are shipped instead of the finished page. Fourth, a canvas redraws the curves when the page loads, producing exactly the same page.

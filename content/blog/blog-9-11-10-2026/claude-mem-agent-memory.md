@@ -4,11 +4,11 @@ slug: claude-mem-agent-memory
 date: 2026-11-10
 description: "Claude-Mem gives Claude Code a memory across sessions — 115,000 stars and counting. It works, and it's worth installing. Just don't install it the way the installer wants you to."
 tags: [ai, claude, claude-code, agents, tools]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Your coding agent forgets everything. Claude-Mem remembers — and here's the bill', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "Your coding agent forgets everything. Claude-Mem remembers — and here's the bill", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "Your coding agent forgets everything. Claude-Mem remembers — and here's the bill", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 Picture it: on Monday you fix a login bug with Claude Code. You decide together that card payments come before bank transfer in the checkout flow, and that the retry logic lives in one place, not three. On Tuesday you open a new session and ask it to finish the job. It asks you what bug you are talking about.
 
@@ -24,7 +24,7 @@ The problem is not that agents are dumb. It is that their memory has the lifespa
 
 So the loop looks like this: you explain the architecture, the agent does good work, the session ends, and tomorrow you explain the architecture again. The re-explanation costs tokens twice — once to say it, once for the agent to re-read the files to confirm it — and the decisions are the worst part, because nothing in the code says *why* card payments come first. That reasoning lived only in the conversation.
 
-![Two loops side by side. On the left, without memory: a new session opens, you re-explain the project, the agent re-reads the same files, and it repeats a mistake you already fixed — then the session ends and the loop starts again. On the right, with memory: a new session opens with a short index of past decisions and fixes, the agent reads only the details it needs, and the loop ends with the work, not the re-explanation.](amnesia-loop.png)
+![Two loops side by side. On the left, without memory: a new session opens, you re-explain the project, the agent re-reads the same files, and it repeats a mistake you already fixed — then the session ends and the loop starts again. On the right, with memory: a new session opens with a short index of past decisions and fixes, the agent reads only the details it needs, and the loop ends with the work, not the re-explanation.](img/amnesia-loop.png)
 
 :::describe
 The diagram shows two loops. The left loop, labelled "without memory", has four steps in a column: a new session opens empty, you re-explain the project, the agent re-reads the same files, and it repeats a mistake you already fixed — then the session ends and the loop starts again. The right loop, labelled "with memory", has three steps in a column: a new session opens with a short index of past decisions and fixes, the agent reads only the details it needs, and the work gets done. The point is that the memory is not about storing more — it is about not paying the re-explanation tax every morning.
@@ -44,7 +44,7 @@ Claude-Mem has four parts, and the design is the interesting half of this story.
 
 **4. The next session starts with an index, not a dump.** When a new session opens, Claude-Mem injects a compact index of the observations that matter for the project. The agent fetches full details only when it needs them. The same staged idea drives search: the mem-search skill runs three MCP tools — `search` for a compact index of results, `timeline` for the chronological context around them, and `get_observations` for the full text of only the IDs it picks. The project claims this staged search saves roughly 10x the tokens of fetching everything up front; that is the project's own number, not an independent measurement, but the direction is right — an index of 50–100 tokens per result is obviously cheaper than a pile of full observations.
 
-![A five-step pipeline diagram titled "How claude-mem remembers". Step 1: hooks in Claude Code hand each tool call to a local worker. Step 2: the observer, a Haiku 5.5 model, turns tool activity into short observations. Step 3: observations, sessions, and summaries are stored in SQLite with Chroma for vector search. Step 4: the next session opens with a compact index of what matters. Step 5: the agent fetches full details only when it needs them, through search, timeline, and get_observations.](how-it-works.png)
+![A five-step pipeline diagram titled "How claude-mem remembers". Step 1: hooks in Claude Code hand each tool call to a local worker. Step 2: the observer, a Haiku 5.5 model, turns tool activity into short observations. Step 3: observations, sessions, and summaries are stored in SQLite with Chroma for vector search. Step 4: the next session opens with a compact index of what matters. Step 5: the agent fetches full details only when it needs them, through search, timeline, and get_observations.](img/how-it-works.png)
 
 :::describe
 The diagram is a top-to-bottom pipeline with five boxes joined by arrows. First, hooks in Claude Code hand each tool call to a local worker. Second, the observer — a Haiku 5.5 model — turns that activity into short typed observations such as bugfix, decision, and discovery. Third, the observations land in SQLite on the machine, with Chroma adding vector search. Fourth, the next session opens with a compact index of the observations that matter for this project. Fifth, the agent fetches full details only when it needs them, using the three-step search. A note under the pipeline says the observer is a second model call, so memory costs model time on top of your own session.
@@ -70,7 +70,7 @@ None of that is hidden — the README says the trial's checkout page "asks for a
 
 The hosted observer is not the only path, and the project does not hide that either. Pass `--provider claude` and the installer skips the sign-in entirely; headless installs land on your own Claude plan by default. You can also use your own OpenRouter or Gemini key. Cloud sync is opt-in, and the memory itself lives in `~/.claude-mem` on your machine either way. The paid product is the hosted observer and the sync, not the memory. The problem is only that the default install is the paid path with the free path one flag away, and a thousand people a day are clicking through it.
 
-![Animation of the observer at work: a tool call flows to the observer, which writes one short note — "Decision: card payments before bank transfer, because refunds are simpler" — into the SQLite database. The next day, the same note arrives in a new session as part of a compact index.](observer-notes.gif){poster=observer-notes-poster.png}
+![Animation of the observer at work: a tool call flows to the observer, which writes one short note — "Decision: card payments before bank transfer, because refunds are simpler" — into the SQLite database. The next day, the same note arrives in a new session as part of a compact index.](img/observer-notes.gif){poster=img/observer-notes-poster.png}
 
 *One tool call becomes one note, and the note comes back. The animation shows a tool call flowing to the observer, the observer writing a short decision note, and that note arriving in the next day's session index.*
 
@@ -123,11 +123,11 @@ Fourth, decide how chatty the memory should be. The default mode records nearly 
 
 Fifth, check what it wrote. After a session or two, open the viewer and read the observations. The database is at `~/.claude-mem/claude-mem.db`, and the viewer shows you the sessions and the notes. If a secret slipped in before you turned redaction on, you will see it there, and you can delete it — which is more than you can say for most tools that watch you work.
 
-![Animation of a new session starting with memory: the session opens empty, a compact index of past observations slides in — three entries labelled decision, bugfix, and discovery — and the agent answers a question about the checkout flow using the decision entry, without re-reading the files.](recall.gif){poster=recall-poster.png}
+![Animation of a new session starting with memory: the session opens empty, a compact index of past observations slides in — three entries labelled decision, bugfix, and discovery — and the agent answers a question about the checkout flow using the decision entry, without re-reading the files.](img/recall.gif){poster=img/recall-poster.png}
 
 *A new session opens with a short index of past decisions and fixes, and the agent answers from it. The animation shows the index arriving at session start and the agent using one entry to answer without re-reading the files.*
 
-![A checklist titled "The safe install, in five steps". Step 1: install with --provider claude to skip the sign-in and the trial. Step 2: turn on redaction — 38 built-in patterns plus 4 generic — in settings.json. Step 3: disable telemetry and switch "Keep images" off. Step 4: pick code--chill mode if you want fewer notes. Step 5: open the viewer after a session or two and read what it wrote.](safe-install.png)
+![A checklist titled "The safe install, in five steps". Step 1: install with --provider claude to skip the sign-in and the trial. Step 2: turn on redaction — 38 built-in patterns plus 4 generic — in settings.json. Step 3: disable telemetry and switch "Keep images" off. Step 4: pick code--chill mode if you want fewer notes. Step 5: open the viewer after a session or two and read what it wrote.](img/safe-install.png)
 
 :::describe
 The diagram is a checklist with five numbered steps. First, install with the --provider claude flag to skip the sign-in and the trial. Second, turn on redaction — 38 built-in patterns plus four generic ones — in settings.json. Third, disable telemetry with the telemetry command and switch "Keep images" off in the viewer. Fourth, pick code--chill mode if you want fewer, higher-value notes. Fifth, open the viewer after a session or two and read what the observer wrote. A note at the bottom says the memory lives in ~/.claude-mem on your machine either way; the paid product is the hosted observer and the sync, not the memory.

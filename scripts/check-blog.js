@@ -22,35 +22,36 @@ function expectThrow(name, fn) {
 }
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blog-check-'));
-function write(slug, body, file) {
-  fs.writeFileSync(path.join(root, slug + '.md'), body);
+function write(folder, slug, body, file) {
+  const dir = path.join(root, folder);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, slug + '.md'), body);
   if (file) {
-    fs.mkdirSync(path.join(root, slug), { recursive: true });
-    fs.writeFileSync(path.join(root, slug, file.name), file.body);
+    fs.mkdirSync(path.join(dir, 'img'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'img', file.name), file.body);
   }
 }
 
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
 
-write('no-alt', `---
+write('blog-1-01-01-2026', 'no-alt', `---
 title: No alt
 date: 2026-01-01
 description: This image has no description.
 ---
 
-![](dot.png)
+![](img/dot.png)
 `, { name: 'dot.png', body: png });
 expectThrow('missing alt', () => loadPosts(root));
-fs.rmSync(path.join(root, 'no-alt.md'));
-fs.rmSync(path.join(root, 'no-alt'), { recursive: true });
+fs.rmSync(path.join(root, 'blog-1-01-01-2026'), { recursive: true });
 
-write('decor', `---
+write('blog-1-01-02-2026', 'decor', `---
 title: Decor
 date: 2026-01-02
 description: A decorative rule.
 ---
 
-![](dot.png){decorative}
+![](img/dot.png){decorative}
 `, { name: 'dot.png', body: png });
 try {
   const posts = loadPosts(root);
@@ -59,13 +60,13 @@ try {
 } catch (e) { bad('decorative image', e); }
 
 // three notes plus an older fourth, so the home list must drop the oldest
-for (const [slug, date, title] of [
-  ['newer', '2026-05-03', 'Newer note'],
-  ['middle', '2026-05-02', 'Middle note'],
-  ['older', '2026-05-01', 'Older note'],
-  ['oldest', '2026-04-01', 'Oldest note'],
+for (const [folder, slug, date, title] of [
+  ['blog-5-05-03-2026', 'newer', '2026-05-03', 'Newer note'],
+  ['blog-4-05-02-2026', 'middle', '2026-05-02', 'Middle note'],
+  ['blog-3-05-01-2026', 'older', '2026-05-01', 'Older note'],
+  ['blog-2-04-01-2026', 'oldest', '2026-04-01', 'Oldest note'],
 ]) {
-  write(slug, `---
+  write(folder, slug, `---
 title: ${title}
 date: ${date}
 description: A short line about ${title}.
@@ -95,8 +96,8 @@ try {
   const html = renderPost(post, real);
   if (!html.includes('href="https://ernie.baidu.com/release/ernie-5-5-flash-base/"')) throw new Error('the ERNIE link was dropped');
   if (!html.includes('<time datetime="2026-11-05">')) throw new Error('no time element');
-  if (!html.includes('data-still-src="next-token-poster.png"') || !html.includes('data-animated-src="next-token.gif"')) throw new Error('the next-token GIF is not using its poster');
-  if (!html.includes('data-still-src="attention-poster.png"') || !html.includes('data-animated-src="attention.gif"')) throw new Error('the attention GIF is not using its poster');
+  if (!html.includes('data-still-src="img/next-token-poster.png"') || !html.includes('data-animated-src="img/next-token.gif"')) throw new Error('the next-token GIF is not using its poster');
+  if (!html.includes('data-still-src="img/attention-poster.png"') || !html.includes('data-animated-src="img/attention.gif"')) throw new Error('the attention GIF is not using its poster');
   if ((html.match(/<h1/g) || []).length !== 1) throw new Error('the page should have one h1');
   ok('post links, dates and posters');
 } catch (e) { bad('post links, dates and posters', e); }
@@ -105,10 +106,10 @@ try {
   const out = path.join(root, 'out');
   const n = buildBlog(out);
   if (n < 1) throw new Error('expected the note to be built, got ' + n);
-  const frame = gifFirstFrame(fs.readFileSync(path.join('content/blog/how-ai-reads-a-million-tokens', 'next-token.gif')));
+  const frame = gifFirstFrame(fs.readFileSync(path.join('content/blog/blog-3-11-05-2026/img', 'next-token.gif')));
   if (frame.frames < 2) throw new Error('next-token.gif is not animated');
   const page = fs.readFileSync(path.join(out, 'how-ai-reads-a-million-tokens', 'index.html'), 'utf8');
-  if (!page.includes('next-token-poster.png') || !fs.existsSync(path.join(out, 'how-ai-reads-a-million-tokens', 'attention-poster.png'))) throw new Error('posters were not published');
+  if (!page.includes('img/next-token-poster.png') || !fs.existsSync(path.join(out, 'how-ai-reads-a-million-tokens', 'img', 'attention-poster.png'))) throw new Error('posters were not published');
   const feed = fs.readFileSync(path.join(out, 'feed.xml'), 'utf8');
   if (!feed.includes('<feed xmlns="http://www.w3.org/2005/Atom">')) throw new Error('not an Atom feed');
   if (!feed.includes('How an AI reads a million tokens')) throw new Error('feed is missing the note');
