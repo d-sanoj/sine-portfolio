@@ -4,11 +4,11 @@ slug: why-embeddings-make-search-work
 date: 2026-11-04
 description: "Keyword search needs shared words. Embeddings turn meaning into geometry so 'bad guy' can find 'villain'. A plain-language tour of vectors, neighbors, and dual encoders."
 tags: [ai, explainer, embeddings, search, nlp]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Why embeddings make search work' with the subtitle 'How meaning becomes geometry, and why bad guy can find villain', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "Why embeddings make search work" with the subtitle "How meaning becomes geometry, and why bad guy can find villain", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "Why embeddings make search work" with the subtitle "How meaning becomes geometry, and why bad guy can find villain", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 Type "bad guy in lord of the rings" into a search box that only understands keywords, and you are gambling that the right page literally contains those words. Type the same thing into a system that understands *meaning*, and it can surface a sentence like "Sala Baker is best known for portraying the villain Sauron in the Lord of the Rings trilogy" — even though "bad guy" and "villain" share no tokens.
 
@@ -22,7 +22,7 @@ Before we talk about neural nets, it helps to respect what keyword search alread
 
 Imagine every document as a gigantic scorecard with one slot per word in the vocabulary. Most slots are zero. The slots for words that actually appear get a weight. Classic weighting schemes boost rare words and discount words that show up everywhere. The family of ranking functions known as **BM25**, surveyed in Robertson and Zaragoza's [The Probabilistic Relevance Framework: BM25 and Beyond](https://www.nowpublishers.com/article/Details/INR-019), is still the default first stage in a huge amount of production search.
 
-![Diagram titled "Two ways to turn text into something searchable". Left: sparse BM25-style vector for a passage about the villain Sauron in the Lord of the Rings, one dimension per vocabulary word, where villain, lord and rings are 1 and bad and guy are 0; it matches exact tokens and misses synonyms. Right: dense embedding as a short vector of real numbers where nearby vectors mean similar meaning.](sparse-vs-dense.png)
+![Diagram titled "Two ways to turn text into something searchable". Left: sparse BM25-style vector for a passage about the villain Sauron in the Lord of the Rings, one dimension per vocabulary word, where villain, lord and rings are 1 and bad and guy are 0; it matches exact tokens and misses synonyms. Right: dense embedding as a short vector of real numbers where nearby vectors mean similar meaning.](img/sparse-vs-dense.png)
 
 Sparse search is fast (inverted indexes are a miracle) and wonderfully precise when the user and the document share the important terms. It struggles when they don't: synonyms, paraphrases, and questions phrased unlike any document. "Bad guy" will not hit "villain" unless you hand-maintain a synonym list, and synonym lists never end.
 
@@ -50,9 +50,9 @@ The party trick that made the internet notice was arithmetic roughly like:
 
 That is not magic and it is not always true for every model or every triple. It is evidence that directions in the space can encode relationships (gender, tense, capital-of) when the training data supports them.
 
-![Animated diagram titled "Training pulls related words together". Words start scattered on a 2-D map, then dog and puppy, car and truck, and king and queen drift into clusters. A final box shows the illustrative equation king − man + woman ≈ queen.](neighbors.gif){poster=neighbors-poster.png}
+![Animated diagram titled "Training pulls related words together". Words start scattered on a 2-D map, then dog and puppy, car and truck, and king and queen drift into clusters. A final box shows the illustrative equation king − man + woman ≈ queen.](img/neighbors.gif){poster=img/neighbors-poster.png}
 
-*A still version is available: [poster frame](neighbors-poster.png).*
+*A still version is available: [poster frame](img/neighbors-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -62,7 +62,7 @@ That is not magic and it is not always true for every model or every triple. It 
 4. After many examples, clusters appear — animals, vehicles, people.
 5. Classic demo: king − man + woman ≈ queen (illustrative, not a guarantee).
 
-![Diagram titled "Meaning as a map (cartoon 2-D slice)". A scatter plot shows dog near puppy, cat near kitten, car near truck, and king near queen, with notes that real embeddings live in hundreds of dimensions and this is a toy projection.](meaning-map.png)
+![Diagram titled "Meaning as a map (cartoon 2-D slice)". A scatter plot shows dog near puppy, cat near kitten, car near truck, and king near queen, with notes that real embeddings live in hundreds of dimensions and this is a toy projection.](img/meaning-map.png)
 
 One honest caveat about the picture. Real embedding spaces have hundreds of dimensions. Any 2-D drawing is a projection, which means some neighbors on the page might not be true neighbors in the full space, and some true neighbors might look far apart after flattening. Treat the diagrams as cartoons of the idea, not measurements.
 
@@ -82,7 +82,7 @@ Once you can embed a passage into a single vector, you can embed a whole corpus 
 
 Here is the architecture behind most modern semantic search and retrieval-augmented generation stacks.
 
-![Diagram titled "Dual encoder at a glance". A query encoder outputs a q vector; a passage encoder outputs p vectors that are indexed offline. A panel on the right shows score = q · p, then take top-k neighbors. A note says passages are embedded once, offline, and queries at search time.](dual-encoder-static.png)
+![Diagram titled "Dual encoder at a glance". A query encoder outputs a q vector; a passage encoder outputs p vectors that are indexed offline. A panel on the right shows score = q · p, then take top-k neighbors. A note says passages are embedded once, offline, and queries at search time.](img/dual-encoder-static.png)
 
 You train (or download) **two** encoders, or one encoder used twice:
 
@@ -93,9 +93,9 @@ At index time, you embed every passage once and store the vectors. At query time
 
 That is the dual-encoder setup used by [DPR](https://arxiv.org/abs/2004.04906). The training objective is conceptually simple: push the vector of a question toward the vectors of passages that contain its answer, and away from passages that do not. DPR showed you can do this with relatively modest amounts of question–passage pairs and still beat a strong BM25 baseline on top-20 retrieval accuracy by large margins on several open-domain QA datasets.
 
-![Animated diagram titled "Dense retrieval with a dual encoder". A query about the bad guy in Lord of the Rings is encoded into a vector; precomputed passage vectors are scored by dot product; the passage mentioning villain Sauron gets the highest score even though it does not contain the words bad guy.](dual-encoder.gif){poster=dual-encoder-poster.png}
+![Animated diagram titled "Dense retrieval with a dual encoder". A query about the bad guy in Lord of the Rings is encoded into a vector; precomputed passage vectors are scored by dot product; the passage mentioning villain Sauron gets the highest score even though it does not contain the words bad guy.](img/dual-encoder.gif){poster=img/dual-encoder-poster.png}
 
-*A still version is available: [poster frame](dual-encoder-poster.png).*
+*A still version is available: [poster frame](img/dual-encoder-poster.png).*
 
 **What the animation shows, step by step:**
 

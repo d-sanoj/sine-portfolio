@@ -4,11 +4,11 @@ slug: weight-space-programming
 date: 2026-11-08
 description: "MIT researchers had GPT-6 Astra read raw neural-network weights, name the game a network was trained on, and fix a small model's maths by editing 0.016% of its weights — and the headline overreaches."
 tags: [ai, research, interpretability, llm, news]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'A model just edited another model's weights — by hand' with the subtitle 'Weight-space programming, the Qwen maths fix, and the argument about what it really shows', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "A model just edited another model's weights — by hand" with the subtitle "Weight-space programming, the Qwen maths fix, and the argument about what it really shows", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "A model just edited another model's weights — by hand" with the subtitle "Weight-space programming, the Qwen maths fix, and the argument about what it really shows", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 On Monday, four researchers at MIT CSAIL [posted something strange](https://rikiyat.github.io/blog/weight-space-programming/): they had handed OpenAI's GPT-6 Astra the raw weights of other neural networks — just the numbers, as text, in the first experiments — and asked it what those networks do. Astra named the game each network had been trained to play. Then they asked it to *write* networks from scratch, and to *fix* a small language model that was bad at maths. It did all of it, with no gradient descent and no training run.
 
@@ -32,21 +32,21 @@ The first experiment is the cleanest, and the one that has held up best under sc
 
 Then they pasted each network's weights into Astra as plain text, described the grid and the actions without naming any game, and asked: which game was this network trained on? Astra named all four correctly. It put 99% confidence on Breakout.
 
-![Diagram titled "A network is 17,253 numbers. Read them, name the game." A grid of numbers with part of the bottom row highlighted, an arrow pointing to a box asking "Which game?" with Breakout, Pong, Pac-Man and Freeway listed and Breakout checked.](weights-as-text.png)
+![Diagram titled "A network is 17,253 numbers. Read them, name the game." A grid of numbers with part of the bottom row highlighted, an arrow pointing to a box asking "Which game?" with Breakout, Pong, Pac-Man and Freeway listed and Breakout checked.](img/weights-as-text.png)
 
 *The numbers in the grid are made up for illustration — the real prompt is 17,253 weights long. The setup is the paper's: four networks, identical in every way except their weights.*
 
 How? The paper's explanation is that the weights carry the shape of the game. In the first layer, each input channel's weights concentrate where that channel matters. For Breakout, the weights for the agent's position lie along the bottom row — that's where the paddle lives. For Pong, they'd sit down one edge instead. Astra worked that out from the numbers alone, with no tools and no chance to run the network.
 
-![Two 10 by 10 grids titled "The first layer gives the game away". The Breakout grid has its bottom row highlighted in yellow and a vertical pale-blue column in the middle; the Pong grid has its left column highlighted in yellow and a horizontal pale-blue row in the middle.](paddle-heatmap.png)
+![Two 10 by 10 grids titled "The first layer gives the game away". The Breakout grid has its bottom row highlighted in yellow and a vertical pale-blue column in the middle; the Pong grid has its left column highlighted in yellow and a horizontal pale-blue row in the middle.](img/paddle-heatmap.png)
 
 *Simplified illustration of the paper's explanation, not the networks' real weights. Yellow marks where the first layer's weights concentrate; pale blue marks the ball's path.*
 
 Two more reading experiments followed. In the second, Astra was shown the weights of three small diffusion models trained to draw a circle, a triangle or a square, and named all three — from the weights alone, without running them. There's a telling detail here: Astra drew each shape as an *outline*, even though the models actually generate filled shapes. The authors read that as evidence it was reading the geometry stored in the weights, not secretly simulating the network in its head. In the third, Astra was given only the *middle* layers of three small language models — the input and output layers removed, so nothing in the weights says which character is which — and still named which one was trained on Python code, which on Japanese written in romaji, and which on English, in both of its attempts. It also found every "copying head" in each model (the attention heads that let a model repeat text it has seen before), matching the measured ground truth exactly.
 
-![Animated diagram titled "Name the game, from the weights alone". A 10 by 10 grid lights up — a pale-blue column in the middle, then the bottom row in yellow — and a box appears reading "Breakout, 99% confident. Pong, Pac-Man and Freeway: also correct."](name-the-game.gif){poster=name-the-game-poster.png}
+![Animated diagram titled "Name the game, from the weights alone". A 10 by 10 grid lights up — a pale-blue column in the middle, then the bottom row in yellow — and a box appears reading "Breakout, 99% confident. Pong, Pac-Man and Freeway: also correct."](img/name-the-game.gif){poster=img/name-the-game-poster.png}
 
-*The grid is simplified. A still version is available: [poster frame](name-the-game-poster.png).*
+*The grid is simplified. A still version is available: [poster frame](img/name-the-game-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -83,9 +83,9 @@ The headline experiment is the eighth, and the only one on a real language model
 
 Astra was given a Python session over the model's weights, plus practice problems from the GSM8K and MATH training sets (not the test sets), and a budget of 10, 25 or 50 forward passes to test its ideas. No training, no gradient information. It traced the looping to one direction written by the MLPs of layers 15 and 19, and subtracted that direction from 64 output columns in each layer — 131,072 weights, 0.016% of the model. Much like removing a behaviour by deleting a single direction from a model's weights.
 
-![Animated diagram titled "Fixing a loop by editing 0.016% of the weights". A looping answer repeats "the answer is 42 because the answer is 42…", then a 24-layer stack lights up layers 15 and 19, then bar charts show MATH-500 rising from 7.9% to 48.1% and GSM8K to 67.1%.](qwen-fix.gif){poster=qwen-fix-poster.png}
+![Animated diagram titled "Fixing a loop by editing 0.016% of the weights". A looping answer repeats "the answer is 42 because the answer is 42…", then a 24-layer stack lights up layers 15 and 19, then bar charts show MATH-500 rising from 7.9% to 48.1% and GSM8K to 67.1%.](img/qwen-fix.gif){poster=img/qwen-fix-poster.png}
 
-*The looping text is illustrative. The scores are the paper's. A still version is available: [poster frame](qwen-fix-poster.png).*
+*The looping text is illustrative. The scores are the paper's. A still version is available: [poster frame](img/qwen-fix-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -113,7 +113,7 @@ Here's where Honnibal's objection comes in, and it's worth taking seriously, bec
 
 His argument is about method. The post's abstract opens with "just by looking at the raw weights," and then, in the same breath, describes the Qwen result. But the Qwen experiment did not work just by looking at the raw weights. It worked by writing Python programs in a notebook, running the model on practice problems, and iterating up to 50 times. The pure raw-weights setting — weights pasted in as text, no tools, no running the network — only appears in experiments 1, 2 and 4, on networks of 17,000 to 172,000 weights. Every experiment involving a real language model uses Python. As Honnibal puts it, what the Qwen result actually shows is that Astra "can be prompted to devise and perform tasks that a human ML engineer could do" — and human ML engineers write snippets of code that analyse or modify network weights directly all the time.
 
-![Two panels titled "One headline, two different tricks". Left: "Just the raw weights — Experiments 1, 2, 4. Weights pasted in as text. No tools. No Python. Network never runs. Networks: 17K–172K weights. Name the game: 4/4. Fix the stuck car: 0% → 100%. This is the startling part." Right: "Python + practice runs — Experiments 6, 8. A Python notebook over the weights. The model runs on practice problems, up to 50 forward passes. Networks: 1.5M and 0.8B weights. Qwen maths: 7.9% → 48.1%. Impressive — and a different job."](two-tricks.png)
+![Two panels titled "One headline, two different tricks". Left: "Just the raw weights — Experiments 1, 2, 4. Weights pasted in as text. No tools. No Python. Network never runs. Networks: 17K–172K weights. Name the game: 4/4. Fix the stuck car: 0% → 100%. This is the startling part." Right: "Python + practice runs — Experiments 6, 8. A Python notebook over the weights. The model runs on practice problems, up to 50 forward passes. Networks: 1.5M and 0.8B weights. Qwen maths: 7.9% → 48.1%. Impressive — and a different job."](img/two-tricks.png)
 
 *The split follows Honnibal's table of the experiments. The two columns are different techniques, and the post's framing blurs them.*
 

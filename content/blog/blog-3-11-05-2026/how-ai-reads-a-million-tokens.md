@@ -4,11 +4,11 @@ slug: how-ai-reads-a-million-tokens
 date: 2026-11-05
 description: "Baidu just released an open model that can take in a million tokens at once. Here's a plain-language tour of tokens, next-token prediction and attention, and the memory trick that makes a million tokens affordable."
 tags: [ai, explainer, transformers, attention, llm, news]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'How an AI reads a million tokens' with the subtitle 'Tokens, attention, and the memory problem behind ERNIE 5.5 Flash', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "How an AI reads a million tokens" with the subtitle "Tokens, attention, and the memory problem behind ERNIE 5.5 Flash", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "How an AI reads a million tokens" with the subtitle "Tokens, attention, and the memory problem behind ERNIE 5.5 Flash", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 This morning Baidu put out a new open model called [ERNIE-5.5-Flash-Base](https://ernie.baidu.com/release/ernie-5-5-flash-base/), with the weights up on [Hugging Face](https://huggingface.co/baidu/ERNIE-5.5-Flash-Base). The headline numbers are the kind that make most people's eyes glaze over: 280 billion parameters, only 14 billion of them "activated per token", trained on 33.5 trillion tokens, and able to handle "a 1M-token context for fine-tuning and inference."
 
@@ -20,7 +20,7 @@ That's what this post is about. It's my first one here, so I wanted to start at 
 
 Language models don't read letters, and they don't really read words either. They read **tokens**, which are chunks of text taken from a fixed vocabulary. A common word like "the" is usually one token. A rarer word gets split into pieces. "Tokenizers" might become "token" + "izers". Spaces usually stick to the front of the next chunk.
 
-![Diagram titled "Models read tokens, not letters". The sentence "Sanoj's blog explains tokenizers" is shown split into six boxes: "Sanoj", "'s", "·blog", "·explains", "·token", "izers", where a dot marks a space that belongs to the token. Below, the number 1,234,567 is shown as three yellow boxes, "1", "234" and "567", with the note that millions, thousands and ones line up.](tokens.png)
+![Diagram titled "Models read tokens, not letters". The sentence "Sanoj's blog explains tokenizers" is shown split into six boxes: "Sanoj", "'s", "·blog", "·explains", "·token", "izers", where a dot marks a space that belongs to the token. Below, the number 1,234,567 is shown as three yellow boxes, "1", "234" and "567", with the note that millions, thousands and ones line up.](img/tokens.png)
 
 *The first row is an illustrative split, not the output of any particular tokenizer. The second row shows how ERNIE 5.5 Flash groups digits, as described in its announcement.*
 
@@ -36,9 +36,9 @@ Here's the part that surprised me most when I first learned it. Under all the ch
 
 That's it. To write a paragraph, the model picks one token from that list, sticks it on the end, and runs the whole thing again with the slightly longer text. Over and over.
 
-![Animated diagram titled "Next-token prediction, one step at a time". The tokens "The cat sat on the" flow into a box labelled "Language model (stack of transformer layers)". Bars appear showing probabilities for the next token: mat 41%, floor 17%, sofa 12%, bed 8%, roof 3%. "mat" is highlighted and appended, and the loop repeats with new bars for what comes after "mat".](next-token.gif){poster=next-token-poster.png}
+![Animated diagram titled "Next-token prediction, one step at a time". The tokens "The cat sat on the" flow into a box labelled "Language model (stack of transformer layers)". Bars appear showing probabilities for the next token: mat 41%, floor 17%, sofa 12%, bed 8%, roof 3%. "mat" is highlighted and appended, and the loop repeats with new bars for what comes after "mat".](img/next-token.gif){poster=img/next-token-poster.png}
 
-*Next-token prediction. The probabilities here are made up for illustration; a real model scores every entry in its vocabulary, which for ERNIE 5.5 Flash is about 200,000 options. A still version is available: [poster frame](next-token-poster.png).*
+*Next-token prediction. The probabilities here are made up for illustration; a real model scores every entry in its vocabulary, which for ERNIE 5.5 Flash is about 200,000 options. A still version is available: [poster frame](img/next-token-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -65,9 +65,9 @@ What was too big? You know it's the trophy. Swap "big" for "small" and suddenly 
 
 Attention is how a transformer handles this. Every token gets to look back at the tokens before it (and itself) and decide how much each one matters to it right now.
 
-![Animated diagram titled "Attention: what is 'it' looking at?". The sentence "The trophy didn't fit in the suitcase because it was too big" is shown as token boxes, with "it" outlined in yellow. Curved lines grow from each earlier word to "it". The lines then thicken by weight: trophy 55%, suitcase 18%, it itself 9%, fit 8%, and 3% or less for the rest. A final box reads: new meaning of "it" is about 55% trophy plus 18% suitcase plus 9% itself plus the rest.](attention.gif){poster=attention-poster.png}
+![Animated diagram titled "Attention: what is 'it' looking at?". The sentence "The trophy didn't fit in the suitcase because it was too big" is shown as token boxes, with "it" outlined in yellow. Curved lines grow from each earlier word to "it". The lines then thicken by weight: trophy 55%, suitcase 18%, it itself 9%, fit 8%, and 3% or less for the rest. A final box reads: new meaning of "it" is about 55% trophy plus 18% suitcase plus 9% itself plus the rest.](img/attention.gif){poster=img/attention-poster.png}
 
-*One attention head, as a cartoon. The percentages are illustrative, not measured from a real model. A still version is available: [poster frame](attention-poster.png).*
+*One attention head, as a cartoon. The percentages are illustrative, not measured from a real model. A still version is available: [poster frame](img/attention-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -100,7 +100,7 @@ This is the part of the announcement I found genuinely clever. Baidu's argument 
 
 So ERNIE 5.5 Flash mixes two kinds of attention layers. In most layers it uses what it calls Heavily Compressed Attention: [each layer compresses every 128 tokens into a single cached entry](https://ernie.baidu.com/release/ernie-5-5-flash-base/), then attends to all those summaries plus a short window of recent tokens kept at full detail. Only **one layer in seven** keeps token-level access to the whole context, using a different scheme called Multi-head Latent Attention.
 
-![Diagram titled "Two ways to look back over a long document". Top: "Full attention (like ERNIE's MLA layers)" keeps every past token in memory, drawn as a long unbroken pale blue bar; the note says memory grows one entry per token, so 1,000,000 tokens means 1,000,000 entries. Bottom: "Compressed attention (like ERNIE's HCA layers)" squashes each block of 128 tokens into one summary, drawn as five yellow blocks each labelled "128 to 1", followed by a short blue bar marked "recent window"; the note says 1,000,000 tokens becomes about 7,800 entries. A box at the bottom says ERNIE 5.5 Flash mixes both: about 1 layer in 7 keeps full token-level access and reads only its top-scoring tokens, and the rest use 128x compressed summaries. Simplified illustration, not to scale.](full-vs-compressed.png)
+![Diagram titled "Two ways to look back over a long document". Top: "Full attention (like ERNIE's MLA layers)" keeps every past token in memory, drawn as a long unbroken pale blue bar; the note says memory grows one entry per token, so 1,000,000 tokens means 1,000,000 entries. Bottom: "Compressed attention (like ERNIE's HCA layers)" squashes each block of 128 tokens into one summary, drawn as five yellow blocks each labelled "128 to 1", followed by a short blue bar marked "recent window"; the note says 1,000,000 tokens becomes about 7,800 entries. A box at the bottom says ERNIE 5.5 Flash mixes both: about 1 layer in 7 keeps full token-level access and reads only its top-scoring tokens, and the rest use 128x compressed summaries. Simplified illustration, not to scale.](img/full-vs-compressed.png)
 
 *Simplified and not to scale. The 7,800 figure is just 1,000,000 divided by 128, ignoring the recent window.*
 

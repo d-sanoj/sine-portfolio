@@ -4,11 +4,11 @@ slug: agent-tests-agree-with-bugs
 date: 2026-11-13
 description: "I gave a small billing module three real bugs, covered it with the kind of tests a coding agent writes, and the suite went green. Then I broke the code on purpose ten times — and fixing the bugs failed the tests."
 tags: [ai, claude-code, testing, mutation-testing, tools]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Your agent's tests agree with its bugs' over a green checkmark labelled '12 tests green' and a red circle reading '3 bugs inside', joined by an arrow labelled 'the test checks the code against itself'."
 ---
 
-![Title card reading "Your agent's tests agree with its bugs" over a green checkmark labelled "12 tests green" and a red circle reading "3 bugs inside", joined by an arrow labelled "the test checks the code against itself".](cover.png)
+![Title card reading "Your agent's tests agree with its bugs" over a green checkmark labelled "12 tests green" and a red circle reading "3 bugs inside", joined by an arrow labelled "the test checks the code against itself".](img/cover.png)
 
 The bench log said 0 rpm. The motor was running away, accelerating to its maximum — and every unit test was green. That is an engineer describing weeks of work on an electric drive controller with Claude Code, in a post from last week: the tests had checked not the program but the agent's assumptions about it. Two bugs had been locked in by tests written to match the code, including one test proudly named "check averaging of several samples" for an averaging function that read the same sensor register several times.
 
@@ -22,7 +22,7 @@ A test needs an oracle: a source of expected values that is independent of the c
 
 When a coding agent writes the implementation and then the tests in the same session, the oracle is almost always the code. The agent reads the function, computes what it returns, and asserts exactly that. It is not being lazy; it is doing the job as specified. "Write tests for this function" has no independent source of truth in it, so the agent supplies one from the only place available: the function.
 
-![Two flows side by side. On the left, labelled 'what a test should be', arrows run downward from a box labelled 'the requirement' to a box labelled 'the test' and on to a box labelled 'the code'; the test compares the code's output with the requirement's value. On the right, labelled 'what an agent usually writes', the requirement box reads 'never consulted', and a single arrow runs downward from the test to the code; the test compares the code's output with the code's own output.](oracle-problem.png)
+![Two flows side by side. On the left, labelled 'what a test should be', arrows run downward from a box labelled 'the requirement' to a box labelled 'the test' and on to a box labelled 'the code'; the test compares the code's output with the requirement's value. On the right, labelled 'what an agent usually writes', the requirement box reads 'never consulted', and a single arrow runs downward from the test to the code; the test compares the code's output with the code's own output.](img/oracle-problem.png)
 
 This is a known problem with a name — testing theory calls it the oracle problem — and the agent era made it the default instead of the edge case. A June 2026 study looked at 86,156 test-file patches from 33,596 agent-authored pull requests across five coding agents (OpenAI Codex, GitHub Copilot, Devin, Cursor, and Claude Code) and classified the oracle signals in them. Four in five — 80.2% — contained weak or no explicit oracle signals: the tests run, but they do not meaningfully check behaviour. The rate of strong oracles on newly created test files ranged from 18% for OpenAI Codex to 67% for Claude Code. That classification is syntactic — it looks at assertion patterns, not at whether a test is useful — so read it as "four in five agent-written test patches show no strong evidence of checking behaviour", not "four in five agent-written tests are useless". Either way, counting test files overstates how much is verified, and the authors say so in the paper.
 
@@ -57,17 +57,17 @@ Green is not the only signal worth checking, so I ran the second half of the exp
 
 I wrote ten mutants for the billing module and a small script that applies each one to a copy, runs the suite, and reports the result. The script is in the skill below; it refuses to run when the baseline is already red, because a mutant that keeps a red suite red proves nothing.
 
-![Bar chart comparing the two suites. The agent-style suite killed 7 of 10 mutants, a 70% mutation score, with 3 survivors. The spec-derived suite killed 6 of 6 applicable mutants, a 100% score, with 4 mutants not applicable because the fix removed the lines they targeted.](mutation-score.png)
+![Bar chart comparing the two suites. The agent-style suite killed 7 of 10 mutants, a 70% mutation score, with 3 survivors. The spec-derived suite killed 6 of 6 applicable mutants, a 100% score, with 4 mutants not applicable because the fix removed the lines they targeted.](img/mutation-score.png)
 
 The agent suite killed 7 of 10 — a 70% mutation score. The three survivors were all in `discounted_price`: the price formula flipped from `(100 - rate)` to `(100 + rate)`, the divisor changed from `// 100` to `// 99`, and the integer division changed to float division. None of them moved the suite, because the suite never checked a price — it only checked that a price existed. The arithmetic that charges the customer was, as far as the tests were concerned, unobserved.
 
 The spec suite, run after the fix, killed 6 of 6 applicable mutants — 100%. Four of the ten mutants no longer apply to the fixed code: the fix removed the exact lines they targeted (the two `<=` boundaries and the expiry comparison), and the script reports those as skipped rather than counting them as killed, because a mutant that cannot apply proves nothing.
 
-![Animation of a surviving mutant. First, the billing code with the price formula highlighted. Second, the formula flips from (100 - rate) to (100 + rate). Third, the test suite runs and stays green — the mutant survived, because the suite never checked the price.](mutant-survives.gif){poster=mutant-survives-poster.png}
+![Animation of a surviving mutant. First, the billing code with the price formula highlighted. Second, the formula flips from (100 - rate) to (100 + rate). Third, the test suite runs and stays green — the mutant survived, because the suite never checked the price.](img/mutant-survives.gif){poster=img/mutant-survives-poster.png}
 
 *Still frame: the price formula flipped from `(100 - rate)` to `(100 + rate)`, and the suite stayed green — the mutant survived.*
 
-![Animation of the red-first check. First, a spec test asserts that $100.00 gets a 5% discount rate, and it fails on the buggy code with 0 != 5. Second, the boundary bug is fixed. Third, the same test passes.](red-then-green.gif){poster=red-then-green-poster.png}
+![Animation of the red-first check. First, a spec test asserts that $100.00 gets a 5% discount rate, and it fails on the buggy code with 0 != 5. Second, the boundary bug is fixed. Third, the same test passes.](img/red-then-green.gif){poster=img/red-then-green-poster.png}
 
 *Still frame: the spec test fails on the buggy code with 0 != 5, then passes after the fix — the test was seen failing before it was trusted.*
 
@@ -75,7 +75,7 @@ The spec suite, run after the fix, killed 6 of 6 applicable mutants — 100%. Fo
 
 Before running mutants, you can find most of the problem by reading the tests for three patterns. They cover most agent-test failures, and they are cheap to spot:
 
-![Three boxes, one per failure pattern. The mirror test: the expected value is re-derived from the implementation, so it can never fail. The assertion that isn't: assert result is not None, or assert a mock was called — technically an assertion, catches almost nothing. Coverage theater: the line runs, so coverage counts it, but nothing checks the value it produced.](three-smells.png)
+![Three boxes, one per failure pattern. The mirror test: the expected value is re-derived from the implementation, so it can never fail. The assertion that isn't: assert result is not None, or assert a mock was called — technically an assertion, catches almost nothing. Coverage theater: the line runs, so coverage counts it, but nothing checks the value it produced.](img/three-smells.png)
 
 **The mirror test.** The expected value is re-derived from the implementation, or copied from the code's output. It can never fail, because it asserts the code against itself. My agent suite's `$100.00 gets 0%` test is one: the value came from the buggy line, not the spec.
 

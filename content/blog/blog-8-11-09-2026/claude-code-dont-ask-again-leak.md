@@ -4,11 +4,11 @@ slug: claude-code-dont-ask-again-leak
 date: 2026-11-09
 description: "Apiiro found 1,122 public settings files holding real credentials — 215 of them invisible to the usual scanners. I built claude-guard, a skill that finds and fixes them."
 tags: [ai, claude, claude-code, security, skills]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Your Claude Code approvals are leaking secrets onto GitHub' with the subtitle 'How \"Don't Ask Again\" saves passwords in plain text — and the skill I built to find them', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "Your Claude Code approvals are leaking secrets onto GitHub" with the subtitle "How \"Don't Ask Again\" saves passwords in plain text — and the skill I built to find them", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "Your Claude Code approvals are leaking secrets onto GitHub" with the subtitle "How \"Don't Ask Again\" saves passwords in plain text — and the skill I built to find them", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 Every time you click "Yes, and don't ask again" in Claude Code, you are saving a rule. The rule is the exact command you approved, word for word, in a file inside your project. If that command held a password or an API key, the secret is now sitting in plain text in your project folder — and if that file gets committed, it is on GitHub for anyone to read.
 
@@ -26,7 +26,7 @@ That is the whole mechanism, and it is easy to picture happening to you. You are
 
 Apiiro reproduced this with the current models, Opus 5.5 and Fable 5.1, and called it a property of Claude Code, not of the model. The model does not matter because the model never touches the file: the product writes the rule.
 
-![A four-step diagram titled "How a secret lands in the file". Step 1: Claude proposes a shell command with a password in it. Step 2: you pick "Yes, and don't ask again". Step 3: Claude Code saves the exact command, password included, as an allow rule in .claude/settings.local.json. Step 4: the file is committed, and the secret is public on GitHub. A note below reads: a rule with no wildcard matches one exact command — the secret is part of the rule.](how-it-happens.png)
+![A four-step diagram titled "How a secret lands in the file". Step 1: Claude proposes a shell command with a password in it. Step 2: you pick "Yes, and don't ask again". Step 3: Claude Code saves the exact command, password included, as an allow rule in .claude/settings.local.json. Step 4: the file is committed, and the secret is public on GitHub. A note below reads: a rule with no wildcard matches one exact command — the secret is part of the rule.](img/how-it-happens.png)
 
 :::describe
 The diagram has four boxes joined by arrows. First, a terminal prompt shows Claude proposing a database command with a password in it. Second, the permission prompt with "Yes, and don't ask again" highlighted. Third, a JSON file, .claude/settings.local.json, with an allow rule containing the same password. Fourth, a GitHub repository with the file committed and the password visible. The point of the sequence is that no step looks like a leak: each one is a reasonable action, and the secret survives all four.
@@ -46,7 +46,7 @@ Fourth, the shared settings file has the same problem on purpose. The file teams
 
 The numbers, in one place:
 
-![A table titled "What Apiiro found (GitHub code search, Nov 1–3, 2026)". Rows: public copies of .claude/settings.local.json checked: 104,185 in 103,617 repos. Copies holding at least one real secret: 1,122 (1.1%), 1,379 distinct secrets. Database passwords: 379. SSH logins for public servers: 43. GitHub, GitLab and npm tokens: 42. AWS keys: 23. Total including history, shared settings and transcripts: 2,539 secrets in 1,994 repos. A caption notes the counts are Apiiro's, and no credential was tested.](numbers.png)
+![A table titled "What Apiiro found (GitHub code search, Nov 1–3, 2026)". Rows: public copies of .claude/settings.local.json checked: 104,185 in 103,617 repos. Copies holding at least one real secret: 1,122 (1.1%), 1,379 distinct secrets. Database passwords: 379. SSH logins for public servers: 43. GitHub, GitLab and npm tokens: 42. AWS keys: 23. Total including history, shared settings and transcripts: 2,539 secrets in 1,994 repos. A caption notes the counts are Apiiro's, and no credential was tested.](img/numbers.png)
 
 A note on what these numbers are and aren't. Apiiro counted a value as a real secret when it matched a known provider format, or when a password or token sat beside the address of a public server — and an AI reviewer also had to agree. It did not test whether any credential still works, and it contacted no host, so the count is a measure of exposure, not of confirmed compromise. The one confirmation comes from the other direction: Apiiro notified affected organisations on November 2 and 3, and one confirmed that the key it flagged was still live. Apiiro sells application-security products, so it has a stake in this topic, and nobody has independently repeated the counts. But the mechanism is not Apiiro's claim — it is in Anthropic's own documentation — and the files are public, so the counts are checkable in a way most vendor research is not.
 
@@ -56,11 +56,11 @@ Here is the part that should worry you most, because it defeats the defence most
 
 The misses are almost all passwords typed inside commands. Secret scanners look for known key formats: a string starting with `ghp_`, or `AKIA`, or a long token with the right shape. A password after `PGPASSWORD=`, or `sshpass -p`, or `mysql -p` looks like an ordinary word in an ordinary command line. There is no format to match, so the scanner walks past it. That is the gap this whole story is about: the file is not a `.env` file full of keys, it is a list of commands, and the secrets are camouflaged as command arguments.
 
-![A still frame from an animation: a red secret travels from a terminal command into .claude/settings.local.json, then into a git commit, then onto GitHub. A shield labelled "global git excludes" covers only the developer's own laptop; a fork of the repo on the right still shows the secret. The frame is labelled "The leak, step by step".](leak-path-poster.png)
+![A still frame from an animation: a red secret travels from a terminal command into .claude/settings.local.json, then into a git commit, then onto GitHub. A shield labelled "global git excludes" covers only the developer's own laptop; a fork of the repo on the right still shows the secret. The frame is labelled "The leak, step by step".](img/leak-path-poster.png)
 
 *The leak, step by step: the command is saved verbatim, the file is committed, and the global-excludes protection only covers the machine it was set on. A fork carries the secret with it.*
 
-![Animation of the same path: a password is typed into a command, approved with "don't ask again", saved into the settings file, committed, and published — while the global-excludes shield stays on the original laptop.](leak-path.gif){poster=leak-path-poster.png}
+![Animation of the same path: a password is typed into a command, approved with "don't ask again", saved into the settings file, committed, and published — while the global-excludes shield stays on the original laptop.](img/leak-path.gif){poster=img/leak-path-poster.png}
 
 *The animation above shows the same path in motion: the secret never changes form, it just changes location — from a command, to a file, to a commit, to a public repository.*
 
@@ -101,11 +101,11 @@ I tested it the way this blog tests everything: by running it. The test builds a
 
 One more honest note: I ran the scanner on this site's own repo first. It found nothing, because the site has never had a `.claude` folder. If you use Claude Code daily, your result will very likely be different — that is the point.
 
-![A still frame from an animation: a terminal shows scan.py finding three secrets in a settings file, then fix.py removing the rules and adding the file to .gitignore, then a re-scan reporting zero secrets. The frame is labelled "Scan, rotate, fix, verify".](scan-fix-poster.png)
+![A still frame from an animation: a terminal shows scan.py finding three secrets in a settings file, then fix.py removing the rules and adding the file to .gitignore, then a re-scan reporting zero secrets. The frame is labelled "Scan, rotate, fix, verify".](img/scan-fix-poster.png)
 
 *Scan, rotate, fix, verify: the skill's loop, in four steps. Rotation comes before cleanup — the one ordering rule that matters.*
 
-![Animation of the skill running: the scanner flags three secrets, the fixer removes the rules and adds the gitignore entry, and a re-scan reports zero confirmed secrets.](scan-fix.gif){poster=scan-fix-poster.png}
+![Animation of the skill running: the scanner flags three secrets, the fixer removes the rules and adds the gitignore entry, and a re-scan reports zero confirmed secrets.](img/scan-fix.gif){poster=img/scan-fix-poster.png}
 
 *The animation above shows the same loop in motion: find, rotate, fix, verify clean.*
 

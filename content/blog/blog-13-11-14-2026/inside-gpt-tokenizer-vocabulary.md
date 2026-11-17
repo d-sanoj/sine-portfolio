@@ -4,11 +4,11 @@ slug: inside-gpt-tokenizer-vocabulary
 date: 2026-11-14
 description: "I opened up the tokenizer behind GPT-4, decoded every entry in its vocabulary, and measured what the same sentence costs in nine languages and the same facts cost in five formats."
 tags: [ai, tokenizers, llm, measurement, multilingual]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'I decoded all 100,277 tokens in GPT-4's vocabulary' with the subtitle 'Most of it is English — and that decides what AI costs you, in tokens, in languages, in formats', and a third line reading '69,868 of the entries are plain ASCII words. Devanagari gets 23.', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "I decoded all 100,277 tokens in GPT-4's vocabulary" with the subtitle "Most of it is English — and that decides what AI costs you, in tokens, in languages, in formats", and a third line reading "69,868 of the entries are plain ASCII words. Devanagari gets 23.", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "I decoded all 100,277 tokens in GPT-4's vocabulary" with the subtitle "Most of it is English — and that decides what AI costs you, in tokens, in languages, in formats", and a third line reading "69,868 of the entries are plain ASCII words. Devanagari gets 23.", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 Everything an AI service charges you for is counted in tokens: the price, the size of the context window, the speed of the reply. The token is the unit of the whole business, and I realised I had never actually looked inside one. So this week I did the most literal thing I could think of. I took the tokenizer behind GPT-4, decoded every single entry in its vocabulary, and counted what is in there. Then I ran the same sentence through it in nine languages, and the same facts through it in five formats, to see what the vocabulary does to real text.
 
@@ -40,7 +40,7 @@ Seven out of ten entries are plain ASCII letter sequences. Fewer than one in twe
 
 The non-ASCII bucket is where it gets stark. This is the count of entries containing each script in the GPT-4 tokenizer:
 
-![Bar chart titled "Non-English scripts in GPT-4's vocabulary". Latin extended has 1,442 entries, CJK characters 1,004, Cyrillic 729, other scripts 548, Hangul 281, Arabic 103, Thai 58, Greek 44, Devanagari 23, Hebrew 20, Bengali 6, and Tamil 3. A note reads: entries can contain more than one script, so the bars overlap slightly. The total non-ASCII bucket is 4,249 entries out of 100,277.](vocab-census.png)
+![Bar chart titled "Non-English scripts in GPT-4's vocabulary". Latin extended has 1,442 entries, CJK characters 1,004, Cyrillic 729, other scripts 548, Hangul 281, Arabic 103, Thai 58, Greek 44, Devanagari 23, Hebrew 20, Bengali 6, and Tamil 3. A note reads: entries can contain more than one script, so the bars overlap slightly. The total non-ASCII bucket is 4,249 entries out of 100,277.](img/vocab-census.png)
 
 *An entry mixing scripts is counted once per script it contains, so the bars add to slightly more than the 4,249-entry non-ASCII bucket. Counts are from decoding every entry of `cl100k_base` with tiktoken.*
 
@@ -84,7 +84,7 @@ To measure that, I took Article 1 of the Universal Declaration of Human Rights �
 | Japanese | 93 | 72 | 2.18× |
 | Amharic | 305 | 206 | 6.24× |
 
-![Grouped bar chart titled "The same article in nine languages". For each language there are two bars, one for the GPT-4 tokenizer and one for GPT-4o. English is 33 tokens in both. Hindi falls from 182 to 54. Amharic falls from 305 to 206 and is still the tallest bar by far. A note reads: Article 1 of the Universal Declaration of Human Rights, counted with tiktoken.](language-premium.png)
+![Grouped bar chart titled "The same article in nine languages". For each language there are two bars, one for the GPT-4 tokenizer and one for GPT-4o. English is 33 tokens in both. Hindi falls from 182 to 54. Amharic falls from 305 to 206 and is still the tallest bar by far. A note reads: Article 1 of the Universal Declaration of Human Rights, counted with tiktoken.](img/language-premium.png)
 
 *Article 1 of the Universal Declaration of Human Rights, counted with tiktoken. My sample is one article in nine languages; the direction matches the large-scale studies cited below.*
 
@@ -94,9 +94,9 @@ But look at the last row. Amharic still costs 206 tokens for a sentence English 
 
 The picture below is the first sentence of that article, split the way each tokenizer actually splits it. English comes apart into 13 tokens — 12 words and a full stop. Hindi, on the GPT-4 tokenizer, comes apart into 85 fragments, most of them a single character or less — 26 of them are single bytes:
 
-![Animated diagram titled "The same sentence, split two ways". The English sentence "All human beings are born free and equal in dignity and rights." is shown as 13 boxes, one per token. Below it, the Hindi translation is shown as 85 narrow slivers on the GPT-4 tokenizer, then re-splits into 25 wider boxes on the GPT-4o tokenizer. A caption reads: 13 tokens in English, 85 in Hindi on GPT-4, 25 in Hindi on GPT-4o.](token-split.gif){poster=token-split-poster.png}
+![Animated diagram titled "The same sentence, split two ways". The English sentence "All human beings are born free and equal in dignity and rights." is shown as 13 boxes, one per token. Below it, the Hindi translation is shown as 85 narrow slivers on the GPT-4 tokenizer, then re-splits into 25 wider boxes on the GPT-4o tokenizer. A caption reads: 13 tokens in English, 85 in Hindi on GPT-4, 25 in Hindi on GPT-4o.](img/token-split.gif){poster=img/token-split-poster.png}
 
-*The first sentence of UDHR Article 1. English: 13 tokens on both tokenizers. Hindi: 85 tokens on the GPT-4 tokenizer, 25 on GPT-4o's. The Hindi token text is not labelled box by box because on the older tokenizer most tokens are a single character or less, not words. A still version is available: [poster frame](token-split-poster.png).*
+*The first sentence of UDHR Article 1. English: 13 tokens on both tokenizers. Hindi: 85 tokens on the GPT-4 tokenizer, 25 on GPT-4o's. The Hindi token text is not labelled box by box because on the older tokenizer most tokens are a single character or less, not words. A still version is available: [poster frame](img/token-split-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -121,7 +121,7 @@ The vocabulary does not only decide what languages cost. It decides what *format
 | JSON | 173 |
 | Python list of dicts | 184 |
 
-![Bar chart titled "The same eight products, five formats". CSV costs 81 tokens, Markdown table 110, plain sentences 133, JSON 173, and a Python list of dicts 184. A note reads: eight products, each with a name, a price, and a stock count; counted with the GPT-4o tokenizer.](formatting-tax.png)
+![Bar chart titled "The same eight products, five formats". CSV costs 81 tokens, Markdown table 110, plain sentences 133, JSON 173, and a Python list of dicts 184. A note reads: eight products, each with a name, a price, and a stock count; counted with the GPT-4o tokenizer.](img/formatting-tax.png)
 
 *Eight products, each with a name, a price and a stock count, written five ways and counted with the GPT-4o tokenizer.*
 
@@ -133,9 +133,9 @@ The same pattern shows up in the other places agents spend tokens. A small Pytho
 
 The animation below runs the same eight products through the formats in order, with the token count ticking as it goes:
 
-![Animated diagram titled "Same facts, fewer tokens". Three of the eight products appear first as sentences at 133 tokens, then as JSON at 173 tokens, then as a Markdown table at 110 tokens, then as CSV at 81 tokens. A caption reads: the labels are said once in CSV; JSON repeats them on every row.](format-morph.gif){poster=format-morph-poster.png}
+![Animated diagram titled "Same facts, fewer tokens". Three of the eight products appear first as sentences at 133 tokens, then as JSON at 173 tokens, then as a Markdown table at 110 tokens, then as CSV at 81 tokens. A caption reads: the labels are said once in CSV; JSON repeats them on every row.](img/format-morph.gif){poster=img/format-morph-poster.png}
 
-*The same eight products in four formats. The token count is the whole point: CSV says each label once, JSON repeats them on every row. A still version is available: [poster frame](format-morph-poster.png).*
+*The same eight products in four formats. The token count is the whole point: CSV says each label once, JSON repeats them on every row. A still version is available: [poster frame](img/format-morph-poster.png).*
 
 **What the animation shows, step by step:**
 

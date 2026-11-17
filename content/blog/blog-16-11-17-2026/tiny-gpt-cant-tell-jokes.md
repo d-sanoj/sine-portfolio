@@ -4,11 +4,11 @@ slug: tiny-gpt-cant-tell-jokes
 date: 2026-11-17
 description: "I trained a tiny GPT on 15,000 jokes and upgraded it three times: finished samples rose from 4% to 70%, but the number of actual jokes stayed at zero out of fifty."
 tags: [gpt, training, evaluation, measurement]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'I trained a tiny GPT to tell jokes. Three upgrades later, it still can't.' Below it, two bars: 'samples that finish properly' at 70% in green, and 'samples that are actual jokes' at 0% in red."
 ---
 
-![Title card reading "I trained a tiny GPT to tell jokes. Three upgrades later, it still can't." Below it, two bars: "samples that finish properly" at 70% in green, and "samples that are actual jokes" at 0% in red.](cover.png)
+![Title card reading "I trained a tiny GPT to tell jokes. Three upgrades later, it still can't." Below it, two bars: "samples that finish properly" at 70% in green, and "samples that are actual jokes" at 0% in red.](img/cover.png)
 
 The loss curve looked great. After 1,500 training steps the loss had fallen from 4.55 — what random guessing over 95 characters scores — to 2.06, the samples were full of real words and question marks, and the model had clearly learned what a joke *looks* like. Then I read the samples. Out of fifty, two finished as proper sentences. None was a joke a person would recognise as one.
 
@@ -32,7 +32,7 @@ After the first version, I did the thing that made the rest of the experiment ho
 
 Good means all three at once. The target was 80% good — 40 of 50 — with a stop rule: if two upgrades in a row each gain under 5 points of good%, stop and say so. With only 50 samples, one sample is 2 points, so differences under about 6 points are noise, and I say so wherever a small difference appears.
 
-![Three gates in a row: a sample must pass Complete, then Coherent, then Joke-shaped. Only a sample that passes all three counts as good. Complete is checked by a script; the other two are judged by a human reading each sample.](rubric.png)
+![Three gates in a row: a sample must pass Complete, then Coherent, then Joke-shaped. Only a sample that passes all three counts as good. Complete is checked by a script; the other two are judged by a human reading each sample.](img/rubric.png)
 
 That rubric is also the download with this post. I turned it into a skill, [output-eval](https://github.com/d-sanoj/claude-skills/tree/skill/output-eval/output-eval), that sets up the same three-gate test for any generative model — the rubric template, a scorer that recomputes the numbers from the samples and cross-checks the verdicts, and this experiment as its worked example. More on that at the end.
 
@@ -68,7 +68,7 @@ The blocker had moved. The 9 coherent samples are all grammatical plain statemen
 
 The loss, meanwhile, had flattened: 5.291 at step 1750, 5.267 at 2000, 5.262 at 2500. More steps at this size were not buying much.
 
-![Animation of one sample from each run, in order. Version 1: letter soup with misspelled fragments. Step 1: real words, but full of unknown-word placeholders. Step 2: grammatical sentences, and the first sample with a punchline shape — garbled in the setup. Step 3: the classic light-bulb joke, with the punchline's last words swapped for 'the other day'. Each step's complete share rises; the good share stays at zero.](samples-evolve.gif){poster=samples-evolve-poster.png}
+![Animation of one sample from each run, in order. Version 1: letter soup with misspelled fragments. Step 1: real words, but full of unknown-word placeholders. Step 2: grammatical sentences, and the first sample with a punchline shape — garbled in the setup. Step 3: the classic light-bulb joke, with the punchline's last words swapped for 'the other day'. Each step's complete share rises; the good share stays at zero.](img/samples-evolve.gif){poster=img/samples-evolve-poster.png}
 
 *Still frame: the step-3 sample — "How many dog does it take to change a light paper? One to screw in the other day." Complete 70%, good 0%.*
 
@@ -93,7 +93,7 @@ At this scale, capacity is ruled out as the bottleneck. The loss says the model 
 
 Two warnings before you read that table. First, the losses are not on the same scale — v1's 95-character vocabulary against 10,000 and 40,000 words — so the only honest comparison between runs is good%, complete%, and the samples themselves. Second, the coherent and joke-shaped numbers move by a few samples at a time, and with 50 samples a few points is noise. The movement that matters is the big one: complete 4% to 70%, while good never leaves zero.
 
-![Grouped bars for the four runs: complete samples rise from 4% to 62% to 68% to 70%, while good samples stay at 0% in every run. The two series diverge — the model keeps getting better at finishing, and never gets better at joking.](progress.png)
+![Grouped bars for the four runs: complete samples rise from 4% to 62% to 68% to 70%, while good samples stay at 0% in every run. The two series diverge — the model keeps getting better at finishing, and never gets better at joking.](img/progress.png)
 
 The pattern is the lesson. Every upgrade fixed the thing it was aimed at, and none of them fixed the job:
 
@@ -101,7 +101,7 @@ The pattern is the lesson. Every upgrade fixed the thing it was aimed at, and no
 - **A bigger vocabulary** fixed the `<unk>` crutch. Samples containing one fell 44 to 6, and coherent samples tripled.
 - **A bigger model** fixed nothing a reader can see. The best loss of the 40k-vocabulary runs, and fewer coherent samples than the run before it.
 
-![Bars of samples containing the unknown-word placeholder: 44 of 50 in step 1, 6 of 50 in step 2, 9 of 50 in step 3. The vocabulary upgrade is the one lever that did exactly what it was supposed to do.](unk.png)
+![Bars of samples containing the unknown-word placeholder: 44 of 50 in step 1, 6 of 50 in step 2, 9 of 50 in step 3. The vocabulary upgrade is the one lever that did exactly what it was supposed to do.](img/unk.png)
 
 The model learns joke *surface* — the openings, the question marks, the templates — and not joke *structure*. A setup and a punchline is a relationship between two halves of a text: the second half has to answer the first in a way that reframes it. Next-word prediction rewards the locally plausible word, and the locally plausible word after "What do you cross a dog with…" is another dog thing, not a twist. Nothing in the training signal says "the ending has to change what the beginning meant". That is what 0 of 50 is telling me, four times.
 
@@ -119,7 +119,7 @@ The evaluation harness from this experiment is now a skill, [output-eval](https:
 
 The failure mode this catches is not rare. Anyone who has watched a loss curve fall and shipped the model has shipped this bug. The loss is a useful instrument and a terrible judge. Read the outputs.
 
-![Animation of the step-2 samples passing through the three gates. Fifty samples go in. Thirty-four pass Complete. Nine of those pass Coherent. None of the nine is joke-shaped — the single joke-shaped sample sits outside them, because its setup is garbled — so zero samples are good. The gates, not the loss, say where the run fails.](gates.gif){poster=gates-poster.png}
+![Animation of the step-2 samples passing through the three gates. Fifty samples go in. Thirty-four pass Complete. Nine of those pass Coherent. None of the nine is joke-shaped — the single joke-shaped sample sits outside them, because its setup is garbled — so zero samples are good. The gates, not the loss, say where the run fails.](img/gates.gif){poster=img/gates-poster.png}
 
 *Still frame: fifty samples in, zero good out — the step-2 funnel, complete 34, coherent 9, joke-shaped 1 (not among the coherent nine), good 0.*
 

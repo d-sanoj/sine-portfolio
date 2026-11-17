@@ -4,11 +4,11 @@ slug: inkling-2-small-open-weights-wait
 date: 2026-11-06
 description: "Thinking Machines' new model is smaller than its predecessor and much better at long, unsupervised work — but the open weights are a week away, pending safety tests."
 tags: [ai, explainer, llm, open-weights, safety, news]
-cover: cover.png
+cover: img/cover.png
 coverAlt: "Title card reading 'Inkling 2 Small is here — but you can't download it yet' with the subtitle 'A smaller, smarter model, and a one-week wait for its weights', over a row of grey sine waves with one yellow wave highlighted."
 ---
 
-![Title card reading "Inkling 2 Small is here — but you can't download it yet" with the subtitle "A smaller, smarter model, and a one-week wait for its weights", over a row of grey sine waves with one yellow wave highlighted.](cover.png)
+![Title card reading "Inkling 2 Small is here — but you can't download it yet" with the subtitle "A smaller, smarter model, and a one-week wait for its weights", over a row of grey sine waves with one yellow wave highlighted.](img/cover.png)
 
 Yesterday, Thinking Machines Lab released its best model yet. It's called Inkling 2 Small, and on the headline score it is a big jump: 31 on the Artificial Analysis Intelligence Index, as reported in [the announcement](https://thinkingmachines.ai/news/inkling-2-small/), against 12 for the first Inkling model from July and 13 for its smaller sibling. It is better at coding, at reading charts and documents, and at the kind of long, multi-step work where most models fall apart.
 
@@ -22,9 +22,9 @@ One naming warning first, because the lab did not make this easy. In July it rel
 
 Inkling 2 Small is a Mixture-of-Experts model, the same architecture idea as the ERNIE model in [yesterday's post](https://sanoj.dev/blog/how-ai-reads-a-million-tokens/). Instead of one giant network that every token passes through, each layer holds a crowd of smaller "expert" networks, and a router picks a few of them for each token. The numbers here: 594 billion parameters in total, but only about 17 billion active for any single token — under 3% of the model doing the work at any moment. In each of its 48 layers, each token is routed to 8 of 384 experts.
 
-![Animated diagram titled "Mixture of experts: 8 of 384, per token". A token box labelled "the" feeds into a box labelled "Router". Below, a grid of small squares represents 384 experts; eight of them light up in yellow one by one while the rest stay grey. A caption reads: 594B parameters in total, about 17B active per token.](moe-routing.gif){poster=moe-routing-poster.png}
+![Animated diagram titled "Mixture of experts: 8 of 384, per token". A token box labelled "the" feeds into a box labelled "Router". Below, a grid of small squares represents 384 experts; eight of them light up in yellow one by one while the rest stay grey. A caption reads: 594B parameters in total, about 17B active per token.](img/moe-routing.gif){poster=img/moe-routing-poster.png}
 
-*Each token is sent to 8 of 384 experts. The expert count and routing are from the model card; the grid is a cartoon — 384 real experts would be far too many to draw one by one. A still version is available: [poster frame](moe-routing-poster.png).*
+*Each token is sent to 8 of 384 experts. The expert count and routing are from the model card; the grid is a cartoon — 384 real experts would be far too many to draw one by one. A still version is available: [poster frame](img/moe-routing-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -51,9 +51,9 @@ Most models answer a question in seconds. The thing Inkling 2 Small is built for
 
 The clearest demonstration is an experiment the lab ran on its own platform. It asked Inkling 2 Small to train a smaller model — Qwen3.5-4B — to forecast time series like electricity demand and Wikipedia page views. The model had 12 hours and a $500 budget. It read the task, wrote its own evaluator, tried different datasets and training recipes, ran supervised fine-tuning and reinforcement learning, and debugged the process as it went. After 4.5 hours and $426 of compute, the trained model had more than doubled its forecasting score.
 
-![Animated diagram titled "Long-horizon work: one task, hours of unsupervised steps". Five boxes in a row read: 1 Read the task, 2 Write its own evaluator, 3 Train & test, 4 Debug & retry, 5 Score more than doubled, with a loop-back arrow from step 5 to step 3. An elapsed-time label advances from 0h to 4.5h and a bar labelled "forecasting score" grows to more than double its starting height.](agent-loop.gif){poster=agent-loop-poster.png}
+![Animated diagram titled "Long-horizon work: one task, hours of unsupervised steps". Five boxes in a row read: 1 Read the task, 2 Write its own evaluator, 3 Train & test, 4 Debug & retry, 5 Score more than doubled, with a loop-back arrow from step 5 to step 3. An elapsed-time label advances from 0h to 4.5h and a bar labelled "forecasting score" grows to more than double its starting height.](img/agent-loop.gif){poster=img/agent-loop-poster.png}
 
-*The loop is the autoresearch demo from the announcement: Inkling 2 Small training another model, unsupervised, for 4.5 hours. The score bar is illustrative — the announcement says the score "more than doubled" without giving exact numbers. A still version is available: [poster frame](agent-loop-poster.png).*
+*The loop is the autoresearch demo from the announcement: Inkling 2 Small training another model, unsupervised, for 4.5 hours. The score bar is illustrative — the announcement says the score "more than doubled" without giving exact numbers. A still version is available: [poster frame](img/agent-loop-poster.png).*
 
 **What the animation shows, step by step:**
 
@@ -77,7 +77,7 @@ The alignment work went deeper than a patch. During mid-training, the lab filter
 
 The lab's own internal scores suggest the work helped a lot, and also that it is not finished:
 
-![Bar chart titled "Internal misbehavior score (lower is better)". Four horizontal bars: Inkling-Small 75.2, Inkling 66.8, Inkling 2 Small 14.9, GPT-6.1 Sol (closed model, shown for scale) 0.8. Inkling 2 Small's bar is highlighted in yellow.](misbehavior-chart.png)
+![Bar chart titled "Internal misbehavior score (lower is better)". Four horizontal bars: Inkling-Small 75.2, Inkling 66.8, Inkling 2 Small 14.9, GPT-6.1 Sol (closed model, shown for scale) 0.8. Inkling 2 Small's bar is highlighted in yellow.](img/misbehavior-chart.png)
 
 *Scores from Thinking Machines' internal alignment evaluation, as reported in the announcement. Lower is better. GPT-6.1 Sol is a closed model, shown only for scale — the gap is the point.*
 
@@ -91,7 +91,7 @@ So why hold the weights back at all? The answer is in a post Thinking Machines p
 
 The post's answer is staged releases. Each stage widens access only when the evidence supports it:
 
-![Diagram titled "Staged release: each step widens access only when the evidence supports it". Three boxes connected by arrows: 1. Inference API (Tinker Playground) — try it, but you can't take it home; 2. Hosted fine-tuning (Tinker) — train it on your data, while the provider monitors use and can revoke access; 3. Open weights (Apache 2.0) — download it, run it anywhere, no way back. Between stages 2 and 3 a gate is labelled "Evidence gate: external safety testing and red-teaming".](staged-release.png)
+![Diagram titled "Staged release: each step widens access only when the evidence supports it". Three boxes connected by arrows: 1. Inference API (Tinker Playground) — try it, but you can't take it home; 2. Hosted fine-tuning (Tinker) — train it on your data, while the provider monitors use and can revoke access; 3. Open weights (Apache 2.0) — download it, run it anywhere, no way back. Between stages 2 and 3 a gate is labelled "Evidence gate: external safety testing and red-teaming".](img/staged-release.png)
 
 *The stages as described in Thinking Machines' July 31 post, with the gate for this release (external safety testing and red-teaming, per the November 5 announcement). The July post stresses the stages are not a fixed sequence that automatically ends with open weights. Inkling 2 Small is currently at stage 2; stage 3 is planned for next week, pending the testing in the gate.*
 
