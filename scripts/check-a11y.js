@@ -2,12 +2,9 @@
 //   npm run build:dist && npm run check:a11y
 import fs from 'node:fs';
 import http from 'node:http';
-import os from 'node:os';
 import path from 'node:path';
-import net from 'node:net';
-import { spawn } from 'node:child_process';
 import { PATHS } from './lib/paths.js';
-import { findChrome } from './lib/chrome.js';
+import { launchChrome, stopChrome } from './lib/chrome.js';
 
 const axePath = path.join(PATHS.dist, '..', 'node_modules', 'axe-core', 'axe.min.js');
 if (!fs.existsSync(axePath)) {
@@ -40,13 +37,6 @@ function serve(root) {
     });
   });
   return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
-}
-
-function freePort() {
-  return new Promise((resolve, reject) => {
-    const s = net.createServer();
-    s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close((e) => e ? reject(e) : resolve(p)); });
-  });
 }
 
 function cdp(ws) {
@@ -82,19 +72,6 @@ function openSocket(url) {
   });
 }
 
-async function waitForDevtools(port, proc) {
-  const deadline = Date.now() + 20000;
-  while (Date.now() < deadline) {
-    if (proc.exitCode !== null) throw new Error('Chrome exited');
-    try {
-      const res = await fetch('http://127.0.0.1:' + port + '/json/version');
-      if (res.ok) return await res.json();
-    } catch (e) { /* not yet */ }
-    await new Promise((r) => setTimeout(r, 100));
-  }
-  throw new Error('Chrome did not open a debugging port');
-}
-
 async function evalJson(page, expression) {
   const result = await page.send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
   if (result.exceptionDetails) throw new Error(result.exceptionDetails.text + ' ' + (result.exceptionDetails.exception && result.exceptionDetails.exception.description || ''));
@@ -104,15 +81,10 @@ async function evalJson(page, expression) {
 async function main() {
   const server = await serve(PATHS.dist);
   const origin = 'http://127.0.0.1:' + server.address().port;
-  const chrome = await findChrome();
-  const port = await freePort();
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sine-a11y-'));
-  const args = ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--no-first-run', '--user-data-dir=' + dataDir, '--remote-debugging-port=' + port, chrome.includes('headless-shell') ? '--headless' : '--headless=new', 'about:blank'];
-  const proc = spawn(chrome, args, { stdio: ['ignore', 'ignore', 'pipe'] });
+  const { proc, port, version, dataDir } = await launchChrome();
   const axeSource = fs.readFileSync(axePath, 'utf8');
   let failed = 0;
   try {
-    const version = await waitForDevtools(port, proc);
     const browserWs = await openSocket(version.webSocketDebuggerUrl);
     const browser = cdp(browserWs);
     const created = await browser.send('Target.createTarget', { url: 'about:blank' });
@@ -218,8 +190,7 @@ async function main() {
     browserWs.close();
     pageWs.close();
   } finally {
-    proc.kill('SIGKILL');
-    fs.rmSync(dataDir, { recursive: true, force: true });
+    await stopChrome(proc, dataDir);
     await new Promise((resolve) => server.close(resolve));
   }
   process.exit(failed ? 1 : 0);
