@@ -1,0 +1,15 @@
+# Offline check of the published site in dist/.
+# External http(s) and mailto links are not requested, so the job stays
+# deterministic and does not depend on the network.
+offline = true
+no_progress = true
+
+# Directory links such as /blog/ and ../ resolve to index.html.
+index_files = ["index.html"]
+fallback_extensions = ["html"]
+
+# apps/plain/index.html is copied to both the sine home page and /boring/.
+# The hidden "click here" link (href="boring/") is only valid on the home
+# page; on the plain page it would resolve to /boring/boring/, which does
+# not exist. Exclude that false positive.
+exclude = ['/dist/boring/boring/?$']
