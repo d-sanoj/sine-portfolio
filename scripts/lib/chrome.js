@@ -1,15 +1,18 @@
 // Finds a Chrome to measure with. The publish build runs on a machine that may not have one,
 // so a missing browser is downloaded once (Chrome for Testing's headless shell).
+// CI sets CHROME_PATH to a browser installed by browser-actions/setup-chrome.
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { createWriteStream } from 'node:fs';
 import { PATHS } from './paths.js';
 
 const CATALOG = 'https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json';
+const DEBUG_WAIT_MS = 60000;
+const LAUNCH_ATTEMPTS = 3;
 
 function cacheDir() {
   const inModules = path.join(PATHS.dist, '..', 'node_modules', '.cache', 'sine-chrome');
@@ -75,4 +78,109 @@ async function downloadChrome() {
 
 export async function findChrome() {
   return systemChrome() || downloadChrome();
+}
+
+function chromeArgs(binary, dataDir) {
+  return [
+    '--no-sandbox',
+    '--disable-gpu',
+    '--disable-dev-shm-usage',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--disable-extensions',
+    '--user-data-dir=' + dataDir,
+    // Port 0 lets Chrome pick a free port and write it to DevToolsActivePort,
+    // avoiding the race of reserving a port, closing it, then handing it to Chrome.
+    '--remote-debugging-port=0',
+    '--remote-debugging-address=127.0.0.1',
+    binary.includes('headless-shell') ? '--headless' : '--headless=new',
+    'about:blank',
+  ];
+}
+
+function readDevToolsPort(dataDir) {
+  const file = path.join(dataDir, 'DevToolsActivePort');
+  if (!fs.existsSync(file)) return null;
+  try {
+    const first = fs.readFileSync(file, 'utf8').split('\n')[0].trim();
+    const port = Number(first);
+    return Number.isInteger(port) && port > 0 ? port : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function withStderr(message, stderr) {
+  const text = stderr && stderr.buf ? stderr.buf.trim().slice(-2000) : '';
+  return text ? message + ':\n' + text : message;
+}
+
+async function waitForDevtools(proc, dataDir, stderr) {
+  const deadline = Date.now() + DEBUG_WAIT_MS;
+  while (Date.now() < deadline) {
+    if (proc.exitCode !== null) throw new Error(withStderr('Chrome exited before it was ready', stderr));
+    const port = readDevToolsPort(dataDir);
+    if (port) {
+      try {
+        const res = await fetch('http://127.0.0.1:' + port + '/json/version');
+        if (res.ok) return { port, version: await res.json() };
+      } catch (e) { /* file exists but the port is not accepting yet */ }
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  throw new Error(withStderr('Chrome did not open a debugging port', stderr));
+}
+
+export async function stopChrome(proc, dataDir) {
+  if (proc && proc.exitCode === null) proc.kill('SIGKILL');
+  if (proc) {
+    await new Promise((resolve) => {
+      if (proc.exitCode !== null) return resolve();
+      const timer = setTimeout(resolve, 5000);
+      proc.once('exit', () => { clearTimeout(timer); resolve(); });
+    });
+  }
+  if (!dataDir) return;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      fs.rmSync(dataDir, { recursive: true, force: true });
+      break;
+    } catch (e) {
+      if (attempt === 2) throw e;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+  }
+}
+
+async function tryLaunch(binary, dataDir) {
+  const proc = spawn(binary, chromeArgs(binary, dataDir), { stdio: ['ignore', 'ignore', 'pipe'] });
+  const stderr = { buf: '' };
+  proc.stderr.on('data', (c) => { stderr.buf += c.toString(); });
+  proc.on('error', (err) => { stderr.buf += String(err.message || err) + '\n'; });
+  try {
+    const started = await waitForDevtools(proc, dataDir, stderr);
+    return { proc, port: started.port, version: started.version, stderr };
+  } catch (e) {
+    await stopChrome(proc, null);
+    throw e;
+  }
+}
+
+export async function launchChrome() {
+  const binary = await findChrome();
+  console.log('Using Chrome at ' + binary);
+  let lastError;
+  for (let attempt = 1; attempt <= LAUNCH_ATTEMPTS; attempt++) {
+    const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sine-chrome-'));
+    try {
+      const started = await tryLaunch(binary, dataDir);
+      return { ...started, dataDir, binary };
+    } catch (e) {
+      lastError = e;
+      console.warn('Chrome start attempt ' + attempt + ' of ' + LAUNCH_ATTEMPTS + ' failed: ' + e.message);
+      await stopChrome(null, dataDir);
+      if (attempt < LAUNCH_ATTEMPTS) await new Promise((r) => setTimeout(r, 500));
+    }
+  }
+  throw lastError;
 }

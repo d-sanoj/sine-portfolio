@@ -3,28 +3,15 @@
 // without anyone opening /measure/ by hand. Chrome is only launched when the page or the posts changed.
 import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
 import http from 'node:http';
 import crypto from 'node:crypto';
-import net from 'node:net';
-import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { PATHS, LAYOUTS } from './paths.js';
-import { findChrome } from './chrome.js';
+import { launchChrome, stopChrome } from './chrome.js';
 import { injectHome, publishedPosts, HOME_VERSION, BlogError } from './blog.js';
 import { writeUsedGlyphs } from './used-glyphs.js';
 
 const STAMP = path.join(PATHS.generated, 'home-stamp.txt');
-
-function freePort() {
-  return new Promise((resolve, reject) => {
-    const server = net.createServer();
-    server.listen(0, '127.0.0.1', () => {
-      const port = server.address().port;
-      server.close((err) => err ? reject(err) : resolve(port));
-    });
-  });
-}
 
 function hashFile(h, file) {
   h.update('\0' + file + '\0');
@@ -181,35 +168,10 @@ function openSocket(url) {
   });
 }
 
-async function waitForDevtools(port, proc) {
-  const deadline = Date.now() + 20000;
-  while (Date.now() < deadline) {
-    if (proc.exitCode !== null) throw new Error('Chrome exited before it was ready');
-    try {
-      const res = await fetch('http://127.0.0.1:' + port + '/json/version');
-      if (res.ok) return await res.json();
-    } catch (e) { /* not up yet */ }
-    await new Promise((r) => setTimeout(r, 100));
-  }
-  throw new Error('Chrome did not open a debugging port');
-}
-
 async function runChrome(measureUrl) {
-  const chrome = await findChrome();
-  const port = await freePort();
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sine-measure-'));
-  const args = [
-    '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--no-first-run', '--no-default-browser-check',
-    '--disable-extensions', '--user-data-dir=' + dataDir, '--remote-debugging-port=' + port,
-  ];
-  args.push(chrome.includes('headless-shell') ? '--headless' : '--headless=new');
-  args.push('about:blank');
-  const proc = spawn(chrome, args, { stdio: ['ignore', 'ignore', 'pipe'] });
-  let stderr = '';
-  proc.stderr.on('data', (c) => { stderr += c.toString(); });
+  const { proc, port, version, dataDir, stderr } = await launchChrome();
   const logs = [];
   try {
-    const version = await waitForDevtools(port, proc);
     const browserWs = await openSocket(version.webSocketDebuggerUrl);
     const browser = cdpSocket(browserWs);
     const created = await browser.send('Target.createTarget', { url: measureUrl });
@@ -234,28 +196,11 @@ async function runChrome(measureUrl) {
       if (value) throw new Error(value + (logs.length ? '\n' + logs.join('\n') : ''));
       await new Promise((r) => setTimeout(r, 200));
     }
-    if (!done) throw new Error('measuring the plain page timed out' + (logs.length ? '\n' + logs.join('\n') : '') + (stderr ? '\n' + stderr.slice(-500) : ''));
+    if (!done) throw new Error('measuring the plain page timed out' + (logs.length ? '\n' + logs.join('\n') : '') + (stderr.buf ? '\n' + stderr.buf.trim().slice(-500) : ''));
     browserWs.close();
     pageWs.close();
   } finally {
-    proc.kill('SIGKILL');
-    // Wait for Chrome to actually exit before deleting its profile dir.
-    // It can still be writing files into Default/ while shutting down, and
-    // deleting a non-empty dir throws ENOTEMPTY and fails the whole build.
-    await new Promise((resolve) => {
-      if (proc.exitCode !== null) return resolve();
-      const timer = setTimeout(resolve, 5000);
-      proc.once('exit', () => { clearTimeout(timer); resolve(); });
-    });
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        fs.rmSync(dataDir, { recursive: true, force: true });
-        break;
-      } catch (e) {
-        if (attempt === 2) throw e;
-        await new Promise((r) => setTimeout(r, 200));
-      }
-    }
+    await stopChrome(proc, dataDir);
   }
 }
 
