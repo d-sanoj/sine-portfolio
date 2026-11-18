@@ -1,0 +1,270 @@
+{
+  "corpus": "content/blog/*.md in d-sanoj/sine-portfolio (14 posts, frontmatter stripped)",
+  "grading": "post-level: a chunk is correct if it comes from the gold post. recall@k = fraction of questions with at least one correct chunk in the top k.",
+  "questions": [
+    {
+      "gold": "your-agents-code-looks-nothing-like-yours",
+      "id": 1,
+      "q": "How do I stop my coding agent from ignoring my team's style rules?",
+      "answer_terms": [
+        "convention",
+        "checker",
+        "exit code"
+      ]
+    },
+    {
+      "gold": "agent-tests-agree-with-bugs",
+      "id": 2,
+      "q": "Why does my agent keep writing tests that pass even when the code is broken?",
+      "answer_terms": [
+        "oracle",
+        "mutant",
+        "prove-the-tests"
+      ]
+    },
+    {
+      "gold": "claude-mem-agent-memory",
+      "id": 3,
+      "q": "My AI assistant remembers nothing between sessions. Is there a way to give it memory, and what does it cost?",
+      "answer_terms": [
+        "claude-mem",
+        "observer",
+        "second session"
+      ]
+    },
+    {
+      "gold": "claude-motion-for-pro",
+      "id": 4,
+      "q": "Can I use Claude Motion on the Pro plan, or is it really Team-only?",
+      "answer_terms": [
+        "motion",
+        "team",
+        "enterprise"
+      ]
+    },
+    {
+      "gold": "claude-code-dont-ask-again-leak",
+      "id": 5,
+      "q": "I clicked 'don't ask again' in Claude Code and now my API keys might be on GitHub. What happened?",
+      "answer_terms": [
+        "ask again",
+        "leak",
+        "approved"
+      ]
+    },
+    {
+      "gold": "is-opus-5-5-nerfed",
+      "id": 6,
+      "q": "How can I tell if my model got worse after an update? Is there a way to measure it?",
+      "answer_terms": [
+        "nerf-watch",
+        "regression",
+        "frozen"
+      ]
+    },
+    {
+      "gold": "inside-gpt-tokenizer-vocabulary",
+      "id": 7,
+      "q": "How do I know if the tokenizer is charging me extra for non-English text?",
+      "answer_terms": [
+        "devanagari",
+        "amharic",
+        "premium"
+      ]
+    },
+    {
+      "gold": "weight-space-programming",
+      "id": 8,
+      "q": "What does it mean to edit a model's weights directly, without retraining?",
+      "answer_terms": [
+        "weight-space",
+        "edited",
+        "astra"
+      ]
+    },
+    {
+      "gold": "why-embeddings-make-search-work",
+      "id": 9,
+      "q": "Why does search work better when words are turned into vectors?",
+      "answer_terms": [
+        "bad guy",
+        "villain",
+        "sauron"
+      ]
+    },
+    {
+      "gold": "how-a-model-learns",
+      "id": 10,
+      "q": "How does a language model actually learn from data \u2014 what's happening during training?",
+      "answer_terms": [
+        "gradient",
+        "loss",
+        "learning rate"
+      ]
+    },
+    {
+      "gold": "how-ai-reads-a-million-tokens",
+      "id": 11,
+      "q": "What happens inside a model when it reads a million tokens of context?",
+      "answer_terms": [
+        "ernie",
+        "280b",
+        "gist"
+      ]
+    },
+    {
+      "gold": "how-i-built-a-portfolio-out-of-sine-waves",
+      "id": 12,
+      "q": "How was this portfolio website built out of sine waves?",
+      "answer_terms": [
+        "sine",
+        "letter",
+        "fourier"
+      ]
+    },
+    {
+      "gold": "inside-gpt-tokenizer-vocabulary",
+      "id": 13,
+      "q": "What's the cheapest way to send tabular data to an API without wasting tokens?",
+      "answer_terms": [
+        "csv",
+        "json",
+        "formatting tax"
+      ]
+    },
+    {
+      "gold": "inkling-2-small-open-weights-wait",
+      "id": 14,
+      "q": "Is there a small open model that can do useful work on its own for hours?",
+      "answer_terms": [
+        "inkling",
+        "unsupervised",
+        "hours"
+      ]
+    },
+    {
+      "gold": "qwen4-max-preview",
+      "id": 15,
+      "q": "What is Qwen4-Max and how long is it available?",
+      "answer_terms": [
+        "qwen4-max",
+        "token plan",
+        "two weeks"
+      ]
+    },
+    {
+      "gold": "agent-tests-agree-with-bugs",
+      "id": 16,
+      "q": "How do I check whether my agent's tests actually catch bugs?",
+      "answer_terms": [
+        "mutant",
+        "killed",
+        "discounted_price"
+      ]
+    },
+    {
+      "gold": "why-embeddings-make-search-work",
+      "id": 17,
+      "q": "Why do embeddings beat keyword search for finding similar meanings?",
+      "answer_terms": [
+        "dense",
+        "dual encoder",
+        "dpr"
+      ]
+    },
+    {
+      "gold": "claude-mem-agent-memory",
+      "id": 18,
+      "q": "What's the downside of giving an agent a memory system that watches everything it does?",
+      "answer_terms": [
+        "observer",
+        "sees",
+        "watches"
+      ]
+    },
+    {
+      "gold": "inside-gpt-tokenizer-vocabulary",
+      "id": 19,
+      "q": "How many tokens does a sentence cost in different languages?",
+      "answer_terms": [
+        "udhr",
+        "article 1",
+        "amharic"
+      ]
+    },
+    {
+      "gold": "is-opus-5-5-nerfed",
+      "id": 20,
+      "q": "What should I do if my model's performance drops and the vendor says nothing changed?",
+      "answer_terms": [
+        "moving target",
+        "rent",
+        "benchmark"
+      ]
+    },
+    {
+      "id": 21,
+      "gold": "tiny-gpt-cant-tell-jokes",
+      "q": "I trained a tiny model to tell jokes and it never tells a real joke. What went wrong?",
+      "answer_terms": [
+        "punchline",
+        "setup",
+        "joke-shaped"
+      ]
+    },
+    {
+      "id": 22,
+      "gold": "tiny-gpt-cant-tell-jokes",
+      "q": "How do you judge whether a tiny model\u2019s outputs are actually jokes?",
+      "answer_terms": [
+        "complete",
+        "coherent",
+        "joke-shaped"
+      ]
+    }
+  ],
+  "rewordings": [
+    {
+      "id": 1,
+      "variants": [
+        "coding agent style rules ignored",
+        "My AI helper writes code that doesn't match how our team writes. How do I make it stick?"
+      ]
+    },
+    {
+      "id": 5,
+      "variants": [
+        "Claude Code don't ask again secret leak GitHub",
+        "I told Claude Code to stop asking for approval and now I'm worried my credentials leaked. What should I check?"
+      ]
+    },
+    {
+      "id": 9,
+      "variants": [
+        "embeddings vs keyword search semantic meaning",
+        "Why does matching word meanings work better than matching exact words?"
+      ]
+    },
+    {
+      "id": 3,
+      "variants": [
+        "agent memory across sessions cost tokens",
+        "Can an AI coding helper remember what we did yesterday?"
+      ]
+    },
+    {
+      "id": 7,
+      "variants": [
+        "tokenizer non-English cost premium",
+        "Does it cost more tokens to write in Hindi than in English?"
+      ]
+    },
+    {
+      "id": 11,
+      "variants": [
+        "million token context window attention cost",
+        "What breaks when you paste a whole book into a chatbot?"
+      ]
+    }
+  ]
+}
