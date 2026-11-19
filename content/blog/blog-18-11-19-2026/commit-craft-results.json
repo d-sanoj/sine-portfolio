@@ -1,0 +1,1932 @@
+{
+  "summary": {
+    "repos": {
+      "sine-portfolio": 56,
+      "claude-skills": 54,
+      "retriever-doc-answer": 13,
+      "local-rag": 3,
+      "jokeGPT": 6
+    },
+    "total_commits": 132,
+    "checker_fail": 25,
+    "checker_warn_only": 0,
+    "checker_clean": 107,
+    "subjects_over_72": 13,
+    "bodies_over_5_lines": 6,
+    "r5_generated_file_commits": 8,
+    "with_coauthor": 0,
+    "median_subject_len": 34.5,
+    "max_subject_len": 122,
+    "median_body_lines": 0.0,
+    "max_body_lines": 14,
+    "median_files": 1.0,
+    "max_files": 147,
+    "commits_over_10_files": 14,
+    "failing_median_files": 11,
+    "failing_median_subject": 73,
+    "clean_median_files": 1,
+    "clean_median_subject": 30,
+    "failing_files": 511,
+    "total_files": 788,
+    "failing_files_share": 0.648,
+    "failing_insertions": 89890,
+    "total_insertions": 106935,
+    "failing_insertions_share": 0.841
+  },
+  "commits": [
+    {
+      "sha": "8ba6c6c",
+      "author": "Sanoj Doddapaneni",
+      "date": "2026-11-17",
+      "subject": "CI: install Chrome and retry when the debugging port is slow to open",
+      "subject_len": 68,
+      "body_lines": 8,
+      "files": 4,
+      "insertions": 131,
+      "checker_problems": [
+        [
+          "R2",
+          "fail",
+          "body is 8 lines (max 5)"
+        ]
+      ],
+      "body": "GitHub Actions sometimes failed at npm run build:dist with\n\"Chrome did not open a debugging port\" after a 20-second wait. A\npassing run of the same workflow finished measuring in 17 seconds,\nso the timeout was too tight, and the script reserved a port then\nclosed it before handing it to Chrome, which can lose the race.\n\nInstall Chrome for Testing in CI and pass it as CHROME_PATH, let\nChrome pick the debug port, wait up to 60 seconds, and retry the\nlaunch three times. The accessibility check uses the same launcher."
+    },
+    {
+      "sha": "cc9412c",
+      "author": "Sanoj Doddapaneni",
+      "date": "2026-11-17",
+      "subject": "CI: run blog, build, accessibility and internal link checks on every push",
+      "subject_len": 73,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 64,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 73 chars (max 72)"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "c5e8bcc",
+      "author": "Sanoj Doddapaneni",
+      "date": "2026-11-17",
+      "subject": "Blog: one folder per post as blog-N-MM-DD-YYYY",
+      "subject_len": 46,
+      "body_lines": 3,
+      "files": 147,
+      "insertions": 204,
+      "checker_problems": [
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/home-stamp.txt"
+        ],
+        [
+          "R4",
+          "warn",
+          "147 files but only 204 insertions (1.4 per file) \u2014 a pure move; say so in the subject"
+        ]
+      ],
+      "body": "Each note now lives in content/blog/blog-<number>-<MM>-<DD>-<YYYY>/,\nwith the markdown at the folder root and images in img/. Public post\nURLs (/blog/<slug>/) are unchanged."
+    },
+    {
+      "sha": "dc614c0",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Blog: escape asterisk in v1 sample quote",
+      "subject_len": 40,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": "Corrected repeated text and fixed minor spelling errors in the analysis of the model's joke-telling capabilities."
+    },
+    {
+      "sha": "a3e08fd",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add images for tiny-gpt-cant-tell-jokes post",
+      "subject_len": 44,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "779500d",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Blog: I trained a tiny GPT to tell jokes. Three upgrades later, it still can't.",
+      "subject_len": 79,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 130,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 79 chars (max 72)"
+        ],
+        [
+          "R1",
+          "fail",
+          "subject ends with a period"
+        ]
+      ],
+      "body": "Add a blog post detailing the training of a tiny GPT model to tell jokes, including methodology, results, and evaluation metrics."
+    },
+    {
+      "sha": "b638081",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Build: wait for Chrome to exit before deleting its profile dir",
+      "subject_len": 62,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 17,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "8e10406",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Blog: link retriever post to retriever-doc-answer repo instead of downloads",
+      "subject_len": 75,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 2,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 75 chars (max 72)"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "404b312",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add images and data for retriever-finds-the-document-not-the-answer post",
+      "subject_len": 72,
+      "body_lines": 0,
+      "files": 10,
+      "insertions": 2676,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "8078da0",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add blog post: Your retriever finds the right document. It doesn't always find the answer.",
+      "subject_len": 90,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 131,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 90 chars (max 72)"
+        ],
+        [
+          "R1",
+          "fail",
+          "subject ends with a period"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "58aef32",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add images for your-agents-code-looks-nothing-like-yours post",
+      "subject_len": 61,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "02ab2e2",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add blog post: Your agent's code looks nothing like yours. Stop writing rules. Write checks.",
+      "subject_len": 92,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 107,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 92 chars (max 72)"
+        ],
+        [
+          "R1",
+          "fail",
+          "subject ends with a period"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "e982b12",
+      "author": "Sanoj D",
+      "date": "2026-11-14",
+      "subject": "Add images and data for inside-gpt-tokenizer-vocabulary post",
+      "subject_len": 60,
+      "body_lines": 0,
+      "files": 11,
+      "insertions": 792,
+      "checker_problems": [
+        [
+          "R4",
+          "fail",
+          "11 files, 792 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "279df15",
+      "author": "Sanoj D",
+      "date": "2026-11-14",
+      "subject": "Add blog post: I decoded all 100,277 tokens in GPT-4's vocabulary. Most of it is English.",
+      "subject_len": 89,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 179,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 89 chars (max 72)"
+        ],
+        [
+          "R1",
+          "fail",
+          "subject ends with a period"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "cc994d1",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add images for agent-tests-agree-with-bugs post",
+      "subject_len": 47,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "1ba46b5",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add blog post: Your agent's tests agree with its bugs",
+      "subject_len": 53,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 133,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "bcd6f19",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Loader: restore the portrait cycle; keep the instant ring",
+      "subject_len": 57,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 17,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "be544d0",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Loader: leave as soon as the page is ready; show a circle at once",
+      "subject_len": 65,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b219343",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Loader: leave as soon as the page is ready; show a circle at once",
+      "subject_len": 65,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 10,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "56e6da5",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Loader: leave as soon as the page is ready; show a circle at once",
+      "subject_len": 65,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 19,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "2a227af",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Loader: leave as soon as the page is ready; show a circle at once",
+      "subject_len": 65,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 39,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "da79095",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Project: point EpigCorpus live demo to epigcorpus.sanoj.dev",
+      "subject_len": 59,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 2,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d53e53e",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Blog: add images for Qwen4-Max is out \u2014 for two weeks only post",
+      "subject_len": 63,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "1731ca7",
+      "author": "Sanoj D",
+      "date": "2026-11-12",
+      "subject": "Blog: add Qwen4-Max is out \u2014 for two weeks only post",
+      "subject_len": 52,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 112,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "f7b5578",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Blog: move Is Opus 5.5 nerfed? post next to its images folder",
+      "subject_len": 61,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "c420664",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Blog: add images for Is Opus 5.5 nerfed? post",
+      "subject_len": 45,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e7f2510",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Blog: add Is Opus 5.5 nerfed? post",
+      "subject_len": 34,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 161,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e344b04",
+      "author": "d-sanoj",
+      "date": "2026-11-10",
+      "subject": "Fix animation stutter: smaller canvas, limited pixel ratio, lighter loader",
+      "subject_len": 74,
+      "body_lines": 5,
+      "files": 8,
+      "insertions": 138,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 74 chars (max 72)"
+        ]
+      ],
+      "body": "- The page's canvas is a band around the screen (screen + 360 px above and\n  below) that follows the scroll, not a canvas as tall as the page.\n- The page's canvas and the loader's canvas use at most 1.5 pixels per CSS pixel.\n- The loader keeps the sum of the outline's waves and adds only the ones that\n  change each frame; the finished portrait is painted once and reused."
+    },
+    {
+      "sha": "02a69f8",
+      "author": "Sanoj D",
+      "date": "2026-11-10",
+      "subject": "Blog: add images for Claude-Mem agent memory post",
+      "subject_len": 49,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "2d24af4",
+      "author": "Sanoj D",
+      "date": "2026-11-10",
+      "subject": "Blog: add Claude-Mem agent memory post",
+      "subject_len": 38,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 155,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "76b413d",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Blog: move post to content/blog/ (fix build)",
+      "subject_len": 44,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "297ecf7",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Blog: add images for Claude Code Don't Ask Again leak post",
+      "subject_len": 58,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "bfba138",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Blog: add Claude Code Don't Ask Again leak post",
+      "subject_len": 47,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 126,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e8940a5",
+      "author": "Sanoj D",
+      "date": "2026-11-08",
+      "subject": "Blog: add images for weight-space-programming post",
+      "subject_len": 50,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d23b141",
+      "author": "Sanoj D",
+      "date": "2026-11-08",
+      "subject": "Blog: add weight-space-programming post",
+      "subject_len": 39,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 164,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "893d4cb",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Blog: add images for Claude Motion for Pro post",
+      "subject_len": 47,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "19427fb",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Blog: add Claude Motion for Pro post",
+      "subject_len": 36,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 134,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e2780a4",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Blog: remove style-model link from Sources",
+      "subject_len": 42,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e746737",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Blog: images for sine-wave portfolio post",
+      "subject_len": 41,
+      "body_lines": 0,
+      "files": 5,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d8919ae",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Blog: How I built a portfolio out of sine waves",
+      "subject_len": 47,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 88,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "758ad54",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Blog: add images for Inkling 2 Small post",
+      "subject_len": 41,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "af4a5b3",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Blog: add Inkling 2 Small post",
+      "subject_len": 30,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 139,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "3d838db",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Docs: simplify the README",
+      "subject_len": 25,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 22,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "5ef6926",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: date always on the line under the title on the home page",
+      "subject_len": 62,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 4,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "f30ab96",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: images for why-embeddings-make-search-work",
+      "subject_len": 48,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "3c050e0",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: images for how-a-model-learns",
+      "subject_len": 35,
+      "body_lines": 0,
+      "files": 9,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "03f5864",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: add \"Why embeddings make semantic search possible\" (2026-11-04)",
+      "subject_len": 69,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 173,
+      "checker_problems": [],
+      "body": "Backfill post, dated 2026-11-04 so it sits between the existing posts in date order. Converted to the repo layout: coverAlt, flat image paths in content/blog/why-embeddings-make-search-work/, GIF posters via {poster=...}, and no duplicate title heading (the title is already the h1)."
+    },
+    {
+      "sha": "9e99b5a",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: add \"How a model learns\" (2026-11-03)",
+      "subject_len": 43,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 195,
+      "checker_problems": [],
+      "body": "Backfill post, dated 2026-11-03 so it sits between the existing posts in date order. Converted to the repo layout: coverAlt, flat image paths in content/blog/how-a-model-learns/, GIF posters via {poster=...}, and no duplicate title heading (the title is already the h1)."
+    },
+    {
+      "sha": "6e02bd6",
+      "author": "Sanoj D",
+      "date": "2026-11-05",
+      "subject": "Blog: remove the dot after the title on the home page",
+      "subject_len": 53,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 3,
+      "checker_problems": [],
+      "body": "The dot after a project title separates it from its links. A blog row has no links after its title, only the date, so the dot is removed there and the space it gave is kept with a margin. The sine page is measured from this page, so it loses the dot too."
+    },
+    {
+      "sha": "c0de368",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "Home: top nav, title-and-date blog list on the sine page, remember which home you use",
+      "subject_len": 85,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 62,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 85 chars (max 72)"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/home-stamp.txt"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "5549ab2",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "Blog: add \"How an AI reads a million tokens\"",
+      "subject_len": 44,
+      "body_lines": 1,
+      "files": 24,
+      "insertions": 220,
+      "checker_problems": [
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/glyphs-used.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/home-stamp.txt"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ],
+        [
+          "R4",
+          "fail",
+          "24 files, 220 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "The first note, with its diagrams and the poster frames for the two GIFs. The sample notes are gone, so this is the one on the home page."
+    },
+    {
+      "sha": "fc3c077",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "Blog: Markdown notes at /blog/, and the latest three on the home page",
+      "subject_len": 69,
+      "body_lines": 1,
+      "files": 29,
+      "insertions": 2572,
+      "checker_problems": [
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/home-stamp.txt"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ],
+        [
+          "R4",
+          "fail",
+          "29 files, 2572 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "Notes are content/blog/<slug>.md. The build writes the plain pages and measures the home page, so the sine page draws the three newest notes when a note is added."
+    },
+    {
+      "sha": "fe34b28",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "About: remove 'Hi! I'm Sanoj.' (the heading says it)",
+      "subject_len": 52,
+      "body_lines": 0,
+      "files": 4,
+      "insertions": 5,
+      "checker_problems": [
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/glyphs-used.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "b7e820a",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "README: apostrophes",
+      "subject_len": 19,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 2,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d212c77",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "Greeting: Good morning / afternoon / evening by the visitor's clock (sine letters on the sine page)",
+      "subject_len": 99,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 62,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 99 chars (max 72)"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "1ab19de",
+      "author": "d-sanoj",
+      "date": "2026-11-05",
+      "subject": "Remove the draggable word: the heading and the line below it are back; keep the scroll lock until the letters have arrived",
+      "subject_len": 122,
+      "body_lines": 0,
+      "files": 13,
+      "insertions": 18,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 122 chars (max 72)"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/hero-word.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-narrow.json"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: data/generated/layout-wide.json"
+        ],
+        [
+          "R4",
+          "warn",
+          "13 files but only 18 insertions (1.4 per file) \u2014 a pure move; say so in the subject"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "f0a45b6",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Docs: add output-eval to the skills list",
+      "subject_len": 40,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "bc6ebf4",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add output-eval skill tests",
+      "subject_len": 27,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 116,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "0ec3d7f",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add output-eval jokeGPT README",
+      "subject_len": 30,
+      "body_lines": 1,
+      "files": 1,
+      "insertions": 58,
+      "checker_problems": [],
+      "body": "This README.md provides an overview of the jokeGPT experiment, detailing the runs, parameters, and results of the evaluations. It also includes instructions for reproducing the scoring and insights from the evaluation gates."
+    },
+    {
+      "sha": "fc5a085",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add output-eval jokeGPT example",
+      "subject_len": 31,
+      "body_lines": 0,
+      "files": 8,
+      "insertions": 1504,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "6f61659",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add output-eval scripts",
+      "subject_len": 23,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 221,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "3be01c5",
+      "author": "Sanoj D",
+      "date": "2026-11-17",
+      "subject": "Add output-eval skill",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 208,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "6e939e7",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Docs: add convention-check to the skills list",
+      "subject_len": 45,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d5a5065",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add reference docs",
+      "subject_len": 18,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 106,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "0fc5ebd",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add sine-portfolio worked example",
+      "subject_len": 33,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 250,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "15d1bd6",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add skill fixtures",
+      "subject_len": 18,
+      "body_lines": 0,
+      "files": 4,
+      "insertions": 54,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "01e0a81",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add end-to-end skill tests",
+      "subject_len": 26,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 171,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "45043ae",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add convention extractor and checker",
+      "subject_len": 36,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 660,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "5ea2de5",
+      "author": "Sanoj D",
+      "date": "2026-11-15",
+      "subject": "Add convention-check skill",
+      "subject_len": 26,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 325,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "25c220f",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Docs: add prove-the-tests to the skills list",
+      "subject_len": 44,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "74ae4bd",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add end-to-end skill tests",
+      "subject_len": 26,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 117,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "a8a553d",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add reference docs",
+      "subject_len": 18,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 130,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "f98763a",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add billing worked example",
+      "subject_len": 26,
+      "body_lines": 0,
+      "files": 6,
+      "insertions": 229,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b5ddc34",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add mutation checker script",
+      "subject_len": 27,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 115,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "5de8d31",
+      "author": "Sanoj D",
+      "date": "2026-11-13",
+      "subject": "Add prove-the-tests skill",
+      "subject_len": 25,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 286,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "bc61c41",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Docs: link the nerf-watch skill",
+      "subject_len": 31,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "244398a",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "1acf08e",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 16,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "c220be6",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 12,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e1cf008",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "0b0759e",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "061b319",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b990a22",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "be3f43a",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 4,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e3e2bb4",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 8,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "67d32f7",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 151,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "6c6bc99",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 74,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "f2ba3d2",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 310,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "8b2df3b",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 18,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "52cd6d2",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 5,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "beac65c",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 15,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "1bf2731",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 6,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d0bebf0",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 6,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "012d16b",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 4,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "cbacab0",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 4,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "bfc4ffc",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 11,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "9f68301",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 134,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "2a860ac",
+      "author": "Sanoj D",
+      "date": "2026-11-11",
+      "subject": "Skill: add nerf-watch",
+      "subject_len": 21,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 251,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "6a48f1d",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Docs: link the claude-guard skill",
+      "subject_len": 33,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "15265f0",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Skill: add claude-guard examples",
+      "subject_len": 32,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 2,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "13af70c",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Skill: add claude-guard references",
+      "subject_len": 34,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 63,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "3979163",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Skill: add claude-guard scripts",
+      "subject_len": 31,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 1027,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "fca1bac",
+      "author": "Sanoj D",
+      "date": "2026-11-09",
+      "subject": "Skill: add claude-guard",
+      "subject_len": 23,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 227,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "4b5fba1",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Docs: link the motion-reel skill",
+      "subject_len": 32,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b5e887f",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Skill: add motion-reel example film",
+      "subject_len": 35,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 78,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "809b687",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Skill: add motion-reel runtime",
+      "subject_len": 30,
+      "body_lines": 0,
+      "files": 6,
+      "insertions": 329,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "0fc9ae3",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Skill: add motion-reel scripts",
+      "subject_len": 30,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 642,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "3efc305",
+      "author": "Sanoj D",
+      "date": "2026-11-07",
+      "subject": "Skill: add motion-reel",
+      "subject_len": 22,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 262,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "df70550",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Docs: write the repo README",
+      "subject_len": 27,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 15,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "dfbfb12",
+      "author": "Sanoj D",
+      "date": "2026-11-06",
+      "subject": "Initial commit",
+      "subject_len": 14,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 2,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b932ff7",
+      "author": "Sanoj D",
+      "date": "2026-11-18",
+      "subject": "Add section chunking experiment (91% recall@5)",
+      "subject_len": 46,
+      "body_lines": 0,
+      "files": 35,
+      "insertions": 5369,
+      "checker_problems": [
+        [
+          "R4",
+          "fail",
+          "35 files, 5369 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "9fabe42",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 6,
+      "insertions": 595,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "d80b6fd",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 2315,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "96d9985",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 14,
+      "insertions": 2022,
+      "checker_problems": [
+        [
+          "R4",
+          "fail",
+          "14 files, 2022 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "be95da6",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 6,
+      "insertions": 621,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "2aad0e4",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 2,
+      "insertions": 63,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "257ff5e",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 4,
+      "insertions": 172,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "b88ccc8",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 52,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "39cb443",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 7,
+      "insertions": 183,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "a458baf",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 1,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "8cde748",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 3,
+      "insertions": 80,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "4344669",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Add files via upload",
+      "subject_len": 20,
+      "body_lines": 0,
+      "files": 6,
+      "insertions": 286,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "79efb85",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "Initial commit",
+      "subject_len": 14,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 2,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "702cb4e",
+      "author": "Sanoj D",
+      "date": "2026-11-18",
+      "subject": "Add CI pipeline, example data, and Streamlit GUI",
+      "subject_len": 48,
+      "body_lines": 13,
+      "files": 25,
+      "insertions": 1695,
+      "checker_problems": [
+        [
+          "R2",
+          "fail",
+          "body is 13 lines (max 5)"
+        ],
+        [
+          "R4",
+          "fail",
+          "25 files, 1695 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "- GitHub Actions CI: lint, unit tests, and an end-to-end smoke test\n  that boots the real service with real embedding/reranker models and\n  checks every example document is retrievable.\n- Example documents in data/examples/ covering every supported type\n  (md, txt, py, pdf, docx, html, csv, json, png, wav, mp4), each about\n  a distinct topic, with a smoke-test question per file.\n- scripts/smoke_test.py: the same end-to-end check CI runs, runnable\n  locally with 'make smoke'.\n- Streamlit GUI in streamlit_app/: Chat, Search, Documents, Health &\n  stats tabs as a client of the service API.\n- Pin av<19: faster-whisper 1.2.1 passes metadata_errors to av.open,\n  which PyAV 19 removed \u2014 with av 19 every audio/video file fails\n  to index."
+    },
+    {
+      "sha": "efc3474",
+      "author": "Sanoj D",
+      "date": "2026-11-18",
+      "subject": "Local RAG: enterprise FastAPI service with ChromaDB, hybrid retrieval, and live folder sync",
+      "subject_len": 91,
+      "body_lines": 10,
+      "files": 62,
+      "insertions": 3941,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 91 chars (max 72)"
+        ],
+        [
+          "R2",
+          "fail",
+          "body is 10 lines (max 5)"
+        ],
+        [
+          "R4",
+          "fail",
+          "62 files, 3941 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "- MVC inside app/ (core, models, repositories, services, api/v1)\n- Chunkers for text (recursive/section/fixed), code, PDF, Word, HTML,\n  CSV/JSON, images (OCR), video/audio (whisper transcription)\n- Retrieval: dense (ChromaDB) + BM25 (k1 1.5, b 0.75) fused with RRF k=60,\n  cross-encoder reranking, optional MMR\n- Folder sync: startup scan with SQLite manifest (SHA-256), live watchdog\n  watcher with debounce, manual sync endpoint\n- Small local models: bge-small-en-v1.5 embeddings, MiniLM-L-6-v2 reranker,\n  Ollama + llama3.2:3b generation behind swappable provider interfaces\n- 48 pytest tests, ruff clean, live smoke test passed (dummy providers)"
+    },
+    {
+      "sha": "aba0432",
+      "author": "Sanoj D",
+      "date": "2026-11-18",
+      "subject": "Initial commit",
+      "subject_len": 14,
+      "body_lines": 0,
+      "files": 0,
+      "insertions": 0,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "7b2c81c",
+      "author": "d-sanoj",
+      "date": "2026-11-17",
+      "subject": "v2 step 3: bigger model \u2014 val 5.262 \u2192 5.225, complete 68% \u2192 70%, good still 0/50",
+      "subject_len": 80,
+      "body_lines": 1,
+      "files": 16,
+      "insertions": 1125,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 80 chars (max 72)"
+        ],
+        [
+          "R4",
+          "fail",
+          "16 files, 1125 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "One lever, capacity: d_model 128 \u2192 256, 6 layers, 8 heads, context 96 words. Same 40k vocab and 50k jokes as step 2, so only capacity changes. 14,997,504 params, 1,500 steps (~4.4 epochs), val 5.225 (train 4.743), complete 70% (35/50), coherent 4/50, joke-shaped 0/50, good 0/50, <unk> in 9/50 samples, 0 duplicates. Capacity is ruled out as the bottleneck at this scale \u2014 2.5x the parameters bought 0.04 of val loss and zero good jokes; the model learns joke surface, not setup \u2192 punchline. Two runtime restarts killed the run (at step 750 and step 1250); it resumed cleanly from the step-500 and step-1000 checkpoints. API default checkpoint is now word-level-50k-big (step 1500), the best so far."
+    },
+    {
+      "sha": "56b8de3",
+      "author": "d-sanoj",
+      "date": "2026-11-16",
+      "subject": "v2 step 2: bigger vocab + more data \u2014 <unk> 44/50 \u2192 6/50, good still 0/50",
+      "subject_len": 73,
+      "body_lines": 0,
+      "files": 11,
+      "insertions": 50831,
+      "checker_problems": [
+        [
+          "R1",
+          "fail",
+          "subject is 73 chars (max 72)"
+        ],
+        [
+          "R4",
+          "fail",
+          "11 files, 50831 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": ""
+    },
+    {
+      "sha": "dee215d",
+      "author": "d-sanoj",
+      "date": "2026-11-16",
+      "subject": "v2 step 1: word-level tokens \u2014 complete 4% \u2192 62%, good still 0/50",
+      "subject_len": 65,
+      "body_lines": 10,
+      "files": 13,
+      "insertions": 1088,
+      "checker_problems": [
+        [
+          "R2",
+          "fail",
+          "body is 10 lines (max 5)"
+        ],
+        [
+          "R4",
+          "fail",
+          "13 files, 1088 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "Word-level tokenizer (10k vocab, context 64 words), same 15k jokes,\nsame-ish model (d_model 128, 4 layers, 2.08M params), 1500 steps.\nVal loss 5.026 (train 4.738); complete 31/50 (62%), coherent 3/50,\njoke-shaped 0/50, good 0/50, duplicates 0%.\n\nThe model learned real words and joke openings, but leans on <unk>\nas a filler: 44/50 samples contain <unk>, and the rubric fails any\nsample with one on coherence. Even the 6 <unk>-free samples are not\njokes. The <unk> crutch is the blocker for the next steps.\n\nTraining was killed by a service restart at step 900; resumed from\nthe step-500 checkpoint (resume support added). Total wall ~40 min."
+    },
+    {
+      "sha": "f1c6dd8",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "v2: judging rubric for good% (locked in before any v2 sample)",
+      "subject_len": 61,
+      "body_lines": 0,
+      "files": 1,
+      "insertions": 45,
+      "checker_problems": [],
+      "body": ""
+    },
+    {
+      "sha": "e194443",
+      "author": "Sanoj D",
+      "date": "2026-11-16",
+      "subject": "v2 infra: word-level tokenizer, top-p decoding, per-config corpus",
+      "subject_len": 65,
+      "body_lines": 14,
+      "files": 11,
+      "insertions": 847,
+      "checker_problems": [
+        [
+          "R2",
+          "fail",
+          "body is 14 lines (max 5)"
+        ],
+        [
+          "R4",
+          "fail",
+          "11 files, 847 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "Add a word tokenizer (10k most frequent words + <pad>/<unk>/<eos>,\neach joke ends with <eos>) alongside the v1 char tokenizer, sharing\none interface so training and generation are tokenizer-agnostic.\nCheckpoints now record which tokenizer they use, so generation loads\nthe right one. Add top-p (nucleus) sampling to generation and the API,\na per-config corpus file override (for the 50k-joke step), and\n--sample-n/--out to the corpus cleaner. New v2 driver\nscripts/run_v2.py runs one lever at a time and saves 50 samples per\nstep verbatim for human judging of good%.\n\nAlso fixes a real bug the new code exposed: the v1 char vocab has no\nnewline, so the old stop check (decoded char == newline) could never\nfire and samples always ran to max_tokens. A stop_token_id of 0 (the\nfallback) is a real token (a space), so it must be None when the stop\ntoken is absent \u2014 otherwise generation stops at the first space."
+    },
+    {
+      "sha": "4fdde77",
+      "author": "d-sanoj",
+      "date": "2026-11-16",
+      "subject": "jokeGPT: tiny character-level GPT trained on 15k short jokes",
+      "subject_len": 60,
+      "body_lines": 10,
+      "files": 61,
+      "insertions": 18155,
+      "checker_problems": [
+        [
+          "R2",
+          "fail",
+          "body is 10 lines (max 5)"
+        ],
+        [
+          "R5",
+          "fail",
+          "generated/accidental file: logs/experiments.log"
+        ],
+        [
+          "R4",
+          "fail",
+          "61 files, 18155 insertions \u2014 split into one logical change per commit"
+        ]
+      ],
+      "body": "Character-level transformer (d_model 128, 4 layers, 4 heads, 819,840\nparams) trained from scratch on CPU on the Short Jokes dataset\n(ysharma/short_jokes, MIT). Main run: 1500 steps, val loss 2.064.\n\nHonest headline: the model learned to spell, not to tell jokes \u2014\nonly 4% of samples finish as a complete sentence. FINDINGS.md has\nthe full numbers, the ablations (data size, training length, model\nsize, temperature), and the best/worst generated jokes verbatim.\n\nFastAPI service (MVC in app/), training as a background job,\ngeneration + experiment endpoints, 13 tests green, ruff clean.\nVisuals in visuals/ (loss, ablations, temperature, architecture)."
+    }
+  ]
+}
