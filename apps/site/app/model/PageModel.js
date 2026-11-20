@@ -34,7 +34,7 @@ export class PageModel {
         };
         word.l.forEach((letter) => add(letter, word.w || 1)); // line weight: bold words are drawn heavier
         (word.u || []).forEach(([a, b, v]) => add(lineLetter(a, b, v), word.uw || 1, true, true)); // underline rows
-        if (word.h) this.links.push({ href: word.h, word: wordNo, box: boxOf(mine) });
+        if (word.h) this.links.push({ href: word.h, word: wordNo, box: boxOf(mine), label: labelFor(word.h) });
         else if (word.peek) this.links.push({ href: null, peek: word.peek, word: wordNo, box: boxOf(mine) }); // hovering it shows a picture
         wordNo++;
       }
@@ -61,4 +61,28 @@ export class PageModel {
       return st;
     });
   }
+}
+
+// A name for a link, for a screen reader: the address says what it is. (The words
+// themselves carry no text — they are sine letters — so the name comes from the href.)
+function labelFor(href) {
+  if (href[0] === '#') return 'Back to top';
+  if (/^mailto:/i.test(href)) return `Email ${href.slice(7)}`;
+  if (href === '../blog/') return 'Blog';
+  const post = /^\.\.\/blog\/([\w-]+)\/$/.exec(href);
+  if (post) {
+    const s = post[1].replaceAll('-', ' ');
+    return s[0].toUpperCase() + s.slice(1);
+  }
+  let u;
+  try { u = new URL(href); } catch { return href; }
+  if (u.hostname === 'github.com') {
+    const parts = u.pathname.split('/').filter(Boolean);
+    const q = u.searchParams.get('q');
+    if (q) return `GitHub repositories matching "${q}"`;
+    if (parts.length <= 1) return 'Sanoj D on GitHub';
+    return `${parts[1]} on GitHub`;
+  }
+  if (u.hostname === 'epigcorpus.sanoj.dev') return 'EpigCorpus live demo';
+  return href;
 }
