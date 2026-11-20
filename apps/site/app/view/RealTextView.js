@@ -2,6 +2,8 @@
 // a click follows them (the "for accessible content click here" in the About section). The plain page marks them (data-sine-real),
 // the measuring tool records where each piece sits, and here each piece is put at that place, in the page's own font, size and colour,
 // in the gap the sine letters leave. They are one paragraph for a screen reader, however many rows they take on the screen.
+// The links drawn in sine waves get invisible anchors over them too, so the browser's own link behaviour works on them: right-click
+// to open in a new tab, middle-click, and the keyboard. The anchors carry no text of their own — what you see is still only sine waves.
 import { LINK_YELLOW } from '../config.js';
 
 export class RealTextView {
@@ -55,7 +57,21 @@ export class RealTextView {
       this.root.appendChild(p);
     }
     for (const g of this.links) g.el.setAttribute('aria-label', g.frags.map(({ f }) => f.t.trim()).join(' ')); // its name for a screen reader: its own words
-    if (this.items.length || this.links.length) document.body.appendChild(this.root);
+    // an invisible anchor over every link drawn in sine waves (a link in real text already has one above, so it is skipped).
+    // Other sites open in a new tab, as a click does today; pages of this site stay in this tab.
+    this.linkAnchors = []; // { el, box }: the anchor and the link's box in page ems
+    for (const l of model.links) {
+      if (!l.href || l.real) continue;
+      const a = document.createElement('a');
+      a.href = l.href;
+      a.className = 'sine-link';
+      a.setAttribute('aria-label', l.label || l.href);
+      a.style.cssText = 'position:absolute;background:transparent;';
+      if (/^https?:/i.test(l.href)) { a.target = '_blank'; a.rel = 'noopener'; }
+      this.root.appendChild(a);
+      this.linkAnchors.push({ el: a, box: l.box });
+    }
+    if (this.items.length || this.links.length || this.linkAnchors.length) document.body.appendChild(this.root);
   }
 
   // put every piece where the sine letters around it expect it (call after the page's geometry changes)
@@ -83,6 +99,12 @@ export class RealTextView {
         el.style.top = ((top - f.v) * em).toFixed(2) + 'px';
         style(el, f, g.r);
       }
+    }
+    for (const { el, box } of this.linkAnchors) { // an invisible anchor sits exactly over its link's box
+      el.style.left = (ox + box[0] * em).toFixed(2) + 'px';
+      el.style.top = (oy - box[3] * em).toFixed(2) + 'px';
+      el.style.width = ((box[2] - box[0]) * em).toFixed(2) + 'px';
+      el.style.height = ((box[3] - box[1]) * em).toFixed(2) + 'px';
     }
   }
 
