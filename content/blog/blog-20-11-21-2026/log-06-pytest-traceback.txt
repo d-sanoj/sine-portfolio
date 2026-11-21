@@ -1,0 +1,20 @@
+.F....                                                                   [100%]
+=================================== FAILURES ===================================
+______________________ test_bm25_ranks_matching_doc_first ______________________
+
+    def test_bm25_ranks_matching_doc_first():
+        chunks = _chunks()
+        scores = BM25(chunks).scores(tokenize("cat sat"))
+>       assert scores[0] < scores[1]  # BROKEN: flipped for the corpus
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert np.float64(1.4508328822574619) < np.float64(0.4700036292457356)
+
+tests/test_scorers.py:38: AssertionError
+=============================== warnings summary ===============================
+../../../home/hatch/workspace/jokeGPT/.venv/lib/python3.12/site-packages/starlette/testclient.py:51
+  /home/hatch/workspace/jokeGPT/.venv/lib/python3.12/site-packages/starlette/testclient.py:51: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_scorers.py::test_bm25_ranks_matching_doc_first - assert np....

@@ -1,0 +1,104 @@
+{
+  "corpus": "10 failing logs, 975 lines. 4 verbatim GitHub Actions logs (gh run view --log, 2026-11-21) and 6 reproductions: the real tool run on a real repo copy with a real defect introduced. The defect class in each reproduction is one that actually failed in these repos before; the LearnLLM mypy case is the exact error from that repo's capstone-ci. Nothing was edited in the real repos.",
+  "logs": [
+    {
+      "cause": "Chrome did not open a debugging port in the Build step; the change itself passed every other step. Environment/tooling failure, fixed the same day by PR #29, which hardened the Chrome launcher (Chrome for Testing, --remote-debugging-port=0, 60s wait, 3 retries).",
+      "class": "environment",
+      "file": "log-01-chrome-port.txt",
+      "ground_truth": [
+        "Chrome did not open a debugging port"
+      ],
+      "source": "GitHub Actions run 44135960638, sine-portfolio CI, 2026-11-17 (merge PR #28). Verbatim download."
+    },
+    {
+      "cause": "check:blog failed because img/cover.png did not exist yet: the .md was committed before the images (two-commit browser upload). Fixed by the images commit; the next run was green.",
+      "class": "config",
+      "file": "log-02-missing-cover-18.txt",
+      "ground_truth": [
+        "cover.png",
+        "not found"
+      ],
+      "source": "GitHub Actions run 44315594718, sine-portfolio CI, 2026-11-18 (blog PR #30). Verbatim download."
+    },
+    {
+      "cause": "Same cause as log-02: cover.png missing at the intermediate commit. The same failure three mornings running.",
+      "class": "config",
+      "file": "log-03-missing-cover-19.txt",
+      "ground_truth": [
+        "cover.png",
+        "not found"
+      ],
+      "source": "GitHub Actions run 44542602124, sine-portfolio CI, 2026-11-19 (blog PR #32). Verbatim download."
+    },
+    {
+      "cause": "Same cause as log-02: cover.png missing at the intermediate commit.",
+      "class": "config",
+      "file": "log-04-missing-cover-20.txt",
+      "ground_truth": [
+        "cover.png",
+        "not found"
+      ],
+      "source": "GitHub Actions run 44749632166, sine-portfolio CI, 2026-11-20 (blog PR #33). Verbatim download."
+    },
+    {
+      "cause": "PyYAML ships no type stubs and types-PyYAML was not installed. Fixed in LearnLLM by adding types-PyYAML to the dev extras.",
+      "class": "config",
+      "file": "log-05-mypy-stubs.txt",
+      "ground_truth": [
+        "Library stubs not installed for \"yaml\""
+      ],
+      "source": "Reproduction of the LearnLLM capstone-ci failure: mypy 2.4.1 on a file importing yaml, PyYAML 6.0.3 installed, types-PyYAML not installed. The exact error that failed LearnLLM's capstone-ci."
+    },
+    {
+      "cause": "The flipped assertion scores[0] < scores[1] fails: 1.45 is not < 0.47. A defect in the changed line.",
+      "class": "defect",
+      "file": "log-06-pytest-traceback.txt",
+      "ground_truth": [
+        "test_scorers.py:38",
+        "AssertionError"
+      ],
+      "source": "Reproduction: retriever-doc-answer tests with one ordering assertion flipped (test_scorers.py:38), pytest run in the jokeGPT venv."
+    },
+    {
+      "cause": "Two real violations; the first is the unused import os at messy.py:2.",
+      "class": "defect",
+      "file": "log-07-ruff.txt",
+      "ground_truth": [
+        "F401",
+        "messy.py:2"
+      ],
+      "source": "Reproduction: ruff check on a file with an unused import (F401) and an undefined name (F821)."
+    },
+    {
+      "cause": "SyntaxError in scripts/build.js:13 (a stray ';'). A defect in the build script.",
+      "class": "defect",
+      "file": "log-08-node-syntax.txt",
+      "ground_truth": [
+        "SyntaxError",
+        "build.js:13"
+      ],
+      "source": "Reproduction: sine-portfolio copy with a syntax error injected into scripts/build.js, npm run build:dist."
+    },
+    {
+      "cause": "package.json and package-lock.json disagree about esbuild's version, so npm ci refuses (EUSAGE). Fixed by regenerating the lockfile.",
+      "class": "config",
+      "file": "log-09-npm-ci-bad-version.txt",
+      "ground_truth": [
+        "esbuild@99.99.99",
+        "does not satisfy"
+      ],
+      "source": "Reproduction: sine-portfolio package.json/package-lock.json with the lock's esbuild version changed to 99.99.99 without the manifest, npm ci."
+    },
+    {
+      "cause": "ModuleNotFoundError for _missing_dep_xyz imported at tests/conftest.py:1; every test errors at setup. A defect (a bad import line), not a missing package.",
+      "class": "defect",
+      "file": "log-10-pytest-cascade.txt",
+      "ground_truth": [
+        "ModuleNotFoundError",
+        "_missing_dep_xyz"
+      ],
+      "source": "Reproduction: retriever-doc-answer tests with a bad import added to tests/conftest.py, pytest run in the jokeGPT venv. One broken import fails every test."
+    }
+  ],
+  "scoring": "A method 'names the cause' only if the text it surfaces contains every ground-truth substring. Ground truth is the root cause as established by the fix that actually resolved the failure."
+}

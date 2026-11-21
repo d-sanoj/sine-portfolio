@@ -1,0 +1,17 @@
+messy.py:2:8: F401 [*] `os` imported but unused
+  |
+1 | """A file with real lint violations: an unused import and an undefined name."""
+2 | import os  # unused
+  |        ^^ F401
+  |
+  = help: Remove unused import: `os`
+
+messy.py:6:22: F821 Undefined name `undefined_name`
+  |
+5 | def greet(name):
+6 |     return f"Hello, {undefined_name}!"
+  |                      ^^^^^^^^^^^^^^ F821
+  |
+
+Found 2 errors.
+[*] 1 fixable with the `--fix` option.

@@ -1,0 +1,256 @@
+{
+  "summary": {
+    "tail": {
+      "correct": 1,
+      "total": 10,
+      "pct": 10
+    },
+    "grep-first": {
+      "correct": 5,
+      "total": 10,
+      "pct": 50
+    },
+    "grep-last": {
+      "correct": 2,
+      "total": 10,
+      "pct": 20
+    },
+    "triage": {
+      "correct": 10,
+      "total": 10,
+      "pct": 100
+    }
+  },
+  "logs": [
+    {
+      "log": "log-01-chrome-port.txt",
+      "cause": "Chrome did not open a debugging port in the Build step; the change itself passed every other step. Environment/tooling failure, fixed the same day by PR #29, which hardened the Chrome launcher (Chrome for Testing, --remote-debugging-port=0, 60s wait, 3 retries).",
+      "class_true": "environment",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "CI\tBuild\t2026-11-17T17:21:24.3989741Z ##[error]Process completed with exit code 1."
+        },
+        "grep-first": {
+          "ok": false,
+          "surfaced": "CI\tBuild\t2026-11-17T17:21:24.3989741Z ##[error]Process completed with exit code 1."
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "CI\tBuild\t2026-11-17T17:21:24.3989741Z ##[error]Process completed with exit code 1."
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "Chrome did not open a debugging port"
+        }
+      }
+    },
+    {
+      "log": "log-02-missing-cover-18.txt",
+      "cause": "check:blog failed because img/cover.png did not exist yet: the .md was committed before the images (two-commit browser upload). Fixed by the images commit; the next run was green.",
+      "class_true": "config",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-18T13:37:54.6782155Z ##[error]Process completed with exit code 1."
+        },
+        "grep-first": {
+          "ok": true,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-18T13:37:54.6225999Z BlogError: content/blog/blog-17-11-18-2026/chunk-by-section-not-by-word-count.md: image \"img/cover.png\" was not found at content/blog/blog-17-11-18-2026/img/cover.png"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-18T13:37:54.6782155Z ##[error]Process completed with exit code 1."
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "BlogError: content/blog/blog-17-11-18-2026/chunk-by-section-not-by-word-count.md: image \"img/cover.png\" was not found at content/blog/blog-17-11-18-2026/img/cover.png | content/blog/blog-17-11-18-2026/chunk-by-section-not-by-word-count.md"
+        }
+      }
+    },
+    {
+      "log": "log-03-missing-cover-19.txt",
+      "cause": "Same cause as log-02: cover.png missing at the intermediate commit. The same failure three mornings running.",
+      "class_true": "config",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-19T14:20:25.2366978Z ##[error]Process completed with exit code 1."
+        },
+        "grep-first": {
+          "ok": true,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-19T14:20:25.1530636Z BlogError: content/blog/blog-18-11-19-2026/agent-commit-messages-measured.md: image \"img/cover.png\" was not found at content/blog/blog-18-11-19-2026/img/cover.png"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-19T14:20:25.2366978Z ##[error]Process completed with exit code 1."
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "BlogError: content/blog/blog-18-11-19-2026/agent-commit-messages-measured.md: image \"img/cover.png\" was not found at content/blog/blog-18-11-19-2026/img/cover.png | content/blog/blog-18-11-19-2026/agent-commit-messages-measured.md"
+        }
+      }
+    },
+    {
+      "log": "log-04-missing-cover-20.txt",
+      "cause": "Same cause as log-02: cover.png missing at the intermediate commit.",
+      "class_true": "config",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-20T14:02:38.6699505Z ##[error]Process completed with exit code 1."
+        },
+        "grep-first": {
+          "ok": true,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-20T14:02:38.5848795Z BlogError: content/blog/blog-19-11-20-2026/embeddings-vs-bm25-measured.md: image \"img/cover.png\" was not found at content/blog/blog-19-11-20-2026/img/cover.png"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "CI\tUNKNOWN STEP\t2026-11-20T14:02:38.6699505Z ##[error]Process completed with exit code 1."
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "BlogError: content/blog/blog-19-11-20-2026/embeddings-vs-bm25-measured.md: image \"img/cover.png\" was not found at content/blog/blog-19-11-20-2026/img/cover.png | content/blog/blog-19-11-20-2026/embeddings-vs-bm25-measured.md"
+        }
+      }
+    },
+    {
+      "log": "log-05-mypy-stubs.txt",
+      "cause": "PyYAML ships no type stubs and types-PyYAML was not installed. Fixed in LearnLLM by adding types-PyYAML to the dev extras.",
+      "class_true": "config",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "Found 1 error in 1 file (checked 1 source file)"
+        },
+        "grep-first": {
+          "ok": true,
+          "surfaced": "check_yaml.py:3: error: Library stubs not installed for \"yaml\"  [import-untyped]"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "Found 1 error in 1 file (checked 1 source file)"
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "check_yaml.py:3: error: Library stubs not installed for \"yaml\"  [import-untyped] | check_yaml.py:3"
+        }
+      }
+    },
+    {
+      "log": "log-06-pytest-traceback.txt",
+      "cause": "The flipped assertion scores[0] < scores[1] fails: 1.45 is not < 0.47. A defect in the changed line.",
+      "class_true": "defect",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "FAILED tests/test_scorers.py::test_bm25_ranks_matching_doc_first - assert np...."
+        },
+        "grep-first": {
+          "ok": true,
+          "surfaced": "tests/test_scorers.py:38: AssertionError"
+        },
+        "grep-last": {
+          "ok": true,
+          "surfaced": "tests/test_scorers.py:38: AssertionError"
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "tests/test_scorers.py:38: AssertionError | tests/test_scorers.py:38"
+        }
+      }
+    },
+    {
+      "log": "log-07-ruff.txt",
+      "cause": "Two real violations; the first is the unused import os at messy.py:2.",
+      "class_true": "defect",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "Found 2 errors."
+        },
+        "grep-first": {
+          "ok": false,
+          "surfaced": "Found 2 errors."
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "Found 2 errors."
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "messy.py:2:8: F401 [*] `os` imported but unused | messy.py:2:8"
+        }
+      }
+    },
+    {
+      "log": "log-08-node-syntax.txt",
+      "cause": "SyntaxError in scripts/build.js:13 (a stray ';'). A defect in the build script.",
+      "class_true": "defect",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "SyntaxError: Unexpected token ';'"
+        },
+        "grep-first": {
+          "ok": false,
+          "surfaced": "SyntaxError: Unexpected token ';'"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "SyntaxError: Unexpected token ';'"
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "SyntaxError: Unexpected token ';' | /home/hatch/workspace/goals/daily-ai-ml-and-data-blog/hidden_files/log-corpus/repro-sine/scripts/build.js:13"
+        }
+      }
+    },
+    {
+      "log": "log-09-npm-ci-bad-version.txt",
+      "cause": "package.json and package-lock.json disagree about esbuild's version, so npm ci refuses (EUSAGE). Fixed by regenerating the lockfile.",
+      "class_true": "config",
+      "results": {
+        "tail": {
+          "ok": false,
+          "surfaced": "npm error A complete log of this run can be found in: /home/hatch/.npm/_logs/2026-11-21T12_57_09_424Z-debug-0.log"
+        },
+        "grep-first": {
+          "ok": false,
+          "surfaced": "npm error code EUSAGE"
+        },
+        "grep-last": {
+          "ok": false,
+          "surfaced": "npm error A complete log of this run can be found in: /home/hatch/.npm/_logs/2026-11-21T12_57_09_424Z-debug-0.log"
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "npm error Invalid: lock file's esbuild@99.99.99 does not satisfy esbuild@0.24.2 | package.json"
+        }
+      }
+    },
+    {
+      "log": "log-10-pytest-cascade.txt",
+      "cause": "ModuleNotFoundError for _missing_dep_xyz imported at tests/conftest.py:1; every test errors at setup. A defect (a bad import line), not a missing package.",
+      "class_true": "defect",
+      "results": {
+        "tail": {
+          "ok": true,
+          "surfaced": "E   ModuleNotFoundError: No module named '_missing_dep_xyz'"
+        },
+        "grep-first": {
+          "ok": false,
+          "surfaced": "ImportError while loading conftest '/home/hatch/workspace/goals/daily-ai-ml-and-data-blog/hidden_files/log-corpus/repro/retriever-cascade/tests/conftest.py'."
+        },
+        "grep-last": {
+          "ok": true,
+          "surfaced": "E   ModuleNotFoundError: No module named '_missing_dep_xyz'"
+        },
+        "triage": {
+          "ok": true,
+          "surfaced": "E   ModuleNotFoundError: No module named '_missing_dep_xyz' | tests/conftest.py:1"
+        }
+      }
+    }
+  ]
+}
