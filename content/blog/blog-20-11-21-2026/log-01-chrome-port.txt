@@ -1,0 +1,185 @@
+CI	Set up job	﻿2026-11-17T17:20:54.9127798Z Current runner version: '2.338.2'
+CI	Set up job	2026-11-17T17:20:54.9156663Z ##[group]Runner Image Provisioner
+CI	Set up job	2026-11-17T17:20:54.9157611Z Hosted Compute Agent
+CI	Set up job	2026-11-17T17:20:54.9158226Z Version: 20261103.629
+CI	Set up job	2026-11-17T17:20:54.9158981Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+CI	Set up job	2026-11-17T17:20:54.9159728Z Build Date: 2026-11-03T17:26:59Z
+CI	Set up job	2026-11-17T17:20:54.9160408Z Worker ID: {72dce3a1-d1f4-4526-8ae2-329baf6b5f77}
+CI	Set up job	2026-11-17T17:20:54.9161186Z Region: westus
+CI	Set up job	2026-11-17T17:20:54.9161766Z Cloud: Azure
+CI	Set up job	2026-11-17T17:20:54.9162605Z ##[endgroup]
+CI	Set up job	2026-11-17T17:20:54.9164696Z ##[group]Operating System
+CI	Set up job	2026-11-17T17:20:54.9165400Z Ubuntu
+CI	Set up job	2026-11-17T17:20:54.9166039Z 26.04.1
+CI	Set up job	2026-11-17T17:20:54.9166552Z LTS
+CI	Set up job	2026-11-17T17:20:54.9167135Z ##[endgroup]
+CI	Set up job	2026-11-17T17:20:54.9167713Z ##[group]Runner Image
+CI	Set up job	2026-11-17T17:20:54.9168329Z Image: ubuntu-26.04
+CI	Set up job	2026-11-17T17:20:54.9169349Z Version: 20261111.196.1
+CI	Set up job	2026-11-17T17:20:54.9170482Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+CI	Set up job	2026-11-17T17:20:54.9172281Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+CI	Set up job	2026-11-17T17:20:54.9173647Z ##[endgroup]
+CI	Set up job	2026-11-17T17:20:54.9175113Z ##[group]GITHUB_TOKEN Permissions
+CI	Set up job	2026-11-17T17:20:54.9177400Z Contents: read
+CI	Set up job	2026-11-17T17:20:54.9178140Z Metadata: read
+CI	Set up job	2026-11-17T17:20:54.9178707Z ##[endgroup]
+CI	Set up job	2026-11-17T17:20:54.9180944Z Secret source: Actions
+CI	Set up job	2026-11-17T17:20:54.9181977Z Cache mode: write
+CI	Set up job	2026-11-17T17:20:54.9183641Z Prepare workflow directory
+CI	Set up job	2026-11-17T17:20:54.9589705Z Prepare all required actions
+CI	Set up job	2026-11-17T17:20:54.9657370Z Getting action download info
+CI	Set up job	2026-11-17T17:20:55.3772217Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+CI	Set up job	2026-11-17T17:20:55.4946143Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+CI	Set up job	2026-11-17T17:20:55.6190722Z Download action repository 'lycheeverse/lychee-action@v2' (SHA:e7477775783ea5526144ba13e8db5eec57747ce8)
+CI	Set up job	2026-11-17T17:20:56.0139840Z Complete job name: CI
+CI	Checkout	﻿2026-11-17T17:20:56.1098375Z ##[group]Run actions/checkout@v5
+CI	Checkout	2026-11-17T17:20:56.1099412Z with:
+CI	Checkout	2026-11-17T17:20:56.1099933Z   repository: d-sanoj/sine-portfolio
+CI	Checkout	2026-11-17T17:20:56.1104446Z   token: ***
+CI	Checkout	2026-11-17T17:20:56.1104927Z   ssh-strict: true
+CI	Checkout	2026-11-17T17:20:56.1105458Z   ssh-user: git
+CI	Checkout	2026-11-17T17:20:56.1105942Z   persist-credentials: true
+CI	Checkout	2026-11-17T17:20:56.1106477Z   clean: true
+CI	Checkout	2026-11-17T17:20:56.1106956Z   sparse-checkout-cone-mode: true
+CI	Checkout	2026-11-17T17:20:56.1107523Z   fetch-depth: 1
+CI	Checkout	2026-11-17T17:20:56.1107990Z   fetch-tags: false
+CI	Checkout	2026-11-17T17:20:56.1108473Z   show-progress: true
+CI	Checkout	2026-11-17T17:20:56.1108965Z   lfs: false
+CI	Checkout	2026-11-17T17:20:56.1109421Z   submodules: false
+CI	Checkout	2026-11-17T17:20:56.1109936Z   set-safe-directory: true
+CI	Checkout	2026-11-17T17:20:56.1110495Z   allow-unsafe-pr-checkout: false
+CI	Checkout	2026-11-17T17:20:56.1111378Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:56.3811643Z Syncing repository: d-sanoj/sine-portfolio
+CI	Checkout	2026-11-17T17:20:56.3815443Z ##[group]Getting Git version info
+CI	Checkout	2026-11-17T17:20:56.3816851Z Working directory is '/home/runner/work/sine-portfolio/sine-portfolio'
+CI	Checkout	2026-11-17T17:20:56.3818280Z [command]/usr/bin/git version
+CI	Checkout	2026-11-17T17:20:56.3829225Z git version 2.56.1
+CI	Checkout	2026-11-17T17:20:56.3853121Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:56.3871692Z Temporarily overriding HOME='/home/runner/work/_temp/80ba537a-d2b9-4fe1-87e4-75aeeec6c6d4' before making global git config changes
+CI	Checkout	2026-11-17T17:20:56.3874737Z Adding repository directory to the temporary git global config as a safe directory
+CI	Checkout	2026-11-17T17:20:56.3877944Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sine-portfolio/sine-portfolio
+CI	Checkout	2026-11-17T17:20:56.3950505Z Deleting the contents of '/home/runner/work/sine-portfolio/sine-portfolio'
+CI	Checkout	2026-11-17T17:20:56.3956817Z ##[group]Initializing the repository
+CI	Checkout	2026-11-17T17:20:56.3963054Z [command]/usr/bin/git init /home/runner/work/sine-portfolio/sine-portfolio
+CI	Checkout	2026-11-17T17:20:56.4078687Z hint: Using 'master' as the name for the initial branch. This default branch name
+CI	Checkout	2026-11-17T17:20:56.4081520Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+CI	Checkout	2026-11-17T17:20:56.4084013Z hint: to use in all of your new repositories, which will suppress this warning,
+CI	Checkout	2026-11-17T17:20:56.4085524Z hint: call:
+CI	Checkout	2026-11-17T17:20:56.4086334Z hint:
+CI	Checkout	2026-11-17T17:20:56.4087322Z hint: 	git config --global init.defaultBranch <name>
+CI	Checkout	2026-11-17T17:20:56.4088746Z hint:
+CI	Checkout	2026-11-17T17:20:56.4090059Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+CI	Checkout	2026-11-17T17:20:56.4092309Z hint: 'development'. The just-created branch can be renamed via this command:
+CI	Checkout	2026-11-17T17:20:56.4096651Z hint:
+CI	Checkout	2026-11-17T17:20:56.4097983Z hint: 	git branch -m <name>
+CI	Checkout	2026-11-17T17:20:56.4099326Z hint:
+CI	Checkout	2026-11-17T17:20:56.4101102Z hint: Disable this message with "git config set advice.defaultBranchName false"
+CI	Checkout	2026-11-17T17:20:56.4102935Z Initialized empty Git repository in /home/runner/work/sine-portfolio/sine-portfolio/.git/
+CI	Checkout	2026-11-17T17:20:56.4106120Z [command]/usr/bin/git remote add origin https://github.com/d-sanoj/sine-portfolio
+CI	Checkout	2026-11-17T17:20:56.4169501Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:56.4171404Z ##[group]Disabling automatic garbage collection
+CI	Checkout	2026-11-17T17:20:56.4173110Z [command]/usr/bin/git config --local gc.auto 0
+CI	Checkout	2026-11-17T17:20:56.4213231Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:56.4214213Z ##[group]Setting up auth
+CI	Checkout	2026-11-17T17:20:56.4221856Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+CI	Checkout	2026-11-17T17:20:56.4263661Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+CI	Checkout	2026-11-17T17:20:56.4750028Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+CI	Checkout	2026-11-17T17:20:56.4790472Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+CI	Checkout	2026-11-17T17:20:56.5085021Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+CI	Checkout	2026-11-17T17:20:56.5124984Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+CI	Checkout	2026-11-17T17:20:56.5409852Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+CI	Checkout	2026-11-17T17:20:56.5451374Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:56.5453387Z ##[group]Fetching the repository
+CI	Checkout	2026-11-17T17:20:56.5463784Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4a710cdb3c3f5e987a49d4cfbb4495d306e1b3b8:refs/remotes/origin/main
+CI	Checkout	2026-11-17T17:20:57.4886389Z From https://github.com/d-sanoj/sine-portfolio
+CI	Checkout	2026-11-17T17:20:57.4888300Z  * [new ref]         4a710cdb3c3f5e987a49d4cfbb4495d306e1b3b8 -> origin/main
+CI	Checkout	2026-11-17T17:20:57.4904703Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:57.4906923Z ##[group]Determining the checkout info
+CI	Checkout	2026-11-17T17:20:57.4908436Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:57.4909425Z [command]/usr/bin/git sparse-checkout disable
+CI	Checkout	2026-11-17T17:20:57.4961265Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+CI	Checkout	2026-11-17T17:20:57.4993506Z ##[group]Checking out the ref
+CI	Checkout	2026-11-17T17:20:57.4997142Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+CI	Checkout	2026-11-17T17:20:57.5639374Z Switched to a new branch 'main'
+CI	Checkout	2026-11-17T17:20:57.5644406Z branch 'main' set up to track 'origin/main'.
+CI	Checkout	2026-11-17T17:20:57.5656092Z ##[endgroup]
+CI	Checkout	2026-11-17T17:20:57.5706678Z [command]/usr/bin/git log -1 --format=%H
+CI	Checkout	2026-11-17T17:20:57.5733773Z 4a710cdb3c3f5e987a49d4cfbb4495d306e1b3b8
+CI	Set up Node.js	﻿2026-11-17T17:20:57.6230389Z ##[group]Run actions/setup-node@v6
+CI	Set up Node.js	2026-11-17T17:20:57.6231643Z with:
+CI	Set up Node.js	2026-11-17T17:20:57.6232772Z   node-version: lts/*
+CI	Set up Node.js	2026-11-17T17:20:57.6233760Z   cache: npm
+CI	Set up Node.js	2026-11-17T17:20:57.6234671Z   check-latest: false
+CI	Set up Node.js	2026-11-17T17:20:57.6245244Z   token: ***
+CI	Set up Node.js	2026-11-17T17:20:57.6246229Z   package-manager-cache: true
+CI	Set up Node.js	2026-11-17T17:20:57.6247336Z ##[endgroup]
+CI	Set up Node.js	2026-11-17T17:20:57.7697744Z Attempt to resolve LTS alias from manifest...
+CI	Set up Node.js	2026-11-17T17:20:58.4198220Z Attempting to download 26...
+CI	Set up Node.js	2026-11-17T17:20:58.4204864Z Acquiring 26.13.1 - x64 from https://github.com/actions/node-versions/releases/download/26.13.1-43134154182/node-26.13.1-linux-x64.tar.gz
+CI	Set up Node.js	2026-11-17T17:20:58.8433424Z Extracting ...
+CI	Set up Node.js	2026-11-17T17:20:58.8588889Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/7ba4e174-20a3-41e0-ab0e-76582c1c8e50 -f /home/runner/work/_temp/d2d12a77-024d-415f-9964-40aa6d0f070e
+CI	Set up Node.js	2026-11-17T17:20:59.7158425Z Adding to the cache ...
+CI	Set up Node.js	2026-11-17T17:21:01.4612978Z ##[group]Environment details
+CI	Set up Node.js	2026-11-17T17:21:01.7285775Z node: v26.13.1
+CI	Set up Node.js	2026-11-17T17:21:01.7286888Z npm: 11.20.0
+CI	Set up Node.js	2026-11-17T17:21:01.7288172Z yarn: 1.22.22
+CI	Set up Node.js	2026-11-17T17:21:01.7289519Z ##[endgroup]
+CI	Set up Node.js	2026-11-17T17:21:01.7323465Z [command]/opt/hostedtoolcache/node/26.13.1/x64/bin/npm config get cache
+CI	Set up Node.js	2026-11-17T17:21:01.8430081Z /home/runner/.npm
+CI	Set up Node.js	2026-11-17T17:21:02.1314301Z npm cache is not found
+CI	Install dependencies	﻿2026-11-17T17:21:02.1557315Z ##[group]Run npm ci
+CI	Install dependencies	2026-11-17T17:21:02.1557665Z ^[[36;1mnpm ci^[[0m
+CI	Install dependencies	2026-11-17T17:21:02.1617772Z shell: /usr/bin/bash -e {0}
+CI	Install dependencies	2026-11-17T17:21:02.1618112Z ##[endgroup]
+CI	Install dependencies	2026-11-17T17:21:02.9473620Z 
+CI	Install dependencies	2026-11-17T17:21:02.9480493Z added 3 packages, and audited 4 packages in 715ms
+CI	Install dependencies	2026-11-17T17:21:02.9511684Z 
+CI	Install dependencies	2026-11-17T17:21:02.9512526Z 1 moderate severity vulnerability
+CI	Install dependencies	2026-11-17T17:21:02.9513047Z 
+CI	Install dependencies	2026-11-17T17:21:02.9513645Z To address all issues (including breaking changes), run:
+CI	Install dependencies	2026-11-17T17:21:02.9514446Z   npm audit fix --force
+CI	Install dependencies	2026-11-17T17:21:02.9514788Z 
+CI	Install dependencies	2026-11-17T17:21:02.9515073Z Run `npm audit` for details.
+CI	Install dependencies	2026-11-17T17:21:02.9523096Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+CI	Install dependencies	2026-11-17T17:21:02.9524623Z npm warn install-scripts   esbuild@0.24.0 (postinstall: node install.js)
+CI	Install dependencies	2026-11-17T17:21:02.9525619Z npm warn install-scripts
+CI	Install dependencies	2026-11-17T17:21:02.9526638Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+CI	Check blog	﻿2026-11-17T17:21:03.0053468Z ##[group]Run npm run check:blog
+CI	Check blog	2026-11-17T17:21:03.0053861Z ^[[36;1mnpm run check:blog^[[0m
+CI	Check blog	2026-11-17T17:21:03.0104662Z shell: /usr/bin/bash -e {0}
+CI	Check blog	2026-11-17T17:21:03.0104950Z ##[endgroup]
+CI	Check blog	2026-11-17T17:21:03.1238359Z 
+CI	Check blog	2026-11-17T17:21:03.1239230Z > sine-portfolio@1.0.0 check:blog
+CI	Check blog	2026-11-17T17:21:03.1239991Z > node scripts/check-blog.js
+CI	Check blog	2026-11-17T17:21:03.1240400Z 
+CI	Check blog	2026-11-17T17:21:03.1674143Z ok  missing alt -> content/blog/blog-1-01-01-2026/no-alt.md:7: image "img/dot.png" has no alt text.
+CI	Check blog	2026-11-17T17:21:03.1704000Z ok  decorative image
+CI	Check blog	2026-11-17T17:21:03.1781373Z ok  home lists the latest 3
+CI	Check blog	2026-11-17T17:21:03.3523417Z ok  post links, dates and posters
+CI	Check blog	2026-11-17T17:21:03.8913504Z ok  build writes pages, posters and feed
+CI	Build	﻿2026-11-17T17:21:03.9201408Z ##[group]Run npm run build:dist
+CI	Build	2026-11-17T17:21:03.9201935Z ^[[36;1mnpm run build:dist^[[0m
+CI	Build	2026-11-17T17:21:03.9266594Z shell: /usr/bin/bash -e {0}
+CI	Build	2026-11-17T17:21:03.9267020Z ##[endgroup]
+CI	Build	2026-11-17T17:21:04.0411689Z 
+CI	Build	2026-11-17T17:21:04.0413018Z > sine-portfolio@1.0.0 build:dist
+CI	Build	2026-11-17T17:21:04.0413827Z > node scripts/build.js --dist
+CI	Build	2026-11-17T17:21:04.0414248Z 
+CI	Build	2026-11-17T17:21:04.3098930Z Measuring the plain page for the sine layout...
+CI	Build	2026-11-17T17:21:24.3824096Z Chrome did not open a debugging port
+CI	Build	2026-11-17T17:21:24.3989741Z ##[error]Process completed with exit code 1.
+CI	Post Checkout	﻿2026-11-17T17:21:24.4138302Z Post job cleanup.
+CI	Post Checkout	2026-11-17T17:21:24.5065878Z [command]/usr/bin/git version
+CI	Post Checkout	2026-11-17T17:21:24.5117784Z git version 2.56.1
+CI	Post Checkout	2026-11-17T17:21:24.5164926Z Temporarily overriding HOME='/home/runner/work/_temp/2861c043-e4d1-4dea-8509-f621af637b7a' before making global git config changes
+CI	Post Checkout	2026-11-17T17:21:24.5166554Z Adding repository directory to the temporary git global config as a safe directory
+CI	Post Checkout	2026-11-17T17:21:24.5170534Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sine-portfolio/sine-portfolio
+CI	Post Checkout	2026-11-17T17:21:24.5223553Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+CI	Post Checkout	2026-11-17T17:21:24.5255799Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+CI	Post Checkout	2026-11-17T17:21:24.5582917Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+CI	Post Checkout	2026-11-17T17:21:24.5613819Z http.https://github.com/.extraheader
+CI	Post Checkout	2026-11-17T17:21:24.5628897Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+CI	Post Checkout	2026-11-17T17:21:24.5670400Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+CI	Post Checkout	2026-11-17T17:21:24.6021207Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+CI	Post Checkout	2026-11-17T17:21:24.6041904Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+CI	Complete job	﻿2026-11-17T17:21:24.6552305Z Cleaning up orphan processes

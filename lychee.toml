@@ -13,3 +13,8 @@ fallback_extensions = ["html"]
 # page; on the plain page it would resolve to /boring/boring/, which does
 # not exist. Exclude that false positive.
 exclude = ['/dist/boring/boring/?$']
+
+# Downloadable .txt files (build logs, corpora) are data, not pages.
+# Lychee reads path-like strings inside them as links and fails on
+# stack-trace frames such as scripts/check-blog.js:107:13.
+exclude_path = ['\.txt$']

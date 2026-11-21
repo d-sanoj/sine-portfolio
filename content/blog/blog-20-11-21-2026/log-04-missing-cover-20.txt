@@ -1,0 +1,224 @@
+CI	UNKNOWN STEP	﻿2026-11-20T14:02:23.5654676Z Current runner version: '2.338.2'
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5681149Z ##[group]Runner Image Provisioner
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5682104Z Hosted Compute Agent
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5682687Z Version: 20261111.635
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5683403Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5684163Z Build Date: 2026-11-11T01:49:01Z
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5684866Z Worker ID: {0447b7a5-03a7-4096-b600-8fd185d619ad}
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5685586Z Region: westus2
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5686119Z Cloud: Azure
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5686698Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5688809Z ##[group]Operating System
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5689582Z Ubuntu
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5690130Z 26.04.1
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5690629Z LTS
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5691187Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5691780Z ##[group]Runner Image
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5692711Z Image: ubuntu-26.04
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5693389Z Version: 20261116.202.1
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5694633Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5696298Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5697244Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5698643Z ##[group]GITHUB_TOKEN Permissions
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5700834Z Contents: read
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5701599Z Metadata: read
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5702158Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5704468Z Secret source: Actions
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5705555Z Cache mode: write
+CI	UNKNOWN STEP	2026-11-20T14:02:23.5706304Z Prepare workflow directory
+CI	UNKNOWN STEP	2026-11-20T14:02:23.6133562Z Prepare all required actions
+CI	UNKNOWN STEP	2026-11-20T14:02:23.6183663Z Getting action download info
+CI	UNKNOWN STEP	2026-11-20T14:02:23.9868493Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+CI	UNKNOWN STEP	2026-11-20T14:02:24.0963241Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+CI	UNKNOWN STEP	2026-11-20T14:02:24.1583411Z Download action repository 'browser-actions/setup-chrome@v2' (SHA:48ad923757ca74d66703209fe939badbdf80f2f4)
+CI	UNKNOWN STEP	2026-11-20T14:02:24.3576164Z Download action repository 'lycheeverse/lychee-action@v2' (SHA:e7477775783ea5526144ba13e8db5eec57747ce8)
+CI	UNKNOWN STEP	2026-11-20T14:02:24.7074572Z Complete job name: CI
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8059879Z ##[group]Run actions/checkout@v5
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8060871Z with:
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8061382Z   repository: d-sanoj/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8065733Z   token: ***
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8066231Z   ssh-strict: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8066713Z   ssh-user: git
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8067194Z   persist-credentials: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8067743Z   clean: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8068397Z   sparse-checkout-cone-mode: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8068981Z   fetch-depth: 1
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8069458Z   fetch-tags: false
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8069952Z   show-progress: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8070445Z   lfs: false
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8070905Z   submodules: false
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8071412Z   set-safe-directory: true
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8071976Z   allow-unsafe-pr-checkout: false
+CI	UNKNOWN STEP	2026-11-20T14:02:24.8072940Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1100216Z Syncing repository: d-sanoj/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1102524Z ##[group]Getting Git version info
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1104086Z Working directory is '/home/runner/work/sine-portfolio/sine-portfolio'
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1106200Z [command]/usr/bin/git version
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1120632Z git version 2.56.1
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1143158Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1159385Z Temporarily overriding HOME='/home/runner/work/_temp/09611921-aa41-4689-9e98-966e871fbecf' before making global git config changes
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1161864Z Adding repository directory to the temporary git global config as a safe directory
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1165152Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sine-portfolio/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1238797Z Deleting the contents of '/home/runner/work/sine-portfolio/sine-portfolio'
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1241893Z ##[group]Initializing the repository
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1248269Z [command]/usr/bin/git init /home/runner/work/sine-portfolio/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1376050Z hint: Using 'master' as the name for the initial branch. This default branch name
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1378008Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1379878Z hint: to use in all of your new repositories, which will suppress this warning,
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1381145Z hint: call:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1381809Z hint:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1382813Z hint: 	git config --global init.defaultBranch <name>
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1383960Z hint:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1385019Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1386634Z hint: 'development'. The just-created branch can be renamed via this command:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1388123Z hint:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1388934Z hint: 	git branch -m <name>
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1389795Z hint:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1390889Z hint: Disable this message with "git config set advice.defaultBranchName false"
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1392773Z Initialized empty Git repository in /home/runner/work/sine-portfolio/sine-portfolio/.git/
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1404241Z [command]/usr/bin/git remote add origin https://github.com/d-sanoj/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1473188Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1474515Z ##[group]Disabling automatic garbage collection
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1478111Z [command]/usr/bin/git config --local gc.auto 0
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1519386Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1520884Z ##[group]Setting up auth
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1527712Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+CI	UNKNOWN STEP	2026-11-20T14:02:25.1569067Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2083138Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2128536Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2409606Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2450921Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2738469Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2782147Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2783222Z ##[group]Fetching the repository
+CI	UNKNOWN STEP	2026-11-20T14:02:25.2793475Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +640ca182330ee8908fe07ec3d27bae7607429285:refs/remotes/origin/blog/2026-11-20-embeddings-vs-bm25-measured
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0831527Z From https://github.com/d-sanoj/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0834497Z  * [new ref]         640ca182330ee8908fe07ec3d27bae7607429285 -> origin/blog/2026-11-20-embeddings-vs-bm25-measured
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0838946Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0840192Z ##[group]Determining the checkout info
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0841495Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0842470Z [command]/usr/bin/git sparse-checkout disable
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0898182Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0937042Z ##[group]Checking out the ref
+CI	UNKNOWN STEP	2026-11-20T14:02:26.0946055Z [command]/usr/bin/git checkout --progress --force -B blog/2026-11-20-embeddings-vs-bm25-measured refs/remotes/origin/blog/2026-11-20-embeddings-vs-bm25-measured
+CI	UNKNOWN STEP	2026-11-20T14:02:26.1985941Z Switched to a new branch 'blog/2026-11-20-embeddings-vs-bm25-measured'
+CI	UNKNOWN STEP	2026-11-20T14:02:26.1989929Z branch 'blog/2026-11-20-embeddings-vs-bm25-measured' set up to track 'origin/blog/2026-11-20-embeddings-vs-bm25-measured'.
+CI	UNKNOWN STEP	2026-11-20T14:02:26.1996924Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2000528Z [command]/usr/bin/git log -1 --format=%H
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2003006Z 640ca182330ee8908fe07ec3d27bae7607429285
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2431796Z ##[group]Run actions/setup-node@v6
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2433118Z with:
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2434035Z   node-version: lts/*
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2435052Z   cache: npm
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2435999Z   check-latest: false
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2447405Z   token: ***
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2448698Z   package-manager-cache: true
+CI	UNKNOWN STEP	2026-11-20T14:02:26.2449845Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:26.4074255Z Attempt to resolve LTS alias from manifest...
+CI	UNKNOWN STEP	2026-11-20T14:02:26.9840434Z Attempting to download 26...
+CI	UNKNOWN STEP	2026-11-20T14:02:26.9852665Z Acquiring 26.13.1 - x64 from https://github.com/actions/node-versions/releases/download/26.13.1-43134154182/node-26.13.1-linux-x64.tar.gz
+CI	UNKNOWN STEP	2026-11-20T14:02:27.4336842Z Extracting ...
+CI	UNKNOWN STEP	2026-11-20T14:02:27.4475899Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/7475d7b6-1063-4429-a790-9dcb1e9a3ad6 -f /home/runner/work/_temp/93499811-a31f-4dec-b95b-5bf74609d72c
+CI	UNKNOWN STEP	2026-11-20T14:02:28.3548415Z Adding to the cache ...
+CI	UNKNOWN STEP	2026-11-20T14:02:30.1303013Z ##[group]Environment details
+CI	UNKNOWN STEP	2026-11-20T14:02:30.3671929Z node: v26.13.1
+CI	UNKNOWN STEP	2026-11-20T14:02:30.3672472Z npm: 11.20.0
+CI	UNKNOWN STEP	2026-11-20T14:02:30.3672768Z yarn: 1.22.22
+CI	UNKNOWN STEP	2026-11-20T14:02:30.3673475Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:30.3698936Z [command]/opt/hostedtoolcache/node/26.13.1/x64/bin/npm config get cache
+CI	UNKNOWN STEP	2026-11-20T14:02:30.4784045Z /home/runner/.npm
+CI	UNKNOWN STEP	2026-11-20T14:02:30.7463563Z Cache hit for: node-cache-Linux-x64-npm-3dd659832c2870989c76a86e8a51b39e98ca3559de3ac46c9e2c2dd5e690f1ad
+CI	UNKNOWN STEP	2026-11-20T14:02:31.9966057Z Received 5384782 of 5384782 (100.0%), 5.5 MBs/sec
+CI	UNKNOWN STEP	2026-11-20T14:02:31.9966888Z Cache Size: ~5 MB (5384782 B)
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0076095Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7b93d1cf-89ff-4ad6-9711-7b96c8fdc6b8/cache.tzst -P -C /home/runner/work/sine-portfolio/sine-portfolio --use-compress-program unzstd
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0248502Z Cache restored successfully
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0255069Z Cache restored from key: node-cache-Linux-x64-npm-3dd659832c2870989c76a86e8a51b39e98ca3559de3ac46c9e2c2dd5e690f1ad
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0484849Z ##[group]Run browser-actions/setup-chrome@v2
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0485215Z with:
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0485428Z   chrome-version: stable
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0485684Z   install-dependencies: false
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0485949Z   install-chromedriver: false
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0486208Z   no-sudo: false
+CI	UNKNOWN STEP	2026-11-20T14:02:32.0486431Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:32.1243450Z Setup chrome stable
+CI	UNKNOWN STEP	2026-11-20T14:02:32.1247645Z Attempting to download chrome stable...
+CI	UNKNOWN STEP	2026-11-20T14:02:32.1684474Z Acquiring chrome stable from https://storage.googleapis.com/chrome-for-testing-public/158.0.8127.36/linux64/chrome-linux64.zip
+CI	UNKNOWN STEP	2026-11-20T14:02:33.4778741Z Installing chrome...
+CI	UNKNOWN STEP	2026-11-20T14:02:33.4826581Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/718fb81e-9905-4662-b5ee-cd558d09877a
+CI	UNKNOWN STEP	2026-11-20T14:02:37.5498273Z Successfully Installed chrome to /opt/hostedtoolcache/setup-chrome/chrome/stable/x64
+CI	UNKNOWN STEP	2026-11-20T14:02:37.5508083Z [command]/opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome --version
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6369661Z Google Chrome for Testing 158.0.8127.36 
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6411954Z Successfully setup chrome 158.0.8127.36
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6652696Z ##[group]Run echo "CHROME_PATH=/opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome" >> "$GITHUB_ENV"
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6653602Z ^[[36;1mecho "CHROME_PATH=/opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome" >> "$GITHUB_ENV"^[[0m
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6654286Z ^[[36;1m"/opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome" --version^[[0m
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6694090Z shell: /usr/bin/bash -e {0}
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6694376Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:37.6996630Z Google Chrome for Testing 158.0.8127.36 
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7054645Z ##[group]Run npm ci
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7054941Z ^[[36;1mnpm ci^[[0m
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7090814Z shell: /usr/bin/bash -e {0}
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7091361Z env:
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7091695Z   CHROME_PATH: /opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome
+CI	UNKNOWN STEP	2026-11-20T14:02:37.7092111Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2756127Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2756994Z added 3 packages, and audited 4 packages in 507ms
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2792608Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2793188Z 1 moderate severity vulnerability
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2793639Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2794259Z To address all issues (including breaking changes), run:
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2794944Z   npm audit fix --force
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2795238Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2795490Z Run `npm audit` for details.
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2802711Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2804835Z npm warn install-scripts   esbuild@0.24.0 (postinstall: node install.js)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2807240Z npm warn install-scripts
+CI	UNKNOWN STEP	2026-11-20T14:02:38.2809182Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3231985Z ##[group]Run npm run check:blog
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3232340Z ^[[36;1mnpm run check:blog^[[0m
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3265375Z shell: /usr/bin/bash -e {0}
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3265642Z env:
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3265978Z   CHROME_PATH: /opt/hostedtoolcache/setup-chrome/chrome/stable/x64/chrome
+CI	UNKNOWN STEP	2026-11-20T14:02:38.3266382Z ##[endgroup]
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4299791Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4300375Z > sine-portfolio@1.0.0 check:blog
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4300831Z > node scripts/check-blog.js
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4301058Z 
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4721086Z ok  missing alt -> content/blog/blog-1-01-01-2026/no-alt.md:7: image "img/dot.png" has no alt text.
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4732907Z ok  decorative image
+CI	UNKNOWN STEP	2026-11-20T14:02:38.4829492Z ok  home lists the latest 3
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5846807Z FAIL  post links, dates and posters
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5848795Z BlogError: content/blog/blog-19-11-20-2026/embeddings-vs-bm25-measured.md: image "img/cover.png" was not found at content/blog/blog-19-11-20-2026/img/cover.png
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5850919Z     at resolveAsset (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:107:11)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5852342Z     at preparePost (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:135:17)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5853677Z     at loadPosts (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:231:22)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5854939Z     at file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/check-blog.js:93:16
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5855953Z     at ModuleJob.run (node:internal/modules/esm/module_job:569:25)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5856732Z     at async node:internal/modules/esm/loader:650:26
+CI	UNKNOWN STEP	2026-11-20T14:02:38.5858198Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6548039Z FAIL  build writes pages, posters and feed
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6550299Z BlogError: content/blog/blog-19-11-20-2026/embeddings-vs-bm25-measured.md: image "img/cover.png" was not found at content/blog/blog-19-11-20-2026/img/cover.png
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6552923Z     at resolveAsset (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:107:11)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6554525Z     at preparePost (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:135:17)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6556037Z     at loadPosts (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:231:22)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6557344Z     at buildBlog (file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/lib/blog.js:618:17)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6558448Z     at file:///home/runner/work/sine-portfolio/sine-portfolio/scripts/check-blog.js:107:13
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6559070Z     at ModuleJob.run (node:internal/modules/esm/module_job:569:25)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6559513Z     at async node:internal/modules/esm/loader:650:26
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6560038Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6699505Z ##[error]Process completed with exit code 1.
+CI	UNKNOWN STEP	2026-11-20T14:02:38.6860189Z Post job cleanup.
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7829047Z [command]/usr/bin/git version
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7879520Z git version 2.56.1
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7926201Z Temporarily overriding HOME='/home/runner/work/_temp/3f6b90d8-8cc1-4151-b57d-663d729699fd' before making global git config changes
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7927455Z Adding repository directory to the temporary git global config as a safe directory
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7933291Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sine-portfolio/sine-portfolio
+CI	UNKNOWN STEP	2026-11-20T14:02:38.7984575Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8032097Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8380701Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8420458Z http.https://github.com/.extraheader
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8435435Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8484550Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8884680Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+CI	UNKNOWN STEP	2026-11-20T14:02:38.8931083Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+CI	UNKNOWN STEP	2026-11-20T14:02:38.9445165Z Cleaning up orphan processes
