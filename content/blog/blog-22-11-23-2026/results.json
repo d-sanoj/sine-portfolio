@@ -1,0 +1,274 @@
+{
+  "window": "2026-11-15 to 2026-11-22",
+  "prs": 25,
+  "files": 596,
+  "out_files": 1,
+  "prs_with_out": 1,
+  "narrow": {
+    "prs": 21,
+    "files": 272,
+    "out_files": 1,
+    "prs_with_out": 1
+  },
+  "broad": {
+    "prs": 4,
+    "files": 324,
+    "out_files": 0,
+    "prs_with_out": 0
+  },
+  "caveat": "Merged diffs only. Edits made and reverted mid-session leave no trace, so this is a floor.",
+  "rows": [
+    {
+      "repo": "sine-portfolio",
+      "pr": 22,
+      "title": "Blog: Your agent's code looks nothing like yours",
+      "stratum": "narrow",
+      "files": 9,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 23,
+      "title": "Blog: Your retriever finds the right document",
+      "stratum": "narrow",
+      "files": 11,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 24,
+      "title": "Build: wait for Chrome to exit before deleting its profile dir",
+      "stratum": "narrow",
+      "files": 1,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 25,
+      "title": "Blog: I trained a tiny GPT to tell jokes",
+      "stratum": "narrow",
+      "files": 9,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 27,
+      "title": "Blog: one folder per post as blog-N-MM-DD-YYYY",
+      "stratum": "broad",
+      "files": 147,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 28,
+      "title": "Add GitHub Actions CI workflow",
+      "stratum": "narrow",
+      "files": 2,
+      "out": 0,
+      "out_files": [],
+      "note": "lychee.toml here is in scope: the request was 'add CI', and the link check is part of CI."
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 29,
+      "title": "CI: fix flaky Chrome debugging-port failure",
+      "stratum": "narrow",
+      "files": 4,
+      "out": 0,
+      "out_files": [],
+      "note": "Borderline, counted IN: the ci.yml change adds workflow_dispatch and a separate concurrency group for manual runs, with the comment 'so they can be used to confirm a flaky fix'. It exists to verify this fix, not as a drive-by. One step from scope creep, and the reason it stays in is written in the diff itself."
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 30,
+      "title": "Blog: I chunked my blog by section",
+      "stratum": "narrow",
+      "files": 11,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 31,
+      "title": "README: hero GIF, screenshots, make-it-yours guide",
+      "stratum": "narrow",
+      "files": 5,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 32,
+      "title": "Blog: I measured 132 of my agent's commits",
+      "stratum": "narrow",
+      "files": 11,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 33,
+      "title": "Blog: Embeddings beat BM25 on my blog",
+      "stratum": "narrow",
+      "files": 10,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 34,
+      "title": "Sine page: invisible anchors over the sine links",
+      "stratum": "narrow",
+      "files": 2,
+      "out": 0,
+      "out_files": [],
+      "note": "PageModel.js gained labelFor(), which only exists to name the new anchors for screen readers. In scope."
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 35,
+      "title": "Blog: Your agent fixes the wrong line of the log",
+      "stratum": "narrow",
+      "files": 25,
+      "out": 1,
+      "out_files": [
+        "lychee.toml"
+      ],
+      "note": "CI link-check config, changed so the post's own .txt downloads would pass lychee. The change was correct \u2014 lychee was failing on stack-trace frames inside the .txt logs \u2014 but it is a CI config change riding in a content PR, in its own commit, unmentioned in the PR title. It belongs in its own CI PR."
+    },
+    {
+      "repo": "sine-portfolio",
+      "pr": 36,
+      "title": "Blog: How many sine waves does a letter need?",
+      "stratum": "narrow",
+      "files": 12,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "retriever-doc-answer",
+      "pr": 1,
+      "title": "Build retriever-doc-answer as a FastAPI service (MVC)",
+      "stratum": "broad",
+      "files": 54,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "retriever-doc-answer",
+      "pr": 2,
+      "title": "Add section chunking experiment (91% recall@5)",
+      "stratum": "narrow",
+      "files": 35,
+      "out": 0,
+      "out_files": [],
+      "note": "The app/ changes (chunking service, API endpoint, tests) are the experiment's implementation, not extras \u2014 the request was to add the section-chunking experiment to the service."
+    },
+    {
+      "repo": "retriever-doc-answer",
+      "pr": 3,
+      "title": "Experiment: embeddings vs BM25 on the blog corpus",
+      "stratum": "narrow",
+      "files": 21,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "local-rag",
+      "pr": 1,
+      "title": "Local RAG: enterprise FastAPI service",
+      "stratum": "broad",
+      "files": 62,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "local-rag",
+      "pr": 3,
+      "title": "Add CI pipeline, example data, and Streamlit GUI",
+      "stratum": "narrow",
+      "files": 25,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "jokeGPT",
+      "pr": 1,
+      "title": "jokeGPT: tiny character-level GPT trained on 15k jokes",
+      "stratum": "broad",
+      "files": 61,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "jokeGPT",
+      "pr": 2,
+      "title": "jokeGPT upgrade: word-level tokens, bigger vocab + data, bigger model",
+      "stratum": "narrow",
+      "files": 38,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "claude-skills",
+      "pr": 5,
+      "title": "Skill: convention-check",
+      "stratum": "narrow",
+      "files": 14,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "claude-skills",
+      "pr": 6,
+      "title": "Skill: output-eval",
+      "stratum": "narrow",
+      "files": 15,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "claude-skills",
+      "pr": 7,
+      "title": "Skill: commit-craft",
+      "stratum": "narrow",
+      "files": 6,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    },
+    {
+      "repo": "claude-skills",
+      "pr": 8,
+      "title": "Skill: add log-triage",
+      "stratum": "narrow",
+      "files": 6,
+      "out": 0,
+      "out_files": [],
+      "note": ""
+    }
+  ]
+}
