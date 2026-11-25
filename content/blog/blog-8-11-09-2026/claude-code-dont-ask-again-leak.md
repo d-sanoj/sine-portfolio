@@ -91,7 +91,7 @@ Copies that never reach GitHub still matter. The file is plain JSON in the proje
 
 ## The skill: claude-guard
 
-The research tells you what to do, but doing it by hand across every repo you have touched means opening every settings file and reading every rule. That is the job I automated. The new skill is called **claude-guard**, and it is [in the skills repo](https://github.com/d-sanoj/claude-skills/tree/skill/claude-guard/claude-guard). It is original work — no adapted code — built from the research above.
+The research tells you what to do, but doing it by hand across every repo you have touched means opening every settings file and reading every rule. That is the job I automated. The new skill is called **claude-guard**, and it is [in the skills repo](https://github.com/d-sanoj/claude-skills/tree/main/claude-guard). It is original work — no adapted code — built from the research above.
 
 It has two scripts, both plain Python with no dependencies. The scanner finds your settings files, checks every allow, deny and ask rule, every `env` value and every hook command, and reports three git facts per file: tracked, in history, and ignored. It looks for the known key formats, and — the part the usual scanners miss — for passwords inside commands: `PGPASSWORD=`, `MYSQL_PWD=`, `sshpass -p`, `mysql -p`, `--password`, `--token`, `curl -u`, `Authorization:` headers, and passwords embedded in URLs. It also flags long mixed-case strings it cannot identify, so a human can review them. It never contacts a host, never tries a credential, and never prints a full secret: values are shown redacted, first four characters and last two, so the report is safe to paste into a ticket.
 
@@ -122,5 +122,5 @@ The practical version is simpler. Open your settings file and read it. It takes 
 - Anthropic, [Settings files and precedence](https://code.claude.com/docs/en/settings) and [Configure permissions](https://code.claude.com/docs/en/permissions) — the mechanism, the global-excludes behaviour, and the exact-command rule matching.
 - [GitHub issue #5544](https://github.com/anthropics/claude-code/issues/5544), "approved bash commands containing credentials are stored as is with plain text credentials in settings.local.json", August 11, 2025.
 - [The Hacker News](https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html) — secondary summary of the Apiiro research, with the scanner counts and the remediation steps.
-- [claude-guard](https://github.com/d-sanoj/claude-skills/tree/skill/claude-guard/claude-guard) — the skill built for this post, in the skills repo.
+- [claude-guard](https://github.com/d-sanoj/claude-skills/tree/main/claude-guard) — the skill built for this post, in the skills repo.
 - Goldman Sachs and Pi: [Hacker News](https://news.ycombinator.com/item?id=50415628) (802 points) and [Hacker News](https://news.ycombinator.com/item?id=50410107) (779 points); the original Pi post is [caleb.software](https://caleb.software/posts/claude-to-pi.html).

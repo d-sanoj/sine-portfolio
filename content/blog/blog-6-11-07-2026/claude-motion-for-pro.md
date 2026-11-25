@@ -14,7 +14,7 @@ On October 8, Anthropic launched [Claude Motion](https://claude.com/resources/ar
 
 There is a catch, and it is the whole story. Motion is in beta on Team and Enterprise only. Not Free, not Pro, not Max — not even Ultra, the $200-a-month plan. A Pro subscriber paying $20 a month cannot use it. A Max subscriber paying $100 a month cannot use it. The cheapest way in is a Team plan, which needs at least two seats: $50 a month on monthly billing, $40 on annual billing. So the person most likely to want a quick animated explainer — one person, on Pro — is the person locked out.
 
-This post is about the workaround that already exists, and the version of it I built for this blog's readers. A small community project rebuilt Motion's trick as code you run yourself, and it works on any Claude Code plan. I took that project, cut it down to the one job most people want, removed the paid parts, and shipped it as a skill you can install. It is called motion-reel, and it is [in the skills repo](https://github.com/d-sanoj/claude-skills/tree/skill/motion-reel/motion-reel).
+This post is about the workaround that already exists, and the version of it I built for this blog's readers. A small community project rebuilt Motion's trick as code you run yourself, and it works on any Claude Code plan. I took that project, cut it down to the one job most people want, removed the paid parts, and shipped it as a skill you can install. It is called motion-reel, and it is [in the skills repo](https://github.com/d-sanoj/claude-skills/tree/main/motion-reel).
 
 ## What Motion actually is
 
@@ -46,7 +46,7 @@ I tested the idea the way this blog tests everything: by running it. The web-fil
 
 ## What I changed: motion-reel
 
-The adapted skill is called **motion-reel**, and it is one folder in [the skills repo](https://github.com/d-sanoj/claude-skills/tree/skill/motion-reel/motion-reel). Here is what changed from motion-skills, and why:
+The adapted skill is called **motion-reel**, and it is one folder in [the skills repo](https://github.com/d-sanoj/claude-skills/tree/main/motion-reel). Here is what changed from motion-skills, and why:
 
 - **One skill, not four.** The Manim skill, the training guide and the training video are gone. This is only the web-film skill, because a 15-second animated explainer is the job most people ask for, and four skills is a menu where one tool will do.
 - **No paid voice.** The ElevenLabs path is removed entirely. Narration uses the free system voice on your machine — `say` on a Mac, Windows speech, `espeak-ng` on Linux — so a film costs nothing to narrate and there is no API key to set, or to leak. The trade is real: the system voice sounds like a system voice, and the skill says so in its own instructions rather than pretending otherwise.
@@ -128,7 +128,7 @@ That is the shape of the thing this blog keeps coming back to: when a good featu
 - Claude Help Center, [What are artifacts and how do I use them?](https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them) — the plan table: Motion template on Team and Enterprise only, Dashboards on every paid plan.
 - [Claude pricing](https://claude.com/pricing) — Pro $17 a month on annual billing ($20 monthly), Max $100, Ultra $200, Claude Code included in paid plans, Enterprise $20 a seat a month plus usage.
 - [motion-skills](https://github.com/verbodh-pte-ltd/motion-skills) — the community project this skill adapts; MIT, created October 13, 2026.
-- [motion-reel](https://github.com/d-sanoj/claude-skills/tree/skill/motion-reel/motion-reel) — the adapted skill in this blog's skills repo: README, SKILL.md, scripts, runtime and the example film.
+- [motion-reel](https://github.com/d-sanoj/claude-skills/tree/main/motion-reel) — the adapted skill in this blog's skills repo: README, SKILL.md, scripts, runtime and the example film.
 - [eesel.ai, Claude Motion](https://www.eesel.ai/blog/claude-motion) — Team pricing ($20 a seat a month annual, $25 monthly), no separate Motion fee, Motion counts toward plan usage limits.
 - [Zemith, Claude Motion Graphics](https://www.zemith.com/en/contents/claude-motion-graphics) — Team sold for teams of 2 to 150 seats.
 - [Claude Code issue #107757](https://github.com/anthropics/claude-code/issues/107757) — account email in User-Agent headers, filed November 5, 2026, open with hundreds of reactions.

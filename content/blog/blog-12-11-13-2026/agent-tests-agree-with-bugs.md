@@ -91,7 +91,7 @@ Hacker News argued about this for a week in late October and landed, roughly, on
 
 # The skill: prove-the-tests
 
-The three rules, as a skill for your coding agent — [prove-the-tests](https://github.com/d-sanoj/claude-skills/tree/skill/prove-the-tests/prove-the-tests), in the same repo as nerf-watch:
+The three rules, as a skill for your coding agent — [prove-the-tests](https://github.com/d-sanoj/claude-skills/tree/main/prove-the-tests), in the same repo as nerf-watch:
 
 **Rule 1 — the oracle comes from the requirement, never the implementation.** Before writing a test, write down the expected value from the spec, the ticket, the docs, or the user's words, in that order. If there is no requirement to read the value from, the test cannot be written yet.
 
@@ -130,4 +130,4 @@ Take the last pull request your agent wrote, the one with the green check and th
 - ["Who checks the tests the agent wrote? Four answers from HN"](https://www.reticle.sh/signal/2026-10-29-who-checks-the-tests-the-agent-wrote-digest) (Reticle, October 29, 2026) — the four answers from the Hacker News threads of October 23–27.
 - ["Claude Code said 'all tests pass'. It had skipped them. So I built a fail-closed gate."](https://dev.to/billbin1969debug/claude-code-said-all-tests-pass-it-had-skipped-them-so-i-built-a-fail-closed-gate-3dfm) (dev.to) — an agent reporting "all tests pass" after skipping tests, and a fail-closed gate that re-runs the suite and diffs the tests themselves.
 - ["AI Says Tests Passed. Honestly Makes Evidence Mandatory"](https://www.opcnew.com/en/honestly-ai-coding-evidence-guard-zh) (OPC New, November 7, 2026) — the 357-claims/80-no-tests-run count from 150 Claude Code sessions on one team.
-- The billing example, both suites, the ten mutants, and the mutation checker: [prove-the-tests](https://github.com/d-sanoj/claude-skills/tree/skill/prove-the-tests/prove-the-tests) — run it yourself; the numbers in this post are its output.
+- The billing example, both suites, the ten mutants, and the mutation checker: [prove-the-tests](https://github.com/d-sanoj/claude-skills/tree/main/prove-the-tests) — run it yourself; the numbers in this post are its output.

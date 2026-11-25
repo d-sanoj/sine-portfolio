@@ -94,7 +94,7 @@ A rule in a notes file is not a fence, though. The Claude Code docs say so direc
 
 ## The check that would have caught it
 
-The skill is [scope-guard](https://github.com/d-sanoj/claude-skills/tree/skill/scope-guard/scope-guard), the ninth skill in the [skills repo](https://github.com/d-sanoj/claude-skills). It has three moves, and the script does the mechanical part:
+The skill is [scope-guard](https://github.com/d-sanoj/claude-skills/tree/main/scope-guard), the ninth skill in the [skills repo](https://github.com/d-sanoj/claude-skills). It has three moves, and the script does the mechanical part:
 
 **Declare the scope before the first edit.** A `SCOPE.md` in the repo root: one sentence for the task, one glob per line under `Allowed`, and the files that are off limits under `Never touch`. For the November 21 post it would have been one line — `content/blog/blog-20-11-21-2026/**` — plus `lychee.toml` under never-touch, because the post had to pass the link check and the link check's config is therefore off limits. No scope file, no edits.
 
@@ -140,4 +140,4 @@ Copy `scope-guard` into `~/.claude/skills/` and use it on your next agent task. 
 - Tang et al., ["How Coding Agents Fail Their Users: A Large-Scale Analysis of Developer-Agent Misalignment in 20,574 Real-World Sessions"](https://arxiv.org/html/2605.29442) (arXiv:2605.29442, May 2026) — 38.33% constraint violation, 10.20% self-initiated overreach, 22.58% inaccurate self-reporting; CLI constraint violation 49.49% vs IDE 32.26%; 91.49% of visible resolutions require explicit developer pushback.
 - Hisashi, ["Claude Code Mistakes: It Changed My Product Without Asking (How I Stopped It)"](https://hisashi.space/blog/claude-code-changed-my-product-without-asking/) — the password-length change: 11 files, 597 lines added, 6 → 8, unnoticed for 27 days, test edited to match; and the Claude Code docs quote that notes files are "context, not enforced configuration".
 - Sion Jang, ["Your coding agent's tests pass. It still edited files you never asked about."](https://dev.to/sion_jang_b7e2e2c640671f5/your-coding-agents-tests-pass-it-still-edited-files-you-never-asked-about-2npm) — prior art for the same fence, built as a Claude Code Stop hook; scope-guard is the skill version, with the baseline and the never-edit-the-check rule.
-- The measurement: `measure-scope.py`, `scope-manifest.json`, and `results.json` in this post's folder — 25 PRs, 596 files, 1 out of scope. The skill: [scope-guard](https://github.com/d-sanoj/claude-skills/tree/skill/scope-guard/scope-guard) in the skills repo (ninth skill; link points at the `skill/scope-guard` branch until the PR is merged).
+- The measurement: `measure-scope.py`, `scope-manifest.json`, and `results.json` in this post's folder — 25 PRs, 596 files, 1 out of scope. The skill: [scope-guard](https://github.com/d-sanoj/claude-skills/tree/main/scope-guard) in the skills repo (ninth skill).
