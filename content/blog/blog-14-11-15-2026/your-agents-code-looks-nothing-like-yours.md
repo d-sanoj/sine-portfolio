@@ -95,7 +95,7 @@ And some conventions cannot be measured this way at all. "New endpoints copy the
 
 The skill is tested end to end: a test script builds a small fixture repo, extracts its conventions, and checks two deliberately bad files and one advisory-only file against them — 21 assertions, all passing, including the one where the checker had to learn not to flag comments. A live run against a real agent session was not tested, and the skill says so: whether a given agent runs the checker before claiming done is yours to watch the first time you use it.
 
-The skill is here: [convention-check](https://github.com/d-sanoj/claude-skills/tree/skill/convention-check/convention-check). Install it by copying the folder into `~/.claude/skills/`, run the extractor on your repo, and read the mixed section first. That is where your next decision is hiding — and it is probably not the one you expected.
+The skill is here: [convention-check](https://github.com/d-sanoj/claude-skills/tree/main/convention-check). Install it by copying the folder into `~/.claude/skills/`, run the extractor on your repo, and read the mixed section first. That is where your next decision is hiding — and it is probably not the one you expected.
 
 # Sources
 
@@ -103,5 +103,5 @@ The skill is here: [convention-check](https://github.com/d-sanoj/claude-skills/t
 - "Make an AI Coding Agent Follow Your Code Style", swarmz.net, August 15, 2026. The five-tier enforcement hierarchy and "Prose in a config file is a suggestion. A failing exit code is a fact." https://swarmz.net/blog/make-an-ai-coding-agent-follow-your-code-style
 - "Repository map", Aider docs. The repo map: tree-sitter parsing, graph-ranked symbols, ~1,024-token default budget. https://aider.chat/docs/repomap.html
 - "I Built an OSS to Stop AI from Writing Inconsistent Code Every Time", dev.to. The AI Dev OS framework and the `getUsers()` / `fetchUserList()` / `loadAllUsers()` drift. https://dev.to/yun_bow/i-built-an-oss-to-stop-ai-from-writing-inconsistent-code-every-time-claude-code-cursor-kiro-1oe1
-- `convention-check` skill, `d-sanoj/claude-skills`. The extractor, the checker, the worked example on this repo, and the 21-assertion test run. https://github.com/d-sanoj/claude-skills/tree/skill/convention-check/convention-check
+- `convention-check` skill, `d-sanoj/claude-skills`. The extractor, the checker, the worked example on this repo, and the 21-assertion test run. https://github.com/d-sanoj/claude-skills/tree/main/convention-check
 - All repo measurements in this post were run on 2026-11-15 against `d-sanoj/sine-portfolio` at main (`f49a951`). The extractor and checker are in the skill linked above; rerun them to reproduce the counts.

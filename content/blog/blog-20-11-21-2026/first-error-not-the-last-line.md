@@ -91,7 +91,7 @@ Eight rows of a schematic log. Row 1 runs the build command, row 2 measures the 
 
 ## The procedure
 
-The skill is called `log-triage`, and it is the eighth skill in [d-sanoj/claude-skills](https://github.com/d-sanoj/claude-skills/tree/skill/log-triage/log-triage). It has six rules, and a script that does the mechanical part deterministically — Python, no packages, no network:
+The skill is called `log-triage`, and it is the eighth skill in [d-sanoj/claude-skills](https://github.com/d-sanoj/claude-skills/tree/main/log-triage). It has six rules, and a script that does the mechanical part deterministically — Python, no packages, no network:
 
 ```bash
 python3 scripts/triage-log.py build.log
@@ -139,7 +139,7 @@ And the script does not know your project's error formats. It recognises pytest,
 
 ## The skill, and the measurement
 
-`log-triage` is in [d-sanoj/claude-skills](https://github.com/d-sanoj/claude-skills/tree/skill/log-triage/log-triage): `SKILL.md` with the full procedure, `scripts/triage-log.py`, fixture tests, and a before/after worked from the Chrome log. Install it by copying the folder into `~/.claude/skills/`.
+`log-triage` is in [d-sanoj/claude-skills](https://github.com/d-sanoj/claude-skills/tree/main/log-triage): `SKILL.md` with the full procedure, `scripts/triage-log.py`, fixture tests, and a before/after worked from the Chrome log. Install it by copying the folder into `~/.claude/skills/`.
 
 The measurement ships with this post: `measure-logs.py`, `results.json`, `corpus-manifest.json` (every log's source and ground truth), `build-corpus.sh` (how the reproductions were made), `triage-log.py` itself, and the ten logs, `log-01-chrome-port.txt` through `log-10-pytest-cascade.txt`. Run the measurement yourself; it takes under a second.
 
@@ -148,7 +148,7 @@ The complaint this skill answers is not new. A guide to pasting massive logs int
 ## Sources
 
 - The corpus and measurement: `measure-logs.py`, `results.json`, `corpus-manifest.json`, `build-corpus.sh`, and `log-01-chrome-port.txt` through `log-10-pytest-cascade.txt`, downloadable with this post. CI logs downloaded with `gh run view --log` (runs 44135960638, 44315594718, 44542602124, 44749632166).
-- The skill: [`log-triage`](https://github.com/d-sanoj/claude-skills/tree/skill/log-triage/log-triage) in `d-sanoj/claude-skills` — `SKILL.md`, `scripts/triage-log.py`, `tests/run_skill_tests.py`, `examples/before-after.md`.
+- The skill: [`log-triage`](https://github.com/d-sanoj/claude-skills/tree/main/log-triage) in `d-sanoj/claude-skills` — `SKILL.md`, `scripts/triage-log.py`, `tests/run_skill_tests.py`, `examples/before-after.md`.
 - [How do I deal with massive logs in chat?](https://www.vibecodinghowto.com/article/qa-context-blowup) (Vibe Coding How-To) — "If you cannot quickly find the failure yourself, you have a bigger problem than context size."
 - [Best Claude Code Prompt for a Failing Build](https://www.prompthackers.co/prompts/ci-failure-fixer) (Prompt Hackers) — "quoting the first real error, not the last line printed."
 - The LearnLLM capstone-ci failure: mypy `Library stubs not installed for "yaml"`, failing deterministically in capstone-ci, fixed by adding `types-PyYAML` to the dev extras.

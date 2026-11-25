@@ -34,7 +34,7 @@ Good means all three at once. The target was 80% good — 40 of 50 — with a st
 
 ![Three gates in a row: a sample must pass Complete, then Coherent, then Joke-shaped. Only a sample that passes all three counts as good. Complete is checked by a script; the other two are judged by a human reading each sample.](img/rubric.png)
 
-That rubric is also the download with this post. I turned it into a skill, [output-eval](https://github.com/d-sanoj/claude-skills/tree/skill/output-eval/output-eval), that sets up the same three-gate test for any generative model — the rubric template, a scorer that recomputes the numbers from the samples and cross-checks the verdicts, and this experiment as its worked example. More on that at the end.
+That rubric is also the download with this post. I turned it into a skill, [output-eval](https://github.com/d-sanoj/claude-skills/tree/main/output-eval), that sets up the same three-gate test for any generative model — the rubric template, a scorer that recomputes the numbers from the samples and cross-checks the verdicts, and this experiment as its worked example. More on that at the end.
 
 # Version 1: it learned to spell, not to tell jokes
 
@@ -111,7 +111,7 @@ The sequence ends here. I stopped at step 3: the decoding sweep is cancelled, an
 
 # Try it on your own model
 
-The evaluation harness from this experiment is now a skill, [output-eval](https://github.com/d-sanoj/claude-skills/tree/skill/output-eval/output-eval). It is the rubric template, a scorer, and this experiment as the worked example — the rubric, all 150 samples across the three word-level runs, their verdicts, and the recomputed results. If you are training or fine-tuning a small model, or prompting a big one and wondering whether the outputs are actually improving:
+The evaluation harness from this experiment is now a skill, [output-eval](https://github.com/d-sanoj/claude-skills/tree/main/output-eval). It is the rubric template, a scorer, and this experiment as the worked example — the rubric, all 150 samples across the three word-level runs, their verdicts, and the recomputed results. If you are training or fine-tuning a small model, or prompting a big one and wondering whether the outputs are actually improving:
 
 1. Write the rubric before you sample — three gates, with the third one naming what "does the job" means for your task.
 2. Sample 50 outputs with fixed seeds, save them verbatim, and judge every one with a one-line note.
@@ -125,6 +125,6 @@ The failure mode this catches is not rare. Anyone who has watched a loss curve f
 
 # Sources
 
-- The model code and the first version are in [jokeGPT](https://github.com/d-sanoj/jokeGPT) (a small GPT in the style of Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT)). The upgrade steps — the 150 samples from the three word-level runs, their verdicts, and the scoring — are in the [output-eval](https://github.com/d-sanoj/claude-skills/tree/skill/output-eval/output-eval) skill's worked example, `examples/jokeGPT/`. The first version's 50 samples are in the jokeGPT repo's `experiments/runs.json`.
+- The model code and the first version are in [jokeGPT](https://github.com/d-sanoj/jokeGPT) (a small GPT in the style of Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT)). The upgrade steps — the 150 samples from the three word-level runs, their verdicts, and the scoring — are in the [output-eval](https://github.com/d-sanoj/claude-skills/tree/main/output-eval) skill's worked example, `examples/jokeGPT/`. The first version's 50 samples are in the jokeGPT repo's `experiments/runs.json`.
 - Short Jokes dataset: Hugging Face [`ysharma/short_jokes`](https://huggingface.co/datasets/ysharma/short_jokes) (MIT licence), a mirror of the Kaggle Short Jokes set — 231,657 user-submitted jokes, mostly from Reddit. 219,175 survived cleaning; 15,000 sampled for the first version, 50,000 for steps 2 and 3.
 - All numbers are from the experiment's own records: `FINDINGS.md` and `experiments/runs-v2.json` in the jokeGPT repo, and the verdict files in the skill's worked example. Sampling: 50 samples per run, fixed seeds, temperature 0.8, top-k 40. Machine: ~1.5 shared CPUs, ~6 GB RAM, no GPU. The loss values for the word-level runs are not comparable to the character-level run's loss — different vocabulary sizes, different random-guessing baselines — and the post compares runs on good%, not on loss.
