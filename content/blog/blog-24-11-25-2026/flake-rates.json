@@ -1,0 +1,120 @@
+{
+  "fixture": "/home/hatch/workspace/claude-skills/flake-hunt/examples/fixture",
+  "suite_runs": 100,
+  "first_run_outcome": {
+    "tests/test_flaky.py::test_expiry_uses_wall_clock": "PASSED",
+    "tests/test_flaky.py::test_random_sample_covers_all": "PASSED",
+    "tests/test_flaky.py::test_async_result_ready": "FAILED",
+    "tests/test_flaky.py::test_records_a_visit": "PASSED",
+    "tests/test_flaky.py::test_visit_count_starts_at_zero": "FAILED",
+    "tests/test_stable.py::test_add_positive": "PASSED",
+    "tests/test_stable.py::test_add_negative": "PASSED",
+    "tests/test_stable.py::test_double_zero": "PASSED",
+    "tests/test_stable.py::test_double_negative": "PASSED"
+  },
+  "per_test": {
+    "tests/test_flaky.py::test_async_result_ready": {
+      "passed": 44,
+      "failed": 56,
+      "fail_rate": 0.56
+    },
+    "tests/test_flaky.py::test_expiry_uses_wall_clock": {
+      "passed": 71,
+      "failed": 29,
+      "fail_rate": 0.29
+    },
+    "tests/test_flaky.py::test_random_sample_covers_all": {
+      "passed": 73,
+      "failed": 27,
+      "fail_rate": 0.27
+    },
+    "tests/test_flaky.py::test_records_a_visit": {
+      "passed": 100,
+      "failed": 0,
+      "fail_rate": 0.0
+    },
+    "tests/test_flaky.py::test_visit_count_starts_at_zero": {
+      "passed": 0,
+      "failed": 100,
+      "fail_rate": 1.0
+    },
+    "tests/test_stable.py::test_add_negative": {
+      "passed": 100,
+      "failed": 0,
+      "fail_rate": 0.0
+    },
+    "tests/test_stable.py::test_add_positive": {
+      "passed": 100,
+      "failed": 0,
+      "fail_rate": 0.0
+    },
+    "tests/test_stable.py::test_double_negative": {
+      "passed": 100,
+      "failed": 0,
+      "fail_rate": 0.0
+    },
+    "tests/test_stable.py::test_double_zero": {
+      "passed": 100,
+      "failed": 0,
+      "fail_rate": 0.0
+    }
+  },
+  "flaky_in_suite": [
+    "tests/test_flaky.py::test_async_result_ready",
+    "tests/test_flaky.py::test_expiry_uses_wall_clock",
+    "tests/test_flaky.py::test_random_sample_covers_all",
+    "tests/test_flaky.py::test_visit_count_starts_at_zero"
+  ],
+  "isolation_10x_alone": {
+    "tests/test_flaky.py::test_async_result_ready": {
+      "passed": 3,
+      "failed": 7
+    },
+    "tests/test_flaky.py::test_expiry_uses_wall_clock": {
+      "passed": 10,
+      "failed": 0
+    },
+    "tests/test_flaky.py::test_random_sample_covers_all": {
+      "passed": 8,
+      "failed": 2
+    },
+    "tests/test_flaky.py::test_visit_count_starts_at_zero": {
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "control_stable_only_50_runs": {
+    "passed": 200,
+    "failed": 0
+  },
+  "detection_probability": {
+    "0.01": {
+      "1": 0.01,
+      "5": 0.049,
+      "10": 0.0956,
+      "20": 0.1821,
+      "50": 0.395
+    },
+    "0.05": {
+      "1": 0.05,
+      "5": 0.2262,
+      "10": 0.4013,
+      "20": 0.6415,
+      "50": 0.9231
+    },
+    "0.1": {
+      "1": 0.1,
+      "5": 0.4095,
+      "10": 0.6513,
+      "20": 0.8784,
+      "50": 0.9948
+    },
+    "0.25": {
+      "1": 0.25,
+      "5": 0.7627,
+      "10": 0.9437,
+      "20": 0.9968,
+      "50": 1.0
+    }
+  }
+}
